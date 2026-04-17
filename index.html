@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>PMP Test - Chapitre 1</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    .question { margin-bottom: 20px; }
+    button { padding: 10px; }
+  </style>
+</head>
+<body>
+
+<h1>Test PMP - Chapitre 1</h1>
+
+<div class="question">
+  <p>1. Quel est le rôle principal du chef de projet ?</p>
+  <button onclick="checkAnswer('a')">A. Gérer les ressources humaines</button><br>
+  <button onclick="checkAnswer('b')">B. Atteindre les objectifs du projet</button><br>
+  <button onclick="checkAnswer('c')">C. Contrôler uniquement le budget</button>
+</div>
+
+<p id="result"></p>
+
+<script>
+function checkAnswer(answer) {
+  if(answer === 'b') {
+    document.getElementById("result").innerHTML = "✅ Bonne réponse";
+  } else {
+    document.getElementById("result").innerHTML = "❌ Mauvaise réponse";
+  }
+}
+</script>
+
+</body>
+</html>
