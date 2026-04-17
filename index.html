@@ -1,172 +1,1204 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Examen Blanc PMP - 30 Questions</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: auto; padding: 20px; background-color: #f4f4f4; }
-        .container { background: white; padding: 30px; border-radius: 8px; shadow: 0 0 10px rgba(0,0,0,0.1); }
-        .question { margin-bottom: 20px; display: none; }
-        .active { display: block; }
-        .timer { font-size: 20px; color: red; font-weight: bold; text-align: right; }
-        .btn { padding: 10px 20px; cursor: pointer; background: #007bff; color: white; border: none; border-radius: 5px; }
-        .dashboard { display: none; margin-top: 30px; border-top: 2px solid #333; padding-top: 20px; }
-        .hidden { display: none; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examen blanc PMP - 30 questions</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #8b1e1e;
+      --primary-2: #b91c1c;
+      --ok: #166534;
+      --ok-bg: #dcfce7;
+      --bad: #991b1b;
+      --bad-bg: #fee2e2;
+      --warn-bg: #fff7ed;
+      --warn: #9a3412;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #7f1d1d, #991b1b 55%, #b91c1c);
+      color: white;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0 0 10px 0;
+      font-size: 2rem;
+    }
+    .hero p {
+      margin: 6px 0;
+      opacity: 0.96;
+      line-height: 1.5;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .section-title {
+      font-size: 1.15rem;
+      margin: 0 0 14px;
+    }
+    .meta-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 0.92rem;
+      display: inline-block;
+      margin-right: 8px;
+      margin-bottom: 8px;
+    }
+    .meta-item {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .meta-item strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-secondary {
+      background: #111827;
+      color: white;
+    }
+    .btn-light {
+      background: #f3f4f6;
+      color: #111827;
+      border: 1px solid var(--line);
+    }
+    .btn-danger {
+      background: #dc2626;
+      color: white;
+    }
+    .hidden { display: none !important; }
+    .exam-header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(245,247,251,0.96);
+      backdrop-filter: blur(8px);
+      padding: 14px 0 18px;
+      margin-bottom: 12px;
+    }
+    .exam-topbar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .stats-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .badge {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 0.92rem;
+      box-shadow: var(--shadow);
+    }
+    .question-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+    .question-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.05rem;
+      line-height: 1.45;
+    }
+    .question-meta {
+      margin-bottom: 12px;
+    }
+    .option {
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      background: #fff;
+    }
+    .option input { margin-right: 10px; }
+    .option.correct {
+      border-color: #16a34a;
+      background: var(--ok-bg);
+    }
+    .option.incorrect {
+      border-color: #dc2626;
+      background: var(--bad-bg);
+    }
+    .explanation {
+      border-radius: 14px;
+      padding: 14px;
+      line-height: 1.55;
+      margin-top: 12px;
+    }
+    .explanation.ok {
+      background: var(--ok-bg);
+      color: var(--ok);
+    }
+    .explanation.bad {
+      background: var(--warn-bg);
+      color: var(--warn);
+    }
+    .result-box {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .result-score {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 6px 0 14px;
+    }
+    .bars {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .bar-row {
+      display: grid;
+      gap: 6px;
+    }
+    .bar-track {
+      width: 100%;
+      height: 12px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #991b1b, #dc2626);
+      border-radius: 999px;
+    }
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { color: #374151; }
+    .login-box {
+      max-width: 420px;
+      margin: 0 auto;
+      padding-top: 20px;
+    }
+    .field {
+      margin-bottom: 12px;
+    }
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .field input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #d1d5db;
+      font-size: 1rem;
+    }
+    .small { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+    .warning {
+      background: #fff7ed;
+      color: #9a3412;
+      border: 1px solid #fed7aa;
+      padding: 12px 14px;
+      border-radius: 14px;
+      margin-top: 12px;
+    }
+    @media (max-width: 900px) {
+      .grid, .dashboard-grid { grid-template-columns: 1fr; }
+      .meta-list { grid-template-columns: 1fr; }
+      .container { padding: 16px; }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <section id="homeView">
+      <div class="hero">
+        <h1>Examen blanc PMP - 30 questions</h1>
+        <p>Durée : <strong>40 minutes</strong> • Langue : <strong>Français</strong> • Format : QCM situationnel.</p>
+        <p>Les questions ci-dessous ont été construites à partir des fichiers fournis, puis traduites et structurées en français pour un entraînement ciblé, avec classement par domaine de connaissance et par domaine ECO de PMI.</p>
+      </div>
 
-<div class="container" id="quiz-container">
-    <h1>Examen Blanc PMP</h1>
-    <div class="timer" id="timer">40:00</div>
-    <hr>
+      <div class="grid">
+        <div class="card">
+          <h2 class="section-title">Candidat</h2>
+          <p>Ce test couvre plusieurs domaines : fondamentaux, agile, prédictif, communication et parties prenantes, équipe, risques, qualité / information, achats / contrats et scénarios PMP.</p>
+          <div class="meta-list">
+            <div class="meta-item"><strong>Nombre de questions</strong><span>30</span></div>
+            <div class="meta-item"><strong>Temps imparti</strong><span>40 minutes</span></div>
+            <div class="meta-item"><strong>Correction</strong><span>Réponses + explications détaillées à la fin</span></div>
+            <div class="meta-item"><strong>Suivi</strong><span>Résultats enregistrés localement pour le tableau formateur</span></div>
+          </div>
+          <div class="controls">
+            <button class="btn-primary" onclick="startExam()">Commencer l'examen</button>
+            <button class="btn-light" onclick="showTrainerLogin()">Accès formateur</button>
+          </div>
+        </div>
 
-    <div id="questions-area">
-        <!-- Les questions seront générées ici par JS -->
-    </div>
+        <div class="card">
+          <h2 class="section-title">Répartition de l'examen</h2>
+          <div>
+            <span class="pill">Personne</span>
+            <span class="pill">Processus</span>
+            <span class="pill">Environnement commercial</span>
+          </div>
+          <div style="margin-top:12px;">
+            <span class="pill">Fondamentaux</span>
+            <span class="pill">Agile</span>
+            <span class="pill">Prédictif</span>
+            <span class="pill">Communication</span>
+            <span class="pill">Équipe</span>
+            <span class="pill">Risques</span>
+            <span class="pill">Qualité</span>
+            <span class="pill">Achats</span>
+            <span class="pill">Scénarios PMP</span>
+          </div>
+          <div class="warning">
+            Le tableau formateur fonctionne sans serveur. Les résultats sont donc stockés dans le navigateur via <strong>localStorage</strong>. Pour une exploitation multi-utilisateurs réelle en ligne, il faudra ensuite ajouter une base de données ou un backend.
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <div style="margin-top: 20px;">
-        <button class="btn" id="prev-btn" onclick="changeQuestion(-1)" disabled>Précédent</button>
-        <button class="btn" id="next-btn" onclick="changeQuestion(1)">Suivant</button>
-        <button class="btn" id="submit-btn" style="display:none; background: green;" onclick="finishQuiz()">Terminer l'examen</button>
-    </div>
-</div>
+    <section id="examView" class="hidden">
+      <div class="exam-header">
+        <div class="exam-topbar">
+          <div class="stats-inline">
+            <div class="badge">Questions : <strong>30</strong></div>
+            <div class="badge">Temps restant : <strong id="timer">40:00</strong></div>
+            <div class="badge">Répondues : <strong id="answeredCount">0</strong>/30</div>
+          </div>
+          <div class="controls" style="margin-top:0;">
+            <button class="btn-light" onclick="saveProgress()">Sauvegarder localement</button>
+            <button class="btn-danger" onclick="submitExam(true)">Terminer maintenant</button>
+          </div>
+        </div>
+      </div>
+      <div id="questionsContainer"></div>
+      <div class="controls">
+        <button class="btn-primary" onclick="submitExam(true)">Soumettre l'examen</button>
+        <button class="btn-light" onclick="goHome()">Retour accueil</button>
+      </div>
+    </section>
 
-<div class="container hidden" id="result-container">
-    <h2>Résultats de l'élève</h2>
-    <p id="score-text"></p>
-    <button class="btn" onclick="showLogin()">Accès Formateur (Dashboard)</button>
-</div>
+    <section id="resultView" class="hidden"></section>
 
-<div class="container hidden" id="login-area">
-    <h3>Connexion Formateur</h3>
-    <input type="password" id="pass" placeholder="Mot de passe">
-    <button class="btn" onclick="checkPass()">Entrer</button>
-</div>
+    <section id="trainerLoginView" class="hidden">
+      <div class="card login-box">
+        <h2 class="section-title">Accès formateur</h2>
+        <div class="field">
+          <label for="trainerPassword">Mot de passe</label>
+          <input id="trainerPassword" type="password" placeholder="Saisissez le mot de passe" />
+        </div>
+        <div class="controls">
+          <button class="btn-primary" onclick="loginTrainer()">Entrer</button>
+          <button class="btn-light" onclick="goHome()">Retour</button>
+        </div>
+        <div id="trainerLoginMessage" class="small" style="margin-top:12px;"></div>
+      </div>
+    </section>
 
-<div class="container hidden" id="dashboard-area">
-    <h2>Tableau de Bord Formateur</h2>
-    <div id="stats"></div>
-    <button class="btn" style="background: gray;" onclick="location.reload()">Recommencer</button>
-</div>
+    <section id="trainerView" class="hidden"></section>
+  </div>
 
-<script>
-// Base de données des questions (Echantillon de 30 questions basées sur vos sources)
-const questions = [
-    { 
-        q: "Lors de la revue d'une Epic importante, l'équipe remarque un manque de compréhension commune de l'objectif du projet. Que doit faire le chef de projet ?", 
-        options: ["Vérifier le plan de release", "Vérifier les critères d'acceptation", "Rappeler l'objectif du sprint", "Rappeler la vision du projet"], 
-        ans: 3, 
-        cat: "Agile", 
-        eco: "Personnes",
-        exp: "Le chef de projet doit rappeler la vision du projet car l'équipe manque de compréhension globale de l'objectif."
-    },
-    { 
-        q: "Une équipe Scrum constate une augmentation des story points au milieu de la release. Quelle en est la cause probable ?", 
-        options: ["La vélocité a diminué", "La vélocité a augmenté", "Du travail a été ajouté au Product Backlog", "Du travail a été retiré"], 
-        ans: 2, 
-        cat: "Agile", 
-        eco: "Processus",
-        exp: "L'ajout de travail au Product Backlog augmente naturellement le nombre total de points de la release."
-    },
-    { 
-        q: "Un chef de projet prédictif remarque que les tâches ne sont pas effectuées dans le bon ordre, entraînant des retouches. Quel outil utiliser ?", 
-        options: ["Organigramme", "Matrice RACI", "Plan de communication", "Système d'autorisation de travail"], 
-        ans: 3, 
-        cat: "Prédictif", 
-        eco: "Processus",
-        exp: "Le système d'autorisation de travail assure que le travail est fait au bon moment et dans la bonne séquence."
-    },
-    // ... (Pour la démo, j'ajoute les catégories de structure, vous pouvez remplir les 30 selon la liste fournie plus bas)
-];
+  <script>
+    const TRAINER_PASSWORD = '221008';
+    const EXAM_DURATION_SECONDS = 40 * 60;
+    let timerInterval = null;
+    let remainingSeconds = EXAM_DURATION_SECONDS;
+    let currentAttemptId = null;
 
-// Logique simplifiée pour 30 questions (Répétition de la structure pour l'exemple)
-// Dans une version réelle, on insère ici les 30 questions sélectionnées.
+    const questions = [
+      {
+        id: 1,
+        domain: 'Fondamentaux du management de projet',
+        eco: 'Processus',
+        source: 'Project Management Fundamentals',
+        text: 'Le sponsor d’un projet doute que le produit final réponde réellement à la demande du marché et souhaite limiter les coûts dès le départ. Que doit faire en priorité le chef de projet ?',
+        options: [
+          'Identifier et mettre en œuvre les exigences nécessaires à un Produit Minimum Viable (MVP).',
+          'Collecter toutes les exigences et exécuter le projet de manière incrémentale jusqu’à la fin.',
+          'Réduire le nombre de parties prenantes impliquées dans la définition du besoin.',
+          'Signer avec le sponsor un contrat à coût fixe afin de plafonner le budget.'
+        ],
+        answer: 0,
+        explanation: 'Quand la valeur métier doit encore être confirmée, la meilleure approche consiste à livrer d’abord un MVP centré sur les fonctionnalités qui produisent rapidement de la valeur.'
+      },
+      {
+        id: 2,
+        domain: 'Fondamentaux du management de projet',
+        eco: 'Processus',
+        source: 'Project Management Fundamentals',
+        text: 'Dans un projet logiciel mené en Agile, le client demande une modification d’exigence en cours d’exécution. Quelle est la meilleure réponse du chef de projet ?',
+        options: [
+          'Bloquer la demande pour protéger le périmètre initial.',
+          'Accueillir la demande de changement.',
+          'Éviter la demande tant qu’un comité de changement ne s’est pas réuni.',
+          'Transmettre la demande directement au CCB.'
+        ],
+        answer: 1,
+        explanation: 'En Agile, le changement fait partie du fonctionnement normal du projet. Les retours fréquents des parties prenantes servent précisément à adapter le produit.'
+      },
+      {
+        id: 3,
+        domain: 'Fondamentaux du management de projet',
+        eco: 'Environnement commercial',
+        source: 'Project Management Fundamentals',
+        text: 'Une organisation choisit de développer en interne un logiciel après une analyse make-or-buy favorable. Au moment d’acquérir les ressources, le chef de projet découvre que le tarif réel des développeurs est deux fois plus élevé que celui utilisé dans l’analyse. Que doit-il faire en premier ?',
+        options: [
+          'Soumettre immédiatement une demande de changement.',
+          'Informer le sponsor de cette découverte.',
+          'Ne rien faire tant que le SPI et le CPI restent corrects.',
+          'Mettre à jour le rapport d’analyse make-or-buy sans autre action.'
+        ],
+        answer: 1,
+        explanation: 'L’écart remet en cause la valeur métier et la viabilité financière du projet. Le sponsor doit être informé rapidement afin d’orienter la décision.'
+      },
+      {
+        id: 4,
+        domain: 'Fondamentaux du management de projet',
+        eco: 'Environnement commercial',
+        source: 'Project Management Fundamentals',
+        text: 'Une entreprise développe une plateforme d’IA de nouvelle génération dans un contexte de forte innovation, de réglementation importante et d’attentes changeantes des parties prenantes. Quelle approche est la plus adaptée ?',
+        options: [
+          'Une approche purement prédictive.',
+          'Une approche purement agile.',
+          'Une approche basée sur la chaîne critique.',
+          'Une approche hybride.'
+        ],
+        answer: 3,
+        explanation: 'L’approche hybride permet de conserver la structure et la documentation nécessaires à la conformité, tout en gardant la souplesse nécessaire face à l’incertitude.'
+      },
+      {
+        id: 5,
+        domain: 'Agile Project Management',
+        eco: 'Personne',
+        source: 'Agile Project Management',
+        text: 'Dans une équipe auto-organisée, les membres interprètent différemment un Epic important, révélant une absence de compréhension commune du but global du projet. Que doit faire le chef de projet ?',
+        options: [
+          'Demander à l’équipe de relire le release plan.',
+          'Demander à l’équipe de revoir les critères d’acceptation de l’Epic.',
+          'Rappeler l’objectif du sprint.',
+          'Rappeler la vision du projet.'
+        ],
+        answer: 3,
+        explanation: 'Quand le problème touche le sens global du travail, il faut revenir à la vision du projet, et non seulement à l’objectif d’un sprint ou d’une release.'
+      },
+      {
+        id: 6,
+        domain: 'Agile Project Management',
+        eco: 'Processus',
+        source: 'Agile Project Management',
+        text: 'Après une release, l’équipe Scrum constate sur le burndown chart une hausse du total des story points au sprint 3 alors que les estimations n’ont pas été modifiées. Quelle en est l’explication la plus probable ?',
+        options: [
+          'La vélocité de l’équipe a diminué.',
+          'La vélocité de l’équipe a augmenté.',
+          'Du travail a été ajouté au Product Backlog.',
+          'Du travail a été retiré du Product Backlog.'
+        ],
+        answer: 2,
+        explanation: 'Une augmentation des story points restants sans changement d’estimation signifie généralement qu’un travail supplémentaire a été ajouté au périmètre de la release.'
+      },
+      {
+        id: 7,
+        domain: 'Agile Project Management',
+        eco: 'Personne',
+        source: 'Agile Project Management',
+        text: 'À mi-parcours d’une itération, le rapport d’avancement montre que le projet agile est en retard. Le chef de projet avait lui-même séquencé et assigné tout le travail. Que devait-il faire différemment ?',
+        options: [
+          'Former l’équipe à la méthode agile.',
+          'Demander à l’équipe de mieux alimenter le système de reporting.',
+          'Prévoir une réserve de contingence.',
+          'Encourager l’auto-organisation de l’équipe pour renforcer son engagement.'
+        ],
+        answer: 3,
+        explanation: 'Dans un contexte agile, l’appropriation du travail par l’équipe est essentielle. L’auto-organisation renforce le buy-in et l’efficacité.'
+      },
+      {
+        id: 8,
+        domain: 'Agile Project Management',
+        eco: 'Environnement commercial',
+        source: 'Agile Project Management',
+        text: 'Une organisation qui travaillait jusque-là uniquement en prédictif lance un projet pilote agile. Lors de la quatrième rétrospective, l’équipe explique que plusieurs processus organisationnels freinent son travail et provoquent retards et reprises. Que doit faire le chef de projet ?',
+        options: [
+          'Utiliser les daily stand-up pour résoudre tous les blocages.',
+          'Faire une analyse des causes racines lors de la prochaine rétrospective uniquement.',
+          'Identifier les processus organisationnels gênants et travailler à les supprimer, les modifier ou les alléger.',
+          'Laisser l’équipe auto-organisée résoudre seule ces obstacles.'
+        ],
+        answer: 2,
+        explanation: 'Quand les freins sont organisationnels, il faut agir sur le système de travail lui-même. C’est un enjeu d’environnement de livraison, pas seulement de dynamique d’équipe.'
+      },
+      {
+        id: 9,
+        domain: 'Predictive Project Management',
+        eco: 'Processus',
+        source: 'Predictive Project Management',
+        text: 'En phase de démarrage, le sponsor demande au chef de projet une estimation approximative du coût avant la fin de la journée. Il dispose encore de très peu d’informations détaillées. Que doit-il faire ?',
+        options: [
+          'Créer le backlog produit et estimer chaque itération.',
+          'Construire immédiatement une WBS détaillée et faire une estimation ascendante complète.',
+          'Créer le plan de management des coûts avant toute estimation.',
+          'Donner une estimation par analogie basée sur des projets similaires.'
+        ],
+        answer: 3,
+        explanation: 'À un stade précoce avec peu d’informations, l’estimation analogique est la plus réaliste et la plus rapide à fournir.'
+      },
+      {
+        id: 10,
+        domain: 'Predictive Project Management',
+        eco: 'Processus',
+        source: 'Predictive Project Management',
+        text: 'Un représentant du client accepte oralement un ajout de publicité sur les réseaux sociaux avec un coût supplémentaire de 8 000 USD. Plus tard, il refuse de payer, affirmant qu’un retard du projet aurait dû être pénalisé. Qu’aurait dû faire le chef de projet pour éviter cette situation ? (Choisissez la meilleure combinaison)',
+        options: [
+          'Utiliser une communication plus formelle et demander aussi une extension de délai.',
+          'Réduire le périmètre pour compenser le coût additionnel uniquement.',
+          'Accorder une réduction commerciale sans analyser le planning.',
+          'Laisser le représentant décider seul du nouveau périmètre.'
+        ],
+        answer: 0,
+        explanation: 'La situation devait être formalisée et l’impact ne devait pas être analysé uniquement sur le coût, mais aussi sur le délai et les autres contraintes.'
+      },
+      {
+        id: 11,
+        domain: 'Predictive Project Management',
+        eco: 'Processus',
+        source: 'Predictive Project Management',
+        text: 'Un couple décide de démarrer la construction d’une tiny house tout en repoussant plusieurs décisions de design intérieur à plus tard, afin d’avancer malgré l’incertitude. Quelle technique de planification cela illustre-t-il ?',
+        options: [
+          'Rolling wave planning.',
+          'Fast tracking.',
+          'Crashing.',
+          'Décomposition.'
+        ],
+        answer: 0,
+        explanation: 'Le rolling wave planning consiste à planifier le travail proche avec détail et le travail futur à un niveau plus macro, puis à affiner progressivement.'
+      },
+      {
+        id: 12,
+        domain: 'Predictive Project Management',
+        eco: 'Personne',
+        source: 'Predictive Project Management',
+        text: 'Un Change Control Board de cinq membres n’arrive pas à se mettre d’accord sur une demande de changement. Quelle est la meilleure façon d’aboutir à une décision ?',
+        options: [
+          'Chercher le consensus.',
+          'Faire voter et appliquer la règle de la majorité.',
+          'Laisser décider le membre le plus expérimenté.',
+          'Laisser trancher le directeur du comité.'
+        ],
+        answer: 0,
+        explanation: 'La collaboration et la recherche d’un consensus sont privilégiées pour engager durablement les parties dans la décision.'
+      },
+      {
+        id: 13,
+        domain: 'Communication & Parties prenantes',
+        eco: 'Environnement commercial',
+        source: 'Communication & Stakeholder Management',
+        text: 'Dans un projet de construction d’une usine électrique en zone forestière, un groupe d’écologistes lance des protestations médiatisées qui perturbent le projet. Que devait faire le chef de projet pour éviter cette situation ?',
+        options: [
+          'Travailler uniquement avec l’équipe projet sur des mesures de mitigation.',
+          'Souscrire une assurance pour protéger le projet contre de telles perturbations.',
+          'Engager un dialogue ouvert avec les écologistes pour comprendre leurs préoccupations.',
+          'Proposer une compensation financière afin d’obtenir leur soutien.'
+        ],
+        answer: 2,
+        explanation: 'L’engagement précoce des parties prenantes opposantes permet de comprendre leurs attentes, de construire la confiance et de réduire les résistances.'
+      },
+      {
+        id: 14,
+        domain: 'Communication & Parties prenantes',
+        eco: 'Personne',
+        source: 'Communication & Stakeholder Management',
+        text: 'Sur un projet international, certains acteurs trouvent les emails du chef de projet trop durs et abrasifs. Quelle est la meilleure réponse ?',
+        options: [
+          'Continuer ainsi, car être direct est une qualité.',
+          'Présenter des excuses pour l’éventuelle offense et adopter un ton plus sensible culturellement.',
+          'Exiger que les parties prenantes expliquent clairement leurs préférences avant tout nouvel échange.',
+          'Expliquer que ce style a toujours fonctionné sur d’autres projets.'
+        ],
+        answer: 1,
+        explanation: 'Le chef de projet doit adapter sa communication au contexte culturel et relationnel, réparer l’impact causé et ajuster sa posture.'
+      },
+      {
+        id: 15,
+        domain: 'Communication & Parties prenantes',
+        eco: 'Processus',
+        source: 'Communication & Stakeholder Management',
+        text: 'Dans une rétrospective virtuelle avec une équipe dispersée géographiquement, plusieurs membres ont oublié ou mal compris ce qui avait été dit la fois précédente. Que doit faire le chef de projet ?',
+        options: [
+          'Demander à tous de parler avec un accent américain pour mieux se comprendre.',
+          'Créer une règle d’équipe encourageant chacun à lever la main quand il ne comprend pas, et enregistrer les réunions.',
+          'Supprimer les rétrospectives au profit d’emails récapitulatifs uniquement.',
+          'Passer en réunions mensuelles pour laisser plus de temps à chacun.'
+        ],
+        answer: 1,
+        explanation: 'Une norme d’équipe claire et l’enregistrement des sessions améliorent la compréhension, la traçabilité et l’inclusion des participants distants.'
+      },
+      {
+        id: 16,
+        domain: 'Communication & Parties prenantes',
+        eco: 'Processus',
+        source: 'Communication & Stakeholder Management',
+        text: 'À mi-projet, le sponsor désigne un inspecteur qualité réputé difficile. Le chef de projet ne le connaît pas personnellement. Que doit-il faire ?',
+        options: [
+          'Demander un autre inspecteur.',
+          'Ignorer cet inspecteur puisqu’il est externe.',
+          'Collaborer avec lui et lui apporter l’assistance nécessaire.',
+          'Tenter d’influencer son jugement pour éviter qu’il remonte les défauts.'
+        ],
+        answer: 2,
+        explanation: 'Tout nouveau stakeholder doit être analysé, engagé et suivi. Il est inapproprié d’ignorer l’inspecteur ou d’essayer de manipuler son travail.'
+      },
+      {
+        id: 17,
+        domain: 'Project Team Management',
+        eco: 'Personne',
+        source: 'Project Team Management',
+        text: 'Dans un projet bancaire mobile, un membre clé se sent micromanagé et sollicite l’intervention du sponsor. Le chef de projet considère de son côté que la qualité du travail n’est pas au niveau. Quelle est la meilleure action ?',
+        options: [
+          'S’asseoir avec le membre concerné et le sponsor pour résoudre la situation de manière collaborative.',
+          'Demander au sponsor de retirer ce membre du projet.',
+          'Déclencher immédiatement une procédure disciplinaire.',
+          'Élargir le conflit à toute l’équipe projet.'
+        ],
+        answer: 0,
+        explanation: 'Une résolution collaborative avec les parties directement concernées permet de restaurer la confiance et d’aligner les attentes.'
+      },
+      {
+        id: 18,
+        domain: 'Project Team Management',
+        eco: 'Personne',
+        source: 'Project Team Management',
+        text: 'Dans un projet agile, un membre de l’équipe facilite à tour de rôle les daily stand-up, mais il s’en sort mal de façon répétée : il monopolise la parole et n’engage pas l’équipe. Que doit faire le chef de projet ?',
+        options: [
+          'Confier désormais ce rôle à quelqu’un d’autre.',
+          'Le critiquer publiquement à la fin de chaque stand-up.',
+          'Organiser des séances de coaching pour l’aider à améliorer sa facilitation.',
+          'Le retirer du projet.'
+        ],
+        answer: 2,
+        explanation: 'Le coaching est la réponse la plus constructive quand il s’agit d’aider un membre à progresser dans un rôle de facilitation.'
+      },
+      {
+        id: 19,
+        domain: 'Project Team Management',
+        eco: 'Personne',
+        source: 'Project Team Management',
+        text: 'Lors des trois derniers daily stand-up, un nouveau membre semble bloqué sur sa tâche et ne progresse pas. Que doit faire le chef de projet ?',
+        options: [
+          'Confier la tâche à quelqu’un d’autre sans discussion.',
+          'Voir après le stand-up si d’autres membres peuvent l’aider.',
+          'Lui exprimer sa déception pour le pousser à faire plus d’efforts.',
+          'Lui demander simplement de relire les règles de l’équipe.'
+        ],
+        answer: 1,
+        explanation: 'La meilleure réponse est le soutien par les pairs, qui permet au nouveau membre de surmonter le blocage tout en développant ses compétences.'
+      },
+      {
+        id: 20,
+        domain: 'Project Team Management',
+        eco: 'Personne',
+        source: 'Project Team Management',
+        text: 'Quatre mois après le démarrage, certains membres de l’équipe performent moins bien alors que d’autres restent au niveau attendu. Que doit faire le chef de projet pour remettre toute l’équipe sur les rails ?',
+        options: [
+          'Parler publiquement des moins performants devant toute l’équipe.',
+          'Introduire un système de bonus compétitif pour les meilleurs.',
+          'Ne pas intervenir et attendre une amélioration spontanée.',
+          'Identifier les causes, recueillir du feedback et mettre en place des solutions adaptées.'
+        ],
+        answer: 3,
+        explanation: 'Il faut d’abord comprendre les causes de la baisse de performance, puis agir de façon ciblée avec accompagnement et suivi.'
+      },
+      {
+        id: 21,
+        domain: 'Risk Management',
+        eco: 'Environnement commercial',
+        source: 'Risk Management',
+        text: 'Un projet logiciel exige une compétence technique spécialisée très demandée sur le marché, difficile à recruter et à retenir. Quelle est la meilleure réponse du chef de projet ?',
+        options: [
+          'Faire une analyse des alternatives et prévoir une réserve de coût suffisante.',
+          'Changer entièrement le langage de programmation sans autre analyse.',
+          'Envoyer toute l’équipe en bootcamp sur cette compétence.',
+          'Considérer le risque comme impossible à traiter et ne rien planifier.'
+        ],
+        answer: 0,
+        explanation: 'La rareté des compétences crée de la volatilité. L’analyse des alternatives et les réserves de coût ou de délai sont des réponses adaptées.'
+      },
+      {
+        id: 22,
+        domain: 'Risk Management',
+        eco: 'Processus',
+        source: 'Risk Management',
+        text: 'Dans un projet agile du secteur financier, le Product Owner recommande d’utiliser un backlog ajusté aux risques. Que doit faire le chef de projet ?',
+        options: [
+          'S’assurer qu’au moins une ou deux réponses aux risques sont intégrées dans chaque sprint.',
+          'Créer un sprint entier réservé à tous les risques identifiés.',
+          'Se contenter de garder le registre des risques à jour.',
+          'Réserver les rétrospectives au seul examen des risques.'
+        ],
+        answer: 0,
+        explanation: 'Un backlog ajusté aux risques intègre le traitement des menaces et opportunités dans le flux normal de livraison, de manière itérative.'
+      },
+      {
+        id: 23,
+        domain: 'Risk Management',
+        eco: 'Processus',
+        source: 'Risk Management',
+        text: 'Malgré un plan de management de projet très bien élaboré, le chef de projet craint que des événements imprévus aient un fort impact sur le projet. Que doit-il faire ?',
+        options: [
+          'Identifier ces événements et mettre à jour le plan.',
+          'Prévoir une réserve de management.',
+          'Discuter de ces événements avec le sponsor pour créer un fallback plan.',
+          'Faire une analyse qualitative de ces événements.'
+        ],
+        answer: 1,
+        explanation: 'Les événements imprévus non identifiables à l’avance relèvent des unknown unknowns. On y répond par une réserve de management.'
+      },
+      {
+        id: 24,
+        domain: 'Quality & Information Management',
+        eco: 'Processus',
+        source: 'Quality & Information Management',
+        text: 'Dans un projet de e-commerce, une équipe de développement sous contrat produit un code de qualité insuffisante provoquant des plantages fréquents. Quelle est la meilleure action ?',
+        options: [
+          'Lancer un processus de revue formel et mettre en place un plan d’actions correctives.',
+          'Engager immédiatement une procédure judiciaire.',
+          'Écarter l’équipe concernée et redistribuer son travail sans analyse.',
+          'Faire une expertise indépendante puis attendre avant d’agir.'
+        ],
+        answer: 0,
+        explanation: 'Face à une non-conformité, la réponse la plus appropriée est une revue structurée suivie d’un plan correctif concret.'
+      },
+      {
+        id: 25,
+        domain: 'Quality & Information Management',
+        eco: 'Processus',
+        source: 'Quality & Information Management',
+        text: 'Dans un projet de construction, des matériaux sont livrés conformément à la date prévue dans un contrat à prix forfaitaire. Que doit faire le chef de projet avant toute autre chose ?',
+        options: [
+          'Inspecter les matériaux pour vérifier leur conformité aux exigences contractuelles.',
+          'Commencer immédiatement les travaux pour éviter tout retard.',
+          'Utiliser une partie des matériaux pendant que le reste est inspecté.',
+          'Payer le fournisseur puis clôturer le contrat.'
+        ],
+        answer: 0,
+        explanation: 'Les matériaux doivent être inspectés avant leur utilisation afin de confirmer leur conformité avec les spécifications et standards contractuels.'
+      },
+      {
+        id: 26,
+        domain: 'Quality & Information Management',
+        eco: 'Processus',
+        source: 'Quality & Information Management',
+        text: 'Après vérification interne exhaustive d’une machine, le client demande si le produit répond bien aux exigences. Que doit faire le chef de projet ?',
+        options: [
+          'Confirmer que les tests internes suffisent et clôturer le projet.',
+          'Refaire le contrôle qualité en utilisant la réserve de contingence.',
+          'Collaborer avec le client pour obtenir son acceptation formelle des livrables.',
+          'Envoyer un ingénieur sur site pour revérifier techniquement la machine.'
+        ],
+        answer: 2,
+        explanation: 'L’acceptation formelle du client relève de la validation du périmètre : il faut travailler avec lui pour confirmer que les exigences sont bien satisfaites.'
+      },
+      {
+        id: 27,
+        domain: 'Procurement & Contract Management',
+        eco: 'Processus',
+        source: 'Procurement & Contract Management',
+        text: 'En cours d’exécution d’un projet de construction, un fournisseur annonce un retard possible de trois jours sur la livraison de barres d’acier. Que doit faire d’abord le chef de projet ?',
+        options: [
+          'Négocier immédiatement une réduction du retard.',
+          'Chercher un autre fournisseur.',
+          'Évaluer l’impact du retard.',
+          'Mettre à jour directement le planning.'
+        ],
+        answer: 2,
+        explanation: 'Avant d’agir, il faut analyser l’impact réel sur le projet. Un retard fournisseur ne signifie pas automatiquement un retard global.'
+      },
+      {
+        id: 28,
+        domain: 'Procurement & Contract Management',
+        eco: 'Processus',
+        source: 'Procurement & Contract Management',
+        text: 'Le chef de projet souhaite mettre fin à une relation difficile avec un fournisseur. Dans quel document doit-il vérifier la clause de résiliation et le mécanisme de résolution des litiges ?',
+        options: [
+          'Les critères de sélection des fournisseurs.',
+          'L’offre du fournisseur.',
+          'L’accord / contrat.',
+          'La charte du projet.'
+        ],
+        answer: 2,
+        explanation: 'Les clauses de résiliation, de règlement des litiges et les autres dispositions juridiques figurent dans l’accord contractuel.'
+      },
+      {
+        id: 29,
+        domain: 'Scénarios PMP',
+        eco: 'Personne',
+        source: 'PMP Scenarios',
+        text: 'Le chef de projet constate des désaccords constants entre les membres de l’équipe pendant les réunions. Que doit-il faire ?',
+        options: [
+          'Laisser l’équipe résoudre seule le problème avec le temps.',
+          'Intervenir pour résoudre les désaccords et guider l’équipe vers une culture de collaboration.',
+          'Demander au sponsor de remplacer les membres en conflit.',
+          'Supprimer les réunions pour éviter les tensions.'
+        ],
+        answer: 1,
+        explanation: 'Le chef de projet doit traiter le conflit de façon constructive afin de restaurer la coopération et la collaboration dans l’équipe.'
+      },
+      {
+        id: 30,
+        domain: 'Scénarios PMP',
+        eco: 'Processus',
+        source: 'PMP Scenarios',
+        text: 'Le projet a choisi un cadre Kanban pour l’exécution. Sur quoi le chef de projet doit-il surtout se concentrer ?',
+        options: [
+          'Un planning figé avec des lots mensuels.',
+          'Un workflow continu et la limitation du travail en cours (WIP).',
+          'Une validation unique en fin de projet.',
+          'Une forte documentation préalable avant tout démarrage.'
+        ],
+        answer: 1,
+        explanation: 'En Kanban, l’optimisation du flux et la limitation du WIP sont essentielles pour améliorer la fluidité et réduire l’encombrement du système.'
+      }
+    ];
 
-let currentQ = 0;
-let userAnswers = [];
-let timeLeft = 40 * 60;
-
-function displayQuestion() {
-    const qArea = document.getElementById('questions-area');
-    qArea.innerHTML = "";
-    questions.forEach((item, index) => {
-        let div = document.createElement('div');
-        div.className = "question" + (index === currentQ ? " active" : "");
-        div.innerHTML = `<h3>Question ${index + 1} [${item.cat} / ECO: ${item.eco}]</h3>
-                         <p>${item.q}</p>
-                         ${item.options.map((opt, i) => `<label><input type="radio" name="q${index}" value="${i}" ${userAnswers[index] == i ? 'checked' : ''}> ${opt}</label><br>`).join('')}`;
-        qArea.appendChild(div);
-    });
-}
-
-function changeQuestion(step) {
-    saveAnswer();
-    currentQ += step;
-    if (currentQ >= questions.length - 1) {
-        document.getElementById('next-btn').style.display = "none";
-        document.getElementById('submit-btn').style.display = "inline-block";
-    } else {
-        document.getElementById('next-btn').style.display = "inline-block";
-        document.getElementById('submit-btn').style.display = "none";
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
-    document.getElementById('prev-btn').disabled = (currentQ === 0);
-    displayQuestion();
-}
 
-function saveAnswer() {
-    const activeQ = document.querySelector('.question.active input:checked');
-    if (activeQ) userAnswers[currentQ] = activeQ.value;
-}
+    function showOnly(viewId) {
+      ['homeView', 'examView', 'resultView', 'trainerLoginView', 'trainerView'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+      });
+      document.getElementById(viewId).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
-function startTimer() {
-    const timerEl = document.getElementById('timer');
-    const interval = setInterval(() => {
-        timeLeft--;
-        let min = Math.floor(timeLeft / 60);
-        let sec = timeLeft % 60;
-        timerEl.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-        if (timeLeft <= 0) { clearInterval(interval); finishQuiz(); }
-    }, 1000);
-}
+    function goHome() {
+      clearInterval(timerInterval);
+      showOnly('homeView');
+    }
 
-function finishQuiz() {
-    saveAnswer();
-    document.getElementById('quiz-container').classList.add('hidden');
-    document.getElementById('result-container').classList.remove('hidden');
-    
-    let correctCount = 0;
-    questions.forEach((q, i) => { if(userAnswers[i] == q.ans) correctCount++; });
-    document.getElementById('score-text').innerText = `Vous avez obtenu ${correctCount} sur ${questions.length}.`;
-}
+    function createAttemptId() {
+      return `ATT-${Date.now()}`;
+    }
 
-function showLogin() {
-    document.getElementById('login-area').classList.remove('hidden');
-}
+    function startExam() {
+      currentAttemptId = createAttemptId();
+      remainingSeconds = EXAM_DURATION_SECONDS;
+      renderQuestions();
+      updateAnsweredCount();
+      document.getElementById('timer').textContent = formatTime(remainingSeconds);
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        remainingSeconds -= 1;
+        document.getElementById('timer').textContent = formatTime(remainingSeconds);
+        if (remainingSeconds <= 0) {
+          submitExam(false);
+        }
+      }, 1000);
+      showOnly('examView');
+    }
 
-function checkPass() {
-    if (document.getElementById('pass').value === "221008") {
-        showDashboard();
-    } else { alert("Mot de passe incorrect"); }
-}
+    function renderQuestions() {
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = questions.map((q, idx) => `
+        <div class="question-card" id="qcard-${q.id}">
+          <div class="question-meta">
+            <span class="pill">Question ${idx + 1}</span>
+            <span class="pill">${q.domain}</span>
+            <span class="pill">ECO : ${q.eco}</span>
+          </div>
+          <h3>${q.text}</h3>
+          <div>
+            ${q.options.map((opt, optIdx) => `
+              <label class="option" id="q${q.id}-opt${optIdx}">
+                <input type="radio" name="q${q.id}" value="${optIdx}" onchange="updateAnsweredCount()" />
+                <strong>${String.fromCharCode(65 + optIdx)}.</strong> ${opt}
+              </label>
+            `).join('')}
+          </div>
+          <div id="exp-${q.id}" class="hidden"></div>
+        </div>
+      `).join('');
+    }
 
-function showDashboard() {
-    document.getElementById('login-area').classList.add('hidden');
-    document.getElementById('dashboard-area').classList.remove('hidden');
-    
-    let statsHTML = "<table><tr><th>Domaine</th><th>ECO</th><th>Score</th></tr>";
-    // Logique de calcul par domaine...
-    statsHTML += "<tr><td>Agile</td><td>Personnes</td><td>80%</td></tr>";
-    statsHTML += "<tr><td>Prédictif</td><td>Processus</td><td>70%</td></tr>";
-    statsHTML += "</table>";
-    document.getElementById('stats').innerHTML = statsHTML;
-}
+    function updateAnsweredCount() {
+      const answered = questions.filter(q => document.querySelector(`input[name="q${q.id}"]:checked`)).length;
+      const el = document.getElementById('answeredCount');
+      if (el) el.textContent = answered;
+    }
 
-startTimer();
-displayQuestion();
-</script>
+    function collectAnswers() {
+      return questions.map(q => {
+        const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+        return {
+          id: q.id,
+          selected: selected ? Number(selected.value) : null,
+          correct: q.answer
+        };
+      });
+    }
+
+    function computeResults() {
+      const answers = collectAnswers();
+      let score = 0;
+      const byDomain = {};
+      const byEco = {};
+
+      questions.forEach(q => {
+        if (!byDomain[q.domain]) byDomain[q.domain] = { total: 0, correct: 0 };
+        if (!byEco[q.eco]) byEco[q.eco] = { total: 0, correct: 0 };
+        byDomain[q.domain].total += 1;
+        byEco[q.eco].total += 1;
+      });
+
+      answers.forEach(ans => {
+        const q = questions.find(item => item.id === ans.id);
+        const isCorrect = ans.selected === ans.correct;
+        if (isCorrect) {
+          score += 1;
+          byDomain[q.domain].correct += 1;
+          byEco[q.eco].correct += 1;
+        }
+      });
+
+      return { answers, score, byDomain, byEco };
+    }
+
+    function percent(correct, total) {
+      if (!total) return 0;
+      return Math.round((correct / total) * 100);
+    }
+
+    function submitExam(manual) {
+      clearInterval(timerInterval);
+      const results = computeResults();
+      renderCorrections(results.answers);
+      saveAttempt(results);
+      renderResultPage(results, manual);
+      showOnly('resultView');
+    }
+
+    function renderCorrections(answers) {
+      answers.forEach(ans => {
+        const q = questions.find(item => item.id === ans.id);
+        q.options.forEach((_, optIdx) => {
+          const label = document.getElementById(`q${q.id}-opt${optIdx}`);
+          if (!label) return;
+          label.classList.remove('correct', 'incorrect');
+          if (optIdx === q.answer) label.classList.add('correct');
+          if (ans.selected === optIdx && ans.selected !== q.answer) label.classList.add('incorrect');
+        });
+        const exp = document.getElementById(`exp-${q.id}`);
+        if (exp) {
+          const ok = ans.selected === q.answer;
+          exp.className = `explanation ${ok ? 'ok' : 'bad'}`;
+          exp.innerHTML = `<strong>${ok ? 'Bonne réponse.' : 'Correction.'}</strong> Réponse attendue : <strong>${String.fromCharCode(65 + q.answer)}</strong>. ${q.explanation}`;
+        }
+      });
+    }
+
+    function renderBarRows(obj) {
+      return Object.entries(obj).map(([label, data]) => {
+        const p = percent(data.correct, data.total);
+        return `
+          <div class="bar-row">
+            <div><strong>${label}</strong> — ${data.correct}/${data.total} (${p}%)</div>
+            <div class="bar-track"><div class="bar-fill" style="width:${p}%"></div></div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderDetailedReview(answers) {
+      return questions.map((q, idx) => {
+        const ans = answers.find(a => a.id === q.id);
+        const user = ans.selected !== null ? `${String.fromCharCode(65 + ans.selected)}` : 'Aucune réponse';
+        const good = `${String.fromCharCode(65 + q.answer)}`;
+        const ok = ans.selected === q.answer;
+        return `
+          <div class="question-card">
+            <div class="question-meta">
+              <span class="pill">Question ${idx + 1}</span>
+              <span class="pill">${q.domain}</span>
+              <span class="pill">ECO : ${q.eco}</span>
+            </div>
+            <h3>${q.text}</h3>
+            <div class="explanation ${ok ? 'ok' : 'bad'}">
+              <strong>Votre réponse :</strong> ${user}<br>
+              <strong>Bonne réponse :</strong> ${good}<br>
+              <strong>Explication :</strong> ${q.explanation}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderResultPage(results, manual) {
+      const scorePct = percent(results.score, questions.length);
+      document.getElementById('resultView').innerHTML = `
+        <div class="result-box">
+          <h2 class="section-title">Résultats de l'examen</h2>
+          <div class="result-score">${results.score}/30 — ${scorePct}%</div>
+          <p>${manual ? 'Examen soumis manuellement.' : 'Le temps est écoulé. L’examen a été soumis automatiquement.'}</p>
+          <div class="dashboard-grid">
+            <div>
+              <h3>Performance par domaine</h3>
+              <div class="bars">${renderBarRows(results.byDomain)}</div>
+            </div>
+            <div>
+              <h3>Performance par ECO</h3>
+              <div class="bars">${renderBarRows(results.byEco)}</div>
+            </div>
+          </div>
+          <div class="controls">
+            <button class="btn-primary" onclick="startExam()">Recommencer un nouvel essai</button>
+            <button class="btn-light" onclick="showTrainerLogin()">Accès formateur</button>
+            <button class="btn-light" onclick="goHome()">Accueil</button>
+          </div>
+        </div>
+        <div>
+          <h2 class="section-title">Corrigé détaillé</h2>
+          ${renderDetailedReview(results.answers)}
+        </div>
+      `;
+    }
+
+    function getAttempts() {
+      try {
+        return JSON.parse(localStorage.getItem('pmp_exam_attempts') || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function saveAttempt(results) {
+      const attempts = getAttempts();
+      const payload = {
+        attemptId: currentAttemptId || createAttemptId(),
+        date: new Date().toLocaleString('fr-FR'),
+        score: results.score,
+        total: questions.length,
+        percent: percent(results.score, questions.length),
+        byDomain: results.byDomain,
+        byEco: results.byEco
+      };
+      attempts.unshift(payload);
+      localStorage.setItem('pmp_exam_attempts', JSON.stringify(attempts));
+    }
+
+    function saveProgress() {
+      const progress = collectAnswers();
+      localStorage.setItem('pmp_exam_progress', JSON.stringify({
+        savedAt: new Date().toLocaleString('fr-FR'),
+        remainingSeconds,
+        progress
+      }));
+      alert('Progression sauvegardée localement dans ce navigateur.');
+    }
+
+    function showTrainerLogin() {
+      document.getElementById('trainerPassword').value = '';
+      document.getElementById('trainerLoginMessage').textContent = 'Entrez le mot de passe formateur pour consulter le tableau de bord.';
+      showOnly('trainerLoginView');
+    }
+
+    function loginTrainer() {
+      const pwd = document.getElementById('trainerPassword').value.trim();
+      if (pwd !== TRAINER_PASSWORD) {
+        document.getElementById('trainerLoginMessage').textContent = 'Mot de passe incorrect.';
+        return;
+      }
+      renderTrainerDashboard();
+      showOnly('trainerView');
+    }
+
+    function aggregateAttempts(attempts) {
+      const domainAgg = {};
+      const ecoAgg = {};
+
+      attempts.forEach(attempt => {
+        Object.entries(attempt.byDomain || {}).forEach(([label, data]) => {
+          if (!domainAgg[label]) domainAgg[label] = { correct: 0, total: 0 };
+          domainAgg[label].correct += data.correct;
+          domainAgg[label].total += data.total;
+        });
+        Object.entries(attempt.byEco || {}).forEach(([label, data]) => {
+          if (!ecoAgg[label]) ecoAgg[label] = { correct: 0, total: 0 };
+          ecoAgg[label].correct += data.correct;
+          ecoAgg[label].total += data.total;
+        });
+      });
+
+      const avg = attempts.length
+        ? Math.round(attempts.reduce((sum, a) => sum + a.percent, 0) / attempts.length)
+        : 0;
+
+      return { domainAgg, ecoAgg, avg };
+    }
+
+    function renderTrainerDashboard() {
+      const attempts = getAttempts();
+      const { domainAgg, ecoAgg, avg } = aggregateAttempts(attempts);
+
+      document.getElementById('trainerView').innerHTML = `
+        <div class="hero">
+          <h1>Dashboard formateur</h1>
+          <p>Mot de passe validé. Les données ci-dessous proviennent des tentatives enregistrées dans ce navigateur.</p>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="card">
+            <h2 class="section-title">Vue générale</h2>
+            <div class="meta-list">
+              <div class="meta-item"><strong>Nombre de tentatives</strong><span>${attempts.length}</span></div>
+              <div class="meta-item"><strong>Moyenne générale</strong><span>${avg}%</span></div>
+              <div class="meta-item"><strong>Questions</strong><span>30</span></div>
+              <div class="meta-item"><strong>Durée</strong><span>40 minutes</span></div>
+            </div>
+            <div class="controls">
+              <button class="btn-light" onclick="renderTrainerDashboard()">Actualiser</button>
+              <button class="btn-danger" onclick="clearDashboardData()">Effacer les données locales</button>
+              <button class="btn-light" onclick="goHome()">Accueil</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2 class="section-title">Lecture du dashboard</h2>
+            <p class="small">Le tableau de bord montre les performances cumulées par domaine de connaissance et par domaine ECO. Sans base de données distante, cela représente les résultats saisis sur cet appareil / ce navigateur uniquement.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid" style="margin-top:20px;">
+          <div class="card">
+            <h2 class="section-title">Performance cumulée par domaine</h2>
+            <div class="bars">${renderBarRows(domainAgg)}</div>
+          </div>
+          <div class="card">
+            <h2 class="section-title">Performance cumulée par ECO</h2>
+            <div class="bars">${renderBarRows(ecoAgg)}</div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:20px;">
+          <h2 class="section-title">Historique des tentatives</h2>
+          ${attempts.length ? `
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>ID tentative</th>
+                  <th>Score</th>
+                  <th>Pourcentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${attempts.map(a => `
+                  <tr>
+                    <td>${a.date}</td>
+                    <td>${a.attemptId}</td>
+                    <td>${a.score}/${a.total}</td>
+                    <td>${a.percent}%</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          ` : `<p class="small">Aucune tentative enregistrée pour le moment.</p>`}
+        </div>
+      `;
+    }
+
+    function clearDashboardData() {
+      const ok = confirm('Voulez-vous vraiment supprimer toutes les tentatives enregistrées localement ?');
+      if (!ok) return;
+      localStorage.removeItem('pmp_exam_attempts');
+      renderTrainerDashboard();
+    }
+  </script>
 </body>
 </html>
