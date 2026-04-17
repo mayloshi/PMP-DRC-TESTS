@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examen blanc PMP - Version 2</title>
+  <title>Examen blanc PMP - Version 3</title>
   <style>
     :root {
       --bg: #f4f6fb;
@@ -285,9 +285,9 @@
   <div class="container">
     <section id="homeView">
       <div class="hero">
-        <h1>Examen blanc PMP - Version 2</h1>
+        <h1>Examen blanc PMP - Version 3</h1>
         <p>30 questions • 40 minutes • français • correction détaillée • tableau de bord formateur</p>
-        <p>Cette version est plus professionnelle : identité du participant, interface améliorée, corrigé détaillé, résultats ventilés par domaine et par ECO PMI, et option de préparation d’envoi par email depuis le poste du participant.</p>
+        <p>Cette version 3 ajoute un mode d’envoi centralisé prêt à brancher sur un service externe, une exportation CSV, un dashboard enrichi, et une meilleure préparation à une mise en ligne réelle.</p>
       </div>
       <div class="grid">
         <div class="card">
@@ -307,7 +307,10 @@
             </label>
           </div>
           <div class="warning">
-            Cette page est conçue pour GitHub Pages, donc sans serveur. L’option email peut <strong>préparer un email dans l’application mail du participant</strong>, mais elle ne peut pas envoyer automatiquement un email depuis le site sans backend ou service externe.
+            Je ne peux pas recopier textuellement dans cette page de longues questions et explications provenant des PDF, mais cette version reprend leur contenu de manière fidèle et exploitable pour l’entraînement. Si vous voulez, je peux ensuite remplacer chaque question par une reformulation encore plus proche, domaine par domaine.
+          </div>
+          <div class="success">
+            Version 3 : si vous renseignez un endpoint web dans la configuration du code, les résultats pourront être envoyés automatiquement vers un stockage centralisé compatible avec GitHub Pages.
           </div>
           <div id="startMessage" class="small" style="margin-top:12px;"></div>
           <div class="controls">
@@ -387,6 +390,13 @@
 
   <script>
     const TRAINER_PASSWORD = '221008';
+    const APP_CONFIG = {
+      // Remplacez cette valeur par votre endpoint Formspree, Apps Script Web App,
+      // Supabase Edge Function, Make, Zapier, etc.
+      RESULT_ENDPOINT: '',
+      ENABLE_REMOTE_SUBMIT: false,
+      APP_TITLE: 'Examen blanc PMP - Version 3'
+    };
     const EXAM_DURATION_SECONDS = 40 * 60;
     let timerInterval = null;
     let remainingSeconds = EXAM_DURATION_SECONDS;
@@ -1088,11 +1098,12 @@
       return `mailto:${participant.email}?subject=${subject}&body=${body}`;
     }
 
-    function submitExam(manual) {
+    async function submitExam(manual) {
       clearInterval(timerInterval);
       const results = computeResults();
       renderCorrections(results.answers);
       saveAttempt(results);
+      await tryRemoteSubmit(results);
       renderResultPage(results, manual);
       showOnly('resultView');
     }
@@ -1100,6 +1111,9 @@
     function renderResultPage(results, manual) {
       const scorePct = percent(results.score, questions.length);
       const mailtoLink = tryPrepareEmail(results);
+      const remoteNote = APP_CONFIG.ENABLE_REMOTE_SUBMIT && APP_CONFIG.RESULT_ENDPOINT
+        ? `<div class="success">Les résultats ont été préparés pour envoi vers l’endpoint centralisé configuré.</div>`
+        : `<div class="warning">Aucun endpoint distant n’est encore configuré. Les résultats restent enregistrés localement dans ce navigateur.</div>`;
       document.getElementById('resultView').innerHTML = `
         <div class="result-box">
           <h2 class="section-title">Résultats de l'examen</h2>
@@ -1116,6 +1130,7 @@
               <div class="bars">${renderBarRows(results.byEco)}</div>
             </div>
           </div>
+          ${remoteNote}
           ${mailtoLink ? `
             <div class="success">
               Vous avez demandé l’envoi des résultats par email. Le bouton ci-dessous va <strong>ouvrir votre application de messagerie</strong> avec un email prérempli contenant vos réponses et résultats.
@@ -1123,6 +1138,7 @@
           ` : ''}
           <div class="controls">
             ${mailtoLink ? `<a href="${mailtoLink}"><button class="btn-secondary" type="button">Préparer l'email des résultats</button></a>` : ''}
+            <button class="btn-light" onclick="downloadLastAttemptCSV()">Exporter ce résultat en CSV</button>
             <button class="btn-primary" onclick="startOver()">Nouvel essai</button>
             <button class="btn-light" onclick="showTrainerLogin()">Accès formateur</button>
             <button class="btn-light" onclick="goHome()">Accueil</button>
@@ -1160,10 +1176,12 @@
         total: questions.length,
         percent: percent(results.score, questions.length),
         byDomain: results.byDomain,
-        byEco: results.byEco
+        byEco: results.byEco,
+        answers: results.answers
       };
       attempts.unshift(payload);
       localStorage.setItem('pmp_exam_attempts_v2', JSON.stringify(attempts));
+      localStorage.setItem('pmp_exam_last_attempt_v2', JSON.stringify(payload));
     }
 
     function saveProgress() {
@@ -1288,7 +1306,72 @@
     function clearDashboardData() {
       if (!confirm('Supprimer toutes les tentatives enregistrées localement ?')) return;
       localStorage.removeItem('pmp_exam_attempts_v2');
+      localStorage.removeItem('pmp_exam_last_attempt_v2');
       renderTrainerDashboard();
+    }
+
+    async function tryRemoteSubmit(results) {
+      if (!(APP_CONFIG.ENABLE_REMOTE_SUBMIT && APP_CONFIG.RESULT_ENDPOINT)) return;
+      const payload = {
+        appTitle: APP_CONFIG.APP_TITLE,
+        submittedAt: new Date().toISOString(),
+        attemptId: currentAttemptId,
+        participant,
+        score: results.score,
+        total: questions.length,
+        percent: percent(results.score, questions.length),
+        byDomain: results.byDomain,
+        byEco: results.byEco,
+        answers: results.answers.map(a => {
+          const q = questions.find(x => x.id === a.id);
+          return {
+            questionId: a.id,
+            domain: q.domain,
+            eco: q.eco,
+            question: q.text,
+            selected: a.selected,
+            correct: a.correct,
+            selectedLabel: a.selected === null ? null : String.fromCharCode(65 + a.selected),
+            correctLabel: String.fromCharCode(65 + a.correct)
+          };
+        })
+      };
+      try {
+        await fetch(APP_CONFIG.RESULT_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (error) {
+        console.error('Envoi distant impossible :', error);
+      }
+    }
+
+    function downloadLastAttemptCSV() {
+      const raw = localStorage.getItem('pmp_exam_last_attempt_v2');
+      if (!raw) {
+        alert('Aucun résultat récent à exporter.');
+        return;
+      }
+      const attempt = JSON.parse(raw);
+      const rows = [['Date','Participant','Email','ID tentative','Score','Pourcentage']];
+      rows.push([attempt.date, attempt.participantName, attempt.participantEmail || '', attempt.attemptId, `${attempt.score}/${attempt.total}`, `${attempt.percent}%`]);
+      rows.push([]);
+      rows.push(['QuestionID','Réponse participant','Bonne réponse']);
+      (attempt.answers || []).forEach(a => {
+        const user = a.selected === null ? 'NR' : String.fromCharCode(65 + a.selected);
+        const good = String.fromCharCode(65 + a.correct);
+        rows.push([a.id, user, good]);
+      });
+      const csv = rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('
+');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `resultat-pmp-${attempt.attemptId}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
     }
   </script>
 </body>
