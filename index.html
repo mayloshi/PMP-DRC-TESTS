@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examen blanc PMP - 30 questions</title>
+  <title>Examen blanc PMP - Version 2</title>
   <style>
     :root {
-      --bg: #f5f7fb;
+      --bg: #f4f6fb;
       --card: #ffffff;
       --text: #1f2937;
       --muted: #6b7280;
       --line: #e5e7eb;
-      --primary: #8b1e1e;
+      --primary: #7f1d1d;
       --primary-2: #b91c1c;
+      --dark: #111827;
       --ok: #166534;
       --ok-bg: #dcfce7;
       --bad: #991b1b;
       --bad-bg: #fee2e2;
-      --warn-bg: #fff7ed;
       --warn: #9a3412;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      --radius: 18px;
+      --warn-bg: #fff7ed;
+      --radius: 20px;
+      --shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
     }
-
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -31,58 +31,48 @@
       color: var(--text);
     }
     .container {
-      max-width: 1150px;
+      max-width: 1180px;
       margin: 0 auto;
       padding: 24px;
     }
     .hero {
-      background: linear-gradient(135deg, #7f1d1d, #991b1b 55%, #b91c1c);
+      background: linear-gradient(135deg, #7f1d1d, #991b1b 52%, #dc2626);
       color: white;
-      border-radius: 24px;
-      padding: 28px;
+      border-radius: 28px;
+      padding: 30px;
       box-shadow: var(--shadow);
       margin-bottom: 24px;
     }
     .hero h1 {
-      margin: 0 0 10px 0;
-      font-size: 2rem;
+      margin: 0 0 10px;
+      font-size: 2.1rem;
     }
     .hero p {
-      margin: 6px 0;
-      opacity: 0.96;
-      line-height: 1.5;
+      margin: 8px 0;
+      line-height: 1.6;
+      opacity: 0.97;
     }
     .grid {
       display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
+      grid-template-columns: 1.2fr 0.8fr;
       gap: 24px;
     }
     .card {
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: var(--radius);
+      padding: 22px;
       box-shadow: var(--shadow);
-      padding: 20px;
     }
     .section-title {
-      font-size: 1.15rem;
       margin: 0 0 14px;
+      font-size: 1.18rem;
     }
     .meta-list {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
-      margin-top: 16px;
-    }
-    .pill {
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: #f3f4f6;
-      color: #374151;
-      font-size: 0.92rem;
-      display: inline-block;
-      margin-right: 8px;
-      margin-bottom: 8px;
+      margin-top: 14px;
     }
     .meta-item {
       background: #f8fafc;
@@ -92,69 +82,116 @@
     }
     .meta-item strong {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
+    }
+    .pill {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
+      color: #374151;
+      font-size: 0.92rem;
+      margin-right: 8px;
+      margin-bottom: 8px;
     }
     .controls {
       display: flex;
-      flex-wrap: wrap;
       gap: 12px;
+      flex-wrap: wrap;
       margin-top: 18px;
     }
     button {
       border: none;
       border-radius: 12px;
       padding: 12px 16px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      transition: transform 0.15s ease, opacity 0.15s ease;
+      transition: transform 0.15s ease;
     }
     button:hover { transform: translateY(-1px); }
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-    .btn-secondary {
-      background: #111827;
-      color: white;
-    }
-    .btn-light {
-      background: #f3f4f6;
-      color: #111827;
-      border: 1px solid var(--line);
-    }
-    .btn-danger {
-      background: #dc2626;
-      color: white;
-    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-secondary { background: var(--dark); color: white; }
+    .btn-light { background: #f3f4f6; color: #111827; border: 1px solid var(--line); }
+    .btn-danger { background: #dc2626; color: white; }
     .hidden { display: none !important; }
+    .field { margin-bottom: 14px; }
+    .field label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .field input[type="text"],
+    .field input[type="email"],
+    .field input[type="password"] {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #d1d5db;
+      font-size: 1rem;
+      background: white;
+    }
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #fafafa;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 8px;
+    }
+    .small {
+      font-size: 0.93rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .warning {
+      background: var(--warn-bg);
+      color: var(--warn);
+      border: 1px solid #fed7aa;
+      border-radius: 14px;
+      padding: 13px 14px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    .success {
+      background: var(--ok-bg);
+      color: var(--ok);
+      border: 1px solid #86efac;
+      border-radius: 14px;
+      padding: 13px 14px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
     .exam-header {
       position: sticky;
       top: 0;
-      z-index: 5;
-      background: rgba(245,247,251,0.96);
+      z-index: 10;
+      background: rgba(244,246,251,0.95);
       backdrop-filter: blur(8px);
       padding: 14px 0 18px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .exam-topbar {
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
     .stats-inline {
       display: flex;
-      flex-wrap: wrap;
       gap: 10px;
+      flex-wrap: wrap;
     }
     .badge {
       background: white;
       border: 1px solid var(--line);
       border-radius: 999px;
       padding: 9px 14px;
-      font-size: 0.92rem;
       box-shadow: var(--shadow);
+      font-size: 0.93rem;
     }
     .question-card {
       background: white;
@@ -166,11 +203,8 @@
     }
     .question-card h3 {
       margin: 0 0 10px;
+      line-height: 1.5;
       font-size: 1.05rem;
-      line-height: 1.45;
-    }
-    .question-meta {
-      margin-bottom: 12px;
     }
     .option {
       display: block;
@@ -180,53 +214,41 @@
       margin-bottom: 10px;
       cursor: pointer;
       background: #fff;
+      line-height: 1.45;
     }
     .option input { margin-right: 10px; }
-    .option.correct {
-      border-color: #16a34a;
-      background: var(--ok-bg);
-    }
-    .option.incorrect {
-      border-color: #dc2626;
-      background: var(--bad-bg);
-    }
+    .option.correct { background: var(--ok-bg); border-color: #22c55e; }
+    .option.incorrect { background: var(--bad-bg); border-color: #ef4444; }
+    .question-meta { margin-bottom: 12px; }
     .explanation {
       border-radius: 14px;
       padding: 14px;
       line-height: 1.55;
       margin-top: 12px;
     }
-    .explanation.ok {
-      background: var(--ok-bg);
-      color: var(--ok);
-    }
-    .explanation.bad {
-      background: var(--warn-bg);
-      color: var(--warn);
-    }
+    .explanation.ok { background: var(--ok-bg); color: var(--ok); }
+    .explanation.bad { background: var(--warn-bg); color: var(--warn); }
     .result-box {
       background: white;
       border: 1px solid var(--line);
-      border-radius: 20px;
+      border-radius: 22px;
       box-shadow: var(--shadow);
       padding: 22px;
       margin-bottom: 20px;
     }
     .result-score {
-      font-size: 2rem;
-      font-weight: 700;
+      font-size: 2.1rem;
+      font-weight: 800;
       color: var(--primary);
-      margin: 6px 0 14px;
+      margin: 8px 0 14px;
     }
-    .bars {
+    .dashboard-grid {
       display: grid;
-      gap: 14px;
-      margin-top: 14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
     }
-    .bar-row {
-      display: grid;
-      gap: 6px;
-    }
+    .bars { display: grid; gap: 14px; margin-top: 14px; }
+    .bar-row { display: grid; gap: 6px; }
     .bar-track {
       width: 100%;
       height: 12px;
@@ -239,15 +261,10 @@
       background: linear-gradient(90deg, #991b1b, #dc2626);
       border-radius: 999px;
     }
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-    }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 0.95rem;
     }
     th, td {
@@ -256,36 +273,7 @@
       text-align: left;
       vertical-align: top;
     }
-    th { color: #374151; }
-    .login-box {
-      max-width: 420px;
-      margin: 0 auto;
-      padding-top: 20px;
-    }
-    .field {
-      margin-bottom: 12px;
-    }
-    .field label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    .field input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid #d1d5db;
-      font-size: 1rem;
-    }
-    .small { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
-    .warning {
-      background: #fff7ed;
-      color: #9a3412;
-      border: 1px solid #fed7aa;
-      padding: 12px 14px;
-      border-radius: 14px;
-      margin-top: 12px;
-    }
+    .login-box { max-width: 430px; margin: 0 auto; }
     @media (max-width: 900px) {
       .grid, .dashboard-grid { grid-template-columns: 1fr; }
       .meta-list { grid-template-columns: 1fr; }
@@ -297,29 +285,38 @@
   <div class="container">
     <section id="homeView">
       <div class="hero">
-        <h1>Examen blanc PMP - 30 questions</h1>
-        <p>Durée : <strong>40 minutes</strong> • Langue : <strong>Français</strong> • Format : QCM situationnel.</p>
-        <p>Les questions ci-dessous ont été construites à partir des fichiers fournis, puis traduites et structurées en français pour un entraînement ciblé, avec classement par domaine de connaissance et par domaine ECO de PMI.</p>
+        <h1>Examen blanc PMP - Version 2</h1>
+        <p>30 questions • 40 minutes • français • correction détaillée • tableau de bord formateur</p>
+        <p>Cette version est plus professionnelle : identité du participant, interface améliorée, corrigé détaillé, résultats ventilés par domaine et par ECO PMI, et option de préparation d’envoi par email depuis le poste du participant.</p>
       </div>
-
       <div class="grid">
         <div class="card">
-          <h2 class="section-title">Candidat</h2>
-          <p>Ce test couvre plusieurs domaines : fondamentaux, agile, prédictif, communication et parties prenantes, équipe, risques, qualité / information, achats / contrats et scénarios PMP.</p>
-          <div class="meta-list">
-            <div class="meta-item"><strong>Nombre de questions</strong><span>30</span></div>
-            <div class="meta-item"><strong>Temps imparti</strong><span>40 minutes</span></div>
-            <div class="meta-item"><strong>Correction</strong><span>Réponses + explications détaillées à la fin</span></div>
-            <div class="meta-item"><strong>Suivi</strong><span>Résultats enregistrés localement pour le tableau formateur</span></div>
+          <h2 class="section-title">Informations du participant</h2>
+          <div class="field">
+            <label for="candidateName">Nom du participant <span style="color:#dc2626;">*</span></label>
+            <input id="candidateName" type="text" placeholder="Ex. Jean Kasongo" />
           </div>
+          <div class="field">
+            <label for="candidateEmail">Adresse email (facultatif)</label>
+            <input id="candidateEmail" type="email" placeholder="Ex. jean@email.com" />
+          </div>
+          <div class="checkbox-row">
+            <input id="sendResultsByEmail" type="checkbox" />
+            <label for="sendResultsByEmail" style="margin:0; font-weight:600; line-height:1.5;">
+              Je souhaite préparer l’envoi de mes réponses et résultats à mon adresse email à la fin de l’examen.
+            </label>
+          </div>
+          <div class="warning">
+            Cette page est conçue pour GitHub Pages, donc sans serveur. L’option email peut <strong>préparer un email dans l’application mail du participant</strong>, mais elle ne peut pas envoyer automatiquement un email depuis le site sans backend ou service externe.
+          </div>
+          <div id="startMessage" class="small" style="margin-top:12px;"></div>
           <div class="controls">
             <button class="btn-primary" onclick="startExam()">Commencer l'examen</button>
             <button class="btn-light" onclick="showTrainerLogin()">Accès formateur</button>
           </div>
         </div>
-
         <div class="card">
-          <h2 class="section-title">Répartition de l'examen</h2>
+          <h2 class="section-title">Structure de l’examen</h2>
           <div>
             <span class="pill">Personne</span>
             <span class="pill">Processus</span>
@@ -336,8 +333,11 @@
             <span class="pill">Achats</span>
             <span class="pill">Scénarios PMP</span>
           </div>
-          <div class="warning">
-            Le tableau formateur fonctionne sans serveur. Les résultats sont donc stockés dans le navigateur via <strong>localStorage</strong>. Pour une exploitation multi-utilisateurs réelle en ligne, il faudra ensuite ajouter une base de données ou un backend.
+          <div class="meta-list">
+            <div class="meta-item"><strong>Questions</strong><span>30</span></div>
+            <div class="meta-item"><strong>Durée</strong><span>40 minutes</span></div>
+            <div class="meta-item"><strong>Dashboard</strong><span>Accès formateur protégé</span></div>
+            <div class="meta-item"><strong>Mot de passe</strong><span>221008</span></div>
           </div>
         </div>
       </div>
@@ -347,6 +347,7 @@
       <div class="exam-header">
         <div class="exam-topbar">
           <div class="stats-inline">
+            <div class="badge">Participant : <strong id="candidateDisplay">-</strong></div>
             <div class="badge">Questions : <strong>30</strong></div>
             <div class="badge">Temps restant : <strong id="timer">40:00</strong></div>
             <div class="badge">Répondues : <strong id="answeredCount">0</strong>/30</div>
@@ -390,6 +391,7 @@
     let timerInterval = null;
     let remainingSeconds = EXAM_DURATION_SECONDS;
     let currentAttemptId = null;
+    let participant = { name: '', email: '', wantsEmail: false };
 
     const questions = [
       {
@@ -397,450 +399,480 @@
         domain: 'Fondamentaux du management de projet',
         eco: 'Processus',
         source: 'Project Management Fundamentals',
-        text: 'Le sponsor d’un projet doute que le produit final réponde réellement à la demande du marché et souhaite limiter les coûts dès le départ. Que doit faire en priorité le chef de projet ?',
+        sourceNote: 'Inspirée des PDF Fundamentals sur MVP et validation de la valeur métier.',
+        text: 'Le sponsor d’un projet doute que le produit final réponde réellement à la demande du marché et veut limiter les coûts dès le départ. Quelle approche le chef de projet doit-il privilégier ?',
         options: [
-          'Identifier et mettre en œuvre les exigences nécessaires à un Produit Minimum Viable (MVP).',
-          'Collecter toutes les exigences et exécuter le projet de manière incrémentale jusqu’à la fin.',
-          'Réduire le nombre de parties prenantes impliquées dans la définition du besoin.',
-          'Signer avec le sponsor un contrat à coût fixe afin de plafonner le budget.'
+          'Identifier d’abord les exigences du Produit Minimum Viable (MVP).',
+          'Recueillir toutes les exigences et attendre la fin pour livrer.',
+          'Réduire les parties prenantes consultées afin d’aller plus vite.',
+          'Fixer immédiatement un budget contractuel rigide avec le sponsor.'
         ],
         answer: 0,
-        explanation: 'Quand la valeur métier doit encore être confirmée, la meilleure approche consiste à livrer d’abord un MVP centré sur les fonctionnalités qui produisent rapidement de la valeur.'
+        explanation: 'Lorsqu’il faut confirmer la valeur métier tout en maîtrisant les coûts, le MVP permet de concentrer le premier incrément sur les fonctionnalités qui créent le plus vite de la valeur.'
       },
       {
         id: 2,
         domain: 'Fondamentaux du management de projet',
         eco: 'Processus',
         source: 'Project Management Fundamentals',
-        text: 'Dans un projet logiciel mené en Agile, le client demande une modification d’exigence en cours d’exécution. Quelle est la meilleure réponse du chef de projet ?',
+        sourceNote: 'Inspirée des PDF Fundamentals sur la gestion du changement en Agile.',
+        text: 'Dans un projet logiciel mené en Agile, un client demande la modification d’une exigence en cours d’exécution. Quelle est la meilleure réponse du chef de projet ?',
         options: [
-          'Bloquer la demande pour protéger le périmètre initial.',
-          'Accueillir la demande de changement.',
-          'Éviter la demande tant qu’un comité de changement ne s’est pas réuni.',
-          'Transmettre la demande directement au CCB.'
+          'Bloquer la demande afin de protéger le périmètre initial.',
+          'Accueillir la demande et l’intégrer selon le fonctionnement Agile.',
+          'Reporter la demande à la clôture du projet.',
+          'L’envoyer systématiquement au CCB.'
         ],
         answer: 1,
-        explanation: 'En Agile, le changement fait partie du fonctionnement normal du projet. Les retours fréquents des parties prenantes servent précisément à adapter le produit.'
+        explanation: 'En Agile, le changement fait partie du mode de fonctionnement. Les retours des parties prenantes servent à adapter régulièrement le produit.'
       },
       {
         id: 3,
         domain: 'Fondamentaux du management de projet',
         eco: 'Environnement commercial',
         source: 'Project Management Fundamentals',
-        text: 'Une organisation choisit de développer en interne un logiciel après une analyse make-or-buy favorable. Au moment d’acquérir les ressources, le chef de projet découvre que le tarif réel des développeurs est deux fois plus élevé que celui utilisé dans l’analyse. Que doit-il faire en premier ?',
+        sourceNote: 'Inspirée des PDF Fundamentals sur make-or-buy et valeur métier.',
+        text: 'Une analyse make-or-buy concluait en faveur d’un développement interne. Au moment de recruter, le chef de projet constate que les taux réels du marché sont très supérieurs à ceux utilisés dans l’analyse. Que doit-il faire en premier ?',
         options: [
-          'Soumettre immédiatement une demande de changement.',
-          'Informer le sponsor de cette découverte.',
-          'Ne rien faire tant que le SPI et le CPI restent corrects.',
-          'Mettre à jour le rapport d’analyse make-or-buy sans autre action.'
+          'Soumettre directement une demande de changement.',
+          'Informer le sponsor de l’impact possible sur la valeur métier.',
+          'Continuer, tant que les KPI du projet restent corrects.',
+          'Mettre à jour discrètement l’analyse financière.'
         ],
         answer: 1,
-        explanation: 'L’écart remet en cause la valeur métier et la viabilité financière du projet. Le sponsor doit être informé rapidement afin d’orienter la décision.'
+        explanation: 'Le changement remet potentiellement en cause le business case. Le sponsor doit donc être informé rapidement pour orienter la décision.'
       },
       {
         id: 4,
-        domain: 'Fondamentaux du management de projet',
-        eco: 'Environnement commercial',
-        source: 'Project Management Fundamentals',
-        text: 'Une entreprise développe une plateforme d’IA de nouvelle génération dans un contexte de forte innovation, de réglementation importante et d’attentes changeantes des parties prenantes. Quelle approche est la plus adaptée ?',
+        domain: 'Agile Project Management',
+        eco: 'Personne',
+        source: 'Agile Project Management',
+        sourceNote: 'Inspirée des PDF Agile sur la vision produit.',
+        text: 'Une équipe auto-organisée interprète différemment un Epic important, ce qui révèle un manque de compréhension commune du but global du projet. Que doit faire le chef de projet ?',
         options: [
-          'Une approche purement prédictive.',
-          'Une approche purement agile.',
-          'Une approche basée sur la chaîne critique.',
-          'Une approche hybride.'
+          'Demander à l’équipe de relire le release plan.',
+          'Rappeler la vision du projet.',
+          'Rappeler uniquement l’objectif du sprint en cours.',
+          'Exiger une nouvelle estimation des user stories.'
         ],
-        answer: 3,
-        explanation: 'L’approche hybride permet de conserver la structure et la documentation nécessaires à la conformité, tout en gardant la souplesse nécessaire face à l’incertitude.'
+        answer: 1,
+        explanation: 'Quand le problème touche la compréhension du sens global, il faut revenir à la vision du projet, pas seulement au niveau du sprint ou d’une release.'
       },
       {
         id: 5,
         domain: 'Agile Project Management',
-        eco: 'Personne',
+        eco: 'Processus',
         source: 'Agile Project Management',
-        text: 'Dans une équipe auto-organisée, les membres interprètent différemment un Epic important, révélant une absence de compréhension commune du but global du projet. Que doit faire le chef de projet ?',
+        sourceNote: 'Inspirée des PDF Agile sur burndown chart et backlog.',
+        text: 'Après une release, le burndown chart montre une hausse des story points restants au sprint 3, alors que les estimations n’ont pas changé. Quelle est l’explication la plus probable ?',
         options: [
-          'Demander à l’équipe de relire le release plan.',
-          'Demander à l’équipe de revoir les critères d’acceptation de l’Epic.',
-          'Rappeler l’objectif du sprint.',
-          'Rappeler la vision du projet.'
+          'La vélocité a baissé.',
+          'La vélocité a augmenté.',
+          'Du travail a été ajouté au Product Backlog.',
+          'Du travail a été supprimé du Product Backlog.'
         ],
-        answer: 3,
-        explanation: 'Quand le problème touche le sens global du travail, il faut revenir à la vision du projet, et non seulement à l’objectif d’un sprint ou d’une release.'
+        answer: 2,
+        explanation: 'Une hausse du total de story points restants sans changement d’estimation indique en général qu’un travail supplémentaire a été ajouté.'
       },
       {
         id: 6,
         domain: 'Agile Project Management',
-        eco: 'Processus',
+        eco: 'Personne',
         source: 'Agile Project Management',
-        text: 'Après une release, l’équipe Scrum constate sur le burndown chart une hausse du total des story points au sprint 3 alors que les estimations n’ont pas été modifiées. Quelle en est l’explication la plus probable ?',
+        sourceNote: 'Inspirée des PDF Agile sur l’auto-organisation.',
+        text: 'À mi-itération, le rapport d’avancement montre que le projet est en retard. Le chef de projet avait lui-même séquencé et assigné tout le travail. Que devait-il faire différemment ?',
         options: [
-          'La vélocité de l’équipe a diminué.',
-          'La vélocité de l’équipe a augmenté.',
-          'Du travail a été ajouté au Product Backlog.',
-          'Du travail a été retiré du Product Backlog.'
+          'Prévoir une réserve de contingence.',
+          'Encourager l’auto-organisation de l’équipe.',
+          'Contrôler davantage les tâches quotidiennes.',
+          'Imposer un reporting plus fréquent.'
         ],
-        answer: 2,
-        explanation: 'Une augmentation des story points restants sans changement d’estimation signifie généralement qu’un travail supplémentaire a été ajouté au périmètre de la release.'
+        answer: 1,
+        explanation: 'En Agile, l’équipe doit s’approprier le travail. L’auto-organisation améliore l’engagement, l’alignement et l’efficacité.'
       },
       {
         id: 7,
         domain: 'Agile Project Management',
-        eco: 'Personne',
+        eco: 'Environnement commercial',
         source: 'Agile Project Management',
-        text: 'À mi-parcours d’une itération, le rapport d’avancement montre que le projet agile est en retard. Le chef de projet avait lui-même séquencé et assigné tout le travail. Que devait-il faire différemment ?',
+        sourceNote: 'Inspirée des PDF Agile sur les freins organisationnels.',
+        text: 'Dans un projet pilote Agile, l’équipe explique que plusieurs processus organisationnels provoquent retards et rework. Que doit faire le chef de projet ?',
         options: [
-          'Former l’équipe à la méthode agile.',
-          'Demander à l’équipe de mieux alimenter le système de reporting.',
-          'Prévoir une réserve de contingence.',
-          'Encourager l’auto-organisation de l’équipe pour renforcer son engagement.'
+          'Demander à l’équipe de s’adapter seule.',
+          'Réserver les daily stand-up à la résolution complète de ces problèmes.',
+          'Identifier les processus bloquants et travailler à les alléger, modifier ou supprimer.',
+          'Attendre la prochaine release pour traiter le sujet.'
         ],
-        answer: 3,
-        explanation: 'Dans un contexte agile, l’appropriation du travail par l’équipe est essentielle. L’auto-organisation renforce le buy-in et l’efficacité.'
+        answer: 2,
+        explanation: 'Lorsque les obstacles viennent du système organisationnel, il faut agir sur l’environnement de travail et pas seulement sur l’équipe.'
       },
       {
         id: 8,
-        domain: 'Agile Project Management',
-        eco: 'Environnement commercial',
-        source: 'Agile Project Management',
-        text: 'Une organisation qui travaillait jusque-là uniquement en prédictif lance un projet pilote agile. Lors de la quatrième rétrospective, l’équipe explique que plusieurs processus organisationnels freinent son travail et provoquent retards et reprises. Que doit faire le chef de projet ?',
+        domain: 'Predictive Project Management',
+        eco: 'Processus',
+        source: 'Predictive Project Management',
+        sourceNote: 'Inspirée des PDF Predictive sur l’estimation analogique.',
+        text: 'En démarrage, le sponsor exige une estimation approximative des coûts avant la fin de la journée alors que peu d’informations sont disponibles. Que doit faire le chef de projet ?',
         options: [
-          'Utiliser les daily stand-up pour résoudre tous les blocages.',
-          'Faire une analyse des causes racines lors de la prochaine rétrospective uniquement.',
-          'Identifier les processus organisationnels gênants et travailler à les supprimer, les modifier ou les alléger.',
-          'Laisser l’équipe auto-organisée résoudre seule ces obstacles.'
+          'Lancer immédiatement une estimation ascendante très détaillée.',
+          'Donner une estimation analogique basée sur des projets similaires.',
+          'Attendre la WBS complète avant de répondre.',
+          'Créer d’abord le plan de management des coûts.'
         ],
-        answer: 2,
-        explanation: 'Quand les freins sont organisationnels, il faut agir sur le système de travail lui-même. C’est un enjeu d’environnement de livraison, pas seulement de dynamique d’équipe.'
+        answer: 1,
+        explanation: 'Avec peu d’informations et un besoin rapide, l’estimation analogique est la méthode la plus adaptée.'
       },
       {
         id: 9,
         domain: 'Predictive Project Management',
         eco: 'Processus',
         source: 'Predictive Project Management',
-        text: 'En phase de démarrage, le sponsor demande au chef de projet une estimation approximative du coût avant la fin de la journée. Il dispose encore de très peu d’informations détaillées. Que doit-il faire ?',
+        sourceNote: 'Inspirée des PDF Predictive sur changement non formalisé.',
+        text: 'Un client accepte oralement un ajout de services payants, puis refuse de payer en invoquant un retard non traité. Que devait faire le chef de projet pour éviter cette situation ?',
         options: [
-          'Créer le backlog produit et estimer chaque itération.',
-          'Construire immédiatement une WBS détaillée et faire une estimation ascendante complète.',
-          'Créer le plan de management des coûts avant toute estimation.',
-          'Donner une estimation par analogie basée sur des projets similaires.'
+          'Formaliser la communication et analyser aussi l’impact sur le délai.',
+          'Accorder immédiatement une remise commerciale.',
+          'Laisser le représentant client décider seul.',
+          'Faire l’ajout sans documentation puisque le client avait accepté.'
         ],
-        answer: 3,
-        explanation: 'À un stade précoce avec peu d’informations, l’estimation analogique est la plus réaliste et la plus rapide à fournir.'
+        answer: 0,
+        explanation: 'Toute modification importante doit être formalisée, et son impact doit être analysé sur le coût, le délai et les autres contraintes.'
       },
       {
         id: 10,
         domain: 'Predictive Project Management',
         eco: 'Processus',
         source: 'Predictive Project Management',
-        text: 'Un représentant du client accepte oralement un ajout de publicité sur les réseaux sociaux avec un coût supplémentaire de 8 000 USD. Plus tard, il refuse de payer, affirmant qu’un retard du projet aurait dû être pénalisé. Qu’aurait dû faire le chef de projet pour éviter cette situation ? (Choisissez la meilleure combinaison)',
+        sourceNote: 'Inspirée des PDF Predictive sur rolling wave planning.',
+        text: 'Un projet avance alors que certains détails futurs restent incertains. L’équipe choisit de planifier le proche terme en détail et d’affiner la suite progressivement. Quelle technique est utilisée ?',
         options: [
-          'Utiliser une communication plus formelle et demander aussi une extension de délai.',
-          'Réduire le périmètre pour compenser le coût additionnel uniquement.',
-          'Accorder une réduction commerciale sans analyser le planning.',
-          'Laisser le représentant décider seul du nouveau périmètre.'
+          'Crashing',
+          'Rolling wave planning',
+          'Fast tracking',
+          'Leveling'
         ],
-        answer: 0,
-        explanation: 'La situation devait être formalisée et l’impact ne devait pas être analysé uniquement sur le coût, mais aussi sur le délai et les autres contraintes.'
+        answer: 1,
+        explanation: 'Le rolling wave planning permet de planifier en détail le travail proche et de détailler plus tard les activités futures.'
       },
       {
         id: 11,
         domain: 'Predictive Project Management',
-        eco: 'Processus',
+        eco: 'Personne',
         source: 'Predictive Project Management',
-        text: 'Un couple décide de démarrer la construction d’une tiny house tout en repoussant plusieurs décisions de design intérieur à plus tard, afin d’avancer malgré l’incertitude. Quelle technique de planification cela illustre-t-il ?',
+        sourceNote: 'Inspirée des PDF Predictive sur la prise de décision au CCB.',
+        text: 'Un Change Control Board ne parvient pas à trancher entre acceptation et rejet d’une demande de changement. Quelle approche est la meilleure ?',
         options: [
-          'Rolling wave planning.',
-          'Fast tracking.',
-          'Crashing.',
-          'Décomposition.'
+          'Imposer la décision du membre le plus expérimenté.',
+          'Appliquer un vote majoritaire immédiatement.',
+          'Chercher un consensus au sein du groupe.',
+          'Faire décider le directeur du comité.'
         ],
-        answer: 0,
-        explanation: 'Le rolling wave planning consiste à planifier le travail proche avec détail et le travail futur à un niveau plus macro, puis à affiner progressivement.'
+        answer: 2,
+        explanation: 'La recherche de consensus favorise une décision plus durable et l’engagement des membres du comité.'
       },
       {
         id: 12,
-        domain: 'Predictive Project Management',
-        eco: 'Personne',
-        source: 'Predictive Project Management',
-        text: 'Un Change Control Board de cinq membres n’arrive pas à se mettre d’accord sur une demande de changement. Quelle est la meilleure façon d’aboutir à une décision ?',
+        domain: 'Communication & Parties prenantes',
+        eco: 'Environnement commercial',
+        source: 'Communication & Stakeholder Management',
+        sourceNote: 'Inspirée des PDF Communication sur les opposants au projet.',
+        text: 'Dans un projet d’infrastructure, un groupe d’écologistes lance des protestations fortement médiatisées qui perturbent le projet. Que devait faire le chef de projet pour éviter cette situation ?',
         options: [
-          'Chercher le consensus.',
-          'Faire voter et appliquer la règle de la majorité.',
-          'Laisser décider le membre le plus expérimenté.',
-          'Laisser trancher le directeur du comité.'
+          'Prévoir seulement une assurance contre ce type de perturbation.',
+          'Entrer en dialogue avec les opposants pour comprendre leurs préoccupations.',
+          'Ignorer les opposants et se concentrer sur l’exécution.',
+          'Leur proposer directement une compensation financière.'
         ],
-        answer: 0,
-        explanation: 'La collaboration et la recherche d’un consensus sont privilégiées pour engager durablement les parties dans la décision.'
+        answer: 1,
+        explanation: 'Un engagement précoce et ouvert des parties prenantes opposantes permet de mieux comprendre leurs préoccupations et de réduire les résistances.'
       },
       {
         id: 13,
         domain: 'Communication & Parties prenantes',
-        eco: 'Environnement commercial',
+        eco: 'Personne',
         source: 'Communication & Stakeholder Management',
-        text: 'Dans un projet de construction d’une usine électrique en zone forestière, un groupe d’écologistes lance des protestations médiatisées qui perturbent le projet. Que devait faire le chef de projet pour éviter cette situation ?',
+        sourceNote: 'Inspirée des PDF Communication sur la sensibilité culturelle.',
+        text: 'Sur un projet international, plusieurs parties prenantes jugent les emails du chef de projet trop brusques. Que doit-il faire ?',
         options: [
-          'Travailler uniquement avec l’équipe projet sur des mesures de mitigation.',
-          'Souscrire une assurance pour protéger le projet contre de telles perturbations.',
-          'Engager un dialogue ouvert avec les écologistes pour comprendre leurs préoccupations.',
-          'Proposer une compensation financière afin d’obtenir leur soutien.'
+          'Continuer, car la franchise prime toujours.',
+          'Présenter des excuses et adapter son ton de communication.',
+          'Exiger que les autres s’adaptent à son style.',
+          'Passer immédiatement tout en communication orale seulement.'
         ],
-        answer: 2,
-        explanation: 'L’engagement précoce des parties prenantes opposantes permet de comprendre leurs attentes, de construire la confiance et de réduire les résistances.'
+        answer: 1,
+        explanation: 'Le chef de projet doit ajuster sa communication au contexte culturel et relationnel, puis corriger l’effet produit sur les parties prenantes.'
       },
       {
         id: 14,
         domain: 'Communication & Parties prenantes',
-        eco: 'Personne',
+        eco: 'Processus',
         source: 'Communication & Stakeholder Management',
-        text: 'Sur un projet international, certains acteurs trouvent les emails du chef de projet trop durs et abrasifs. Quelle est la meilleure réponse ?',
+        sourceNote: 'Inspirée des PDF Communication sur rétrospectives distantes.',
+        text: 'Dans une rétrospective virtuelle, plusieurs membres oublient ou comprennent mal ce qui a été dit lors de la session précédente. Quelle réponse est la plus appropriée ?',
         options: [
-          'Continuer ainsi, car être direct est une qualité.',
-          'Présenter des excuses pour l’éventuelle offense et adopter un ton plus sensible culturellement.',
-          'Exiger que les parties prenantes expliquent clairement leurs préférences avant tout nouvel échange.',
-          'Expliquer que ce style a toujours fonctionné sur d’autres projets.'
+          'Créer une règle invitant chacun à signaler les incompréhensions et enregistrer les réunions.',
+          'Supprimer les rétrospectives à distance.',
+          'Réduire les échanges pour aller plus vite.',
+          'Exiger un niveau de langue unique plus élevé.'
         ],
-        answer: 1,
-        explanation: 'Le chef de projet doit adapter sa communication au contexte culturel et relationnel, réparer l’impact causé et ajuster sa posture.'
+        answer: 0,
+        explanation: 'Des règles de groupe adaptées et l’enregistrement des sessions améliorent la compréhension, la mémorisation et l’inclusion.'
       },
       {
         id: 15,
         domain: 'Communication & Parties prenantes',
         eco: 'Processus',
         source: 'Communication & Stakeholder Management',
-        text: 'Dans une rétrospective virtuelle avec une équipe dispersée géographiquement, plusieurs membres ont oublié ou mal compris ce qui avait été dit la fois précédente. Que doit faire le chef de projet ?',
+        sourceNote: 'Inspirée des PDF Communication sur engagement des nouveaux stakeholders.',
+        text: 'Le sponsor nomme un inspecteur qualité réputé difficile. Le chef de projet ne le connaît pas. Que doit-il faire ?',
         options: [
-          'Demander à tous de parler avec un accent américain pour mieux se comprendre.',
-          'Créer une règle d’équipe encourageant chacun à lever la main quand il ne comprend pas, et enregistrer les réunions.',
-          'Supprimer les rétrospectives au profit d’emails récapitulatifs uniquement.',
-          'Passer en réunions mensuelles pour laisser plus de temps à chacun.'
+          'Demander qu’il soit remplacé.',
+          'L’ignorer, puisqu’il est externe.',
+          'Collaborer avec lui et lui fournir l’appui nécessaire.',
+          'Essayer de l’influencer pour éviter les constats négatifs.'
         ],
-        answer: 1,
-        explanation: 'Une norme d’équipe claire et l’enregistrement des sessions améliorent la compréhension, la traçabilité et l’inclusion des participants distants.'
+        answer: 2,
+        explanation: 'Tout nouveau stakeholder doit être analysé, engagé et suivi. Il faut collaborer avec lui dans un cadre professionnel et éthique.'
       },
       {
         id: 16,
-        domain: 'Communication & Parties prenantes',
-        eco: 'Processus',
-        source: 'Communication & Stakeholder Management',
-        text: 'À mi-projet, le sponsor désigne un inspecteur qualité réputé difficile. Le chef de projet ne le connaît pas personnellement. Que doit-il faire ?',
+        domain: 'Project Team Management',
+        eco: 'Personne',
+        source: 'Project Team Management',
+        sourceNote: 'Inspirée des PDF Team Management sur conflit et sponsor.',
+        text: 'Un membre clé se sent micromanagé et sollicite le sponsor. Le chef de projet, lui, estime que le travail est insuffisant. Quelle est la meilleure action ?',
         options: [
-          'Demander un autre inspecteur.',
-          'Ignorer cet inspecteur puisqu’il est externe.',
-          'Collaborer avec lui et lui apporter l’assistance nécessaire.',
-          'Tenter d’influencer son jugement pour éviter qu’il remonte les défauts.'
+          'Réunir le membre concerné et le sponsor pour une résolution collaborative.',
+          'Demander au sponsor de retirer le membre du projet.',
+          'Appliquer tout de suite une sanction disciplinaire.',
+          'Étendre le conflit à toute l’équipe.'
         ],
-        answer: 2,
-        explanation: 'Tout nouveau stakeholder doit être analysé, engagé et suivi. Il est inapproprié d’ignorer l’inspecteur ou d’essayer de manipuler son travail.'
+        answer: 0,
+        explanation: 'La résolution collaborative permet de clarifier les attentes, restaurer la confiance et réaligner le travail sur les objectifs du projet.'
       },
       {
         id: 17,
         domain: 'Project Team Management',
         eco: 'Personne',
         source: 'Project Team Management',
-        text: 'Dans un projet bancaire mobile, un membre clé se sent micromanagé et sollicite l’intervention du sponsor. Le chef de projet considère de son côté que la qualité du travail n’est pas au niveau. Quelle est la meilleure action ?',
+        sourceNote: 'Inspirée des PDF Team Management sur coaching de facilitateur.',
+        text: 'Dans un projet Agile, un membre facilite mal les daily stand-up quand son tour arrive. Quelle est la meilleure réponse du chef de projet ?',
         options: [
-          'S’asseoir avec le membre concerné et le sponsor pour résoudre la situation de manière collaborative.',
-          'Demander au sponsor de retirer ce membre du projet.',
-          'Déclencher immédiatement une procédure disciplinaire.',
-          'Élargir le conflit à toute l’équipe projet.'
+          'Le remplacer définitivement dans ce rôle.',
+          'Le critiquer devant l’équipe pour le faire progresser.',
+          'Organiser un coaching ciblé sur la facilitation.',
+          'Le retirer du projet.'
         ],
-        answer: 0,
-        explanation: 'Une résolution collaborative avec les parties directement concernées permet de restaurer la confiance et d’aligner les attentes.'
+        answer: 2,
+        explanation: 'Le coaching est la réponse la plus constructive pour aider un membre à monter en compétence dans un rôle de facilitation.'
       },
       {
         id: 18,
         domain: 'Project Team Management',
         eco: 'Personne',
         source: 'Project Team Management',
-        text: 'Dans un projet agile, un membre de l’équipe facilite à tour de rôle les daily stand-up, mais il s’en sort mal de façon répétée : il monopolise la parole et n’engage pas l’équipe. Que doit faire le chef de projet ?',
+        sourceNote: 'Inspirée des PDF Team Management sur soutien aux nouveaux membres.',
+        text: 'Un nouveau membre semble bloqué sur sa tâche depuis plusieurs daily stand-up. Que doit faire le chef de projet ?',
         options: [
-          'Confier désormais ce rôle à quelqu’un d’autre.',
-          'Le critiquer publiquement à la fin de chaque stand-up.',
-          'Organiser des séances de coaching pour l’aider à améliorer sa facilitation.',
-          'Le retirer du projet.'
+          'Retirer la tâche et la donner à un autre membre.',
+          'Voir après le stand-up si d’autres membres peuvent l’aider.',
+          'Lui exprimer sa déception pour le pousser à réagir.',
+          'Lui demander de simplement relire les règles de l’équipe.'
         ],
-        answer: 2,
-        explanation: 'Le coaching est la réponse la plus constructive quand il s’agit d’aider un membre à progresser dans un rôle de facilitation.'
+        answer: 1,
+        explanation: 'Le soutien par les pairs aide à lever les obstacles tout en développant les compétences du nouveau membre.'
       },
       {
         id: 19,
         domain: 'Project Team Management',
         eco: 'Personne',
         source: 'Project Team Management',
-        text: 'Lors des trois derniers daily stand-up, un nouveau membre semble bloqué sur sa tâche et ne progresse pas. Que doit faire le chef de projet ?',
+        sourceNote: 'Inspirée des PDF Team Management sur baisse de performance.',
+        text: 'Après plusieurs mois, la performance de certains membres baisse alors que d’autres continuent à bien performer. Que doit faire le chef de projet ?',
         options: [
-          'Confier la tâche à quelqu’un d’autre sans discussion.',
-          'Voir après le stand-up si d’autres membres peuvent l’aider.',
-          'Lui exprimer sa déception pour le pousser à faire plus d’efforts.',
-          'Lui demander simplement de relire les règles de l’équipe.'
+          'Parler publiquement des moins performants devant toute l’équipe.',
+          'Introduire une compétition financière entre membres.',
+          'Identifier les causes, recueillir du feedback et mettre en place des solutions adaptées.',
+          'Ne pas intervenir pour laisser chacun se corriger seul.'
         ],
-        answer: 1,
-        explanation: 'La meilleure réponse est le soutien par les pairs, qui permet au nouveau membre de surmonter le blocage tout en développant ses compétences.'
+        answer: 2,
+        explanation: 'Avant d’agir, il faut comprendre les causes de la baisse de performance puis accompagner et suivre les personnes concernées.'
       },
       {
         id: 20,
-        domain: 'Project Team Management',
-        eco: 'Personne',
-        source: 'Project Team Management',
-        text: 'Quatre mois après le démarrage, certains membres de l’équipe performent moins bien alors que d’autres restent au niveau attendu. Que doit faire le chef de projet pour remettre toute l’équipe sur les rails ?',
+        domain: 'Risk Management',
+        eco: 'Environnement commercial',
+        source: 'Risk Management',
+        sourceNote: 'Inspirée des PDF Risk sur rareté des compétences et volatilité.',
+        text: 'Un projet dépend d’une compétence technique très rare sur le marché et difficile à retenir. Quelle est la réponse la plus adaptée ?',
         options: [
-          'Parler publiquement des moins performants devant toute l’équipe.',
-          'Introduire un système de bonus compétitif pour les meilleurs.',
-          'Ne pas intervenir et attendre une amélioration spontanée.',
-          'Identifier les causes, recueillir du feedback et mettre en place des solutions adaptées.'
+          'Faire une analyse des alternatives et prévoir une réserve de coût.',
+          'Changer immédiatement toute la technologie du projet.',
+          'Former toute l’équipe sans autre analyse.',
+          'Accepter le risque sans plan de réponse.'
         ],
-        answer: 3,
-        explanation: 'Il faut d’abord comprendre les causes de la baisse de performance, puis agir de façon ciblée avec accompagnement et suivi.'
+        answer: 0,
+        explanation: 'La rareté des compétences crée de la volatilité. Il faut analyser les alternatives et prévoir des réserves adaptées.'
       },
       {
         id: 21,
         domain: 'Risk Management',
-        eco: 'Environnement commercial',
+        eco: 'Processus',
         source: 'Risk Management',
-        text: 'Un projet logiciel exige une compétence technique spécialisée très demandée sur le marché, difficile à recruter et à retenir. Quelle est la meilleure réponse du chef de projet ?',
+        sourceNote: 'Inspirée des PDF Risk sur backlog ajusté aux risques.',
+        text: 'Dans un projet Agile, le Product Owner recommande un backlog ajusté aux risques. Que doit faire le chef de projet ?',
         options: [
-          'Faire une analyse des alternatives et prévoir une réserve de coût suffisante.',
-          'Changer entièrement le langage de programmation sans autre analyse.',
-          'Envoyer toute l’équipe en bootcamp sur cette compétence.',
-          'Considérer le risque comme impossible à traiter et ne rien planifier.'
+          'Intégrer régulièrement des réponses aux risques dans les sprints.',
+          'Créer un sprint dédié à tous les risques.',
+          'Utiliser seulement le registre des risques.',
+          'Réserver les rétrospectives au seul sujet des risques.'
         ],
         answer: 0,
-        explanation: 'La rareté des compétences crée de la volatilité. L’analyse des alternatives et les réserves de coût ou de délai sont des réponses adaptées.'
+        explanation: 'Un backlog ajusté aux risques permet d’intégrer le traitement des menaces et opportunités dans le flux normal de livraison.'
       },
       {
         id: 22,
         domain: 'Risk Management',
         eco: 'Processus',
         source: 'Risk Management',
-        text: 'Dans un projet agile du secteur financier, le Product Owner recommande d’utiliser un backlog ajusté aux risques. Que doit faire le chef de projet ?',
+        sourceNote: 'Inspirée des PDF Risk sur unknown unknowns.',
+        text: 'Le chef de projet craint des événements imprévus impossibles à identifier à l’avance. Que doit-il prévoir ?',
         options: [
-          'S’assurer qu’au moins une ou deux réponses aux risques sont intégrées dans chaque sprint.',
-          'Créer un sprint entier réservé à tous les risques identifiés.',
-          'Se contenter de garder le registre des risques à jour.',
-          'Réserver les rétrospectives au seul examen des risques.'
+          'Une réserve de management.',
+          'Une analyse qualitative détaillée de tous les inconnus.',
+          'Une liste exhaustive d’événements imprévisibles.',
+          'Une simple mise à jour du plan de management.'
         ],
         answer: 0,
-        explanation: 'Un backlog ajusté aux risques intègre le traitement des menaces et opportunités dans le flux normal de livraison, de manière itérative.'
+        explanation: 'Les unknown unknowns ne peuvent pas être identifiés précisément à l’avance. La réponse adaptée est une réserve de management.'
       },
       {
         id: 23,
-        domain: 'Risk Management',
+        domain: 'Quality & Information Management',
         eco: 'Processus',
-        source: 'Risk Management',
-        text: 'Malgré un plan de management de projet très bien élaboré, le chef de projet craint que des événements imprévus aient un fort impact sur le projet. Que doit-il faire ?',
+        source: 'Quality & Information Management',
+        sourceNote: 'Inspirée des PDF Quality sur non-conformité fournisseur / équipe.',
+        text: 'Dans un projet de plateforme e-commerce, une équipe de développement sous contrat produit un code de mauvaise qualité. Que doit faire le chef de projet ?',
         options: [
-          'Identifier ces événements et mettre à jour le plan.',
-          'Prévoir une réserve de management.',
-          'Discuter de ces événements avec le sponsor pour créer un fallback plan.',
-          'Faire une analyse qualitative de ces événements.'
+          'Lancer une revue formelle et définir un plan d’actions correctives.',
+          'Engager directement une action judiciaire.',
+          'Laisser le défaut en l’état et compenser plus tard.',
+          'Attendre la clôture du projet pour réévaluer la situation.'
         ],
-        answer: 1,
-        explanation: 'Les événements imprévus non identifiables à l’avance relèvent des unknown unknowns. On y répond par une réserve de management.'
+        answer: 0,
+        explanation: 'Une non-conformité importante appelle un traitement structuré : revue formelle, analyse, actions correctives et suivi.'
       },
       {
         id: 24,
         domain: 'Quality & Information Management',
         eco: 'Processus',
         source: 'Quality & Information Management',
-        text: 'Dans un projet de e-commerce, une équipe de développement sous contrat produit un code de qualité insuffisante provoquant des plantages fréquents. Quelle est la meilleure action ?',
+        sourceNote: 'Inspirée des PDF Quality sur inspection de matériaux.',
+        text: 'Des matériaux livrés dans le cadre d’un contrat à prix forfaitaire arrivent au chantier. Que faut-il faire avant toute utilisation ?',
         options: [
-          'Lancer un processus de revue formel et mettre en place un plan d’actions correctives.',
-          'Engager immédiatement une procédure judiciaire.',
-          'Écarter l’équipe concernée et redistribuer son travail sans analyse.',
-          'Faire une expertise indépendante puis attendre avant d’agir.'
+          'Les inspecter pour vérifier leur conformité.',
+          'Lancer immédiatement les travaux pour éviter un retard.',
+          'En utiliser une partie pendant que le reste est contrôlé.',
+          'Payer d’abord le fournisseur et vérifier ensuite.'
         ],
         answer: 0,
-        explanation: 'Face à une non-conformité, la réponse la plus appropriée est une revue structurée suivie d’un plan correctif concret.'
+        explanation: 'Les matériaux doivent être inspectés avant usage afin de confirmer leur conformité aux spécifications contractuelles.'
       },
       {
         id: 25,
         domain: 'Quality & Information Management',
         eco: 'Processus',
         source: 'Quality & Information Management',
-        text: 'Dans un projet de construction, des matériaux sont livrés conformément à la date prévue dans un contrat à prix forfaitaire. Que doit faire le chef de projet avant toute autre chose ?',
+        sourceNote: 'Inspirée des PDF Quality sur validation du périmètre.',
+        text: 'Après vérification interne d’un produit, le client demande s’il satisfait bien les exigences. Que doit faire le chef de projet ?',
         options: [
-          'Inspecter les matériaux pour vérifier leur conformité aux exigences contractuelles.',
-          'Commencer immédiatement les travaux pour éviter tout retard.',
-          'Utiliser une partie des matériaux pendant que le reste est inspecté.',
-          'Payer le fournisseur puis clôturer le contrat.'
+          'Dire que les tests internes suffisent.',
+          'Refaire un contrôle qualité interne.',
+          'Obtenir l’acceptation formelle du client.',
+          'Demander seulement à un ingénieur de revérifier.'
         ],
-        answer: 0,
-        explanation: 'Les matériaux doivent être inspectés avant leur utilisation afin de confirmer leur conformité avec les spécifications et standards contractuels.'
+        answer: 2,
+        explanation: 'L’étape clé ici est la validation du périmètre avec le client pour confirmer formellement que le livrable répond aux exigences.'
       },
       {
         id: 26,
-        domain: 'Quality & Information Management',
+        domain: 'Procurement & Contract Management',
         eco: 'Processus',
-        source: 'Quality & Information Management',
-        text: 'Après vérification interne exhaustive d’une machine, le client demande si le produit répond bien aux exigences. Que doit faire le chef de projet ?',
+        source: 'Procurement & Contract Management',
+        sourceNote: 'Inspirée des PDF Procurement sur retard fournisseur.',
+        text: 'Un fournisseur annonce un retard possible de trois jours sur une livraison critique. Quelle est la première action à mener ?',
         options: [
-          'Confirmer que les tests internes suffisent et clôturer le projet.',
-          'Refaire le contrôle qualité en utilisant la réserve de contingence.',
-          'Collaborer avec le client pour obtenir son acceptation formelle des livrables.',
-          'Envoyer un ingénieur sur site pour revérifier techniquement la machine.'
+          'Négocier immédiatement le délai.',
+          'Chercher un autre fournisseur.',
+          'Évaluer l’impact réel du retard.',
+          'Mettre à jour automatiquement le planning.'
         ],
         answer: 2,
-        explanation: 'L’acceptation formelle du client relève de la validation du périmètre : il faut travailler avec lui pour confirmer que les exigences sont bien satisfaites.'
+        explanation: 'Avant de décider, il faut analyser l’impact du retard sur le projet. Un retard fournisseur ne crée pas toujours un retard global.'
       },
       {
         id: 27,
         domain: 'Procurement & Contract Management',
         eco: 'Processus',
         source: 'Procurement & Contract Management',
-        text: 'En cours d’exécution d’un projet de construction, un fournisseur annonce un retard possible de trois jours sur la livraison de barres d’acier. Que doit faire d’abord le chef de projet ?',
+        sourceNote: 'Inspirée des PDF Procurement sur clauses contractuelles.',
+        text: 'Le chef de projet veut vérifier la clause de résiliation et le mécanisme de résolution des litiges avec un fournisseur. Dans quel document doit-il regarder ?',
         options: [
-          'Négocier immédiatement une réduction du retard.',
-          'Chercher un autre fournisseur.',
-          'Évaluer l’impact du retard.',
-          'Mettre à jour directement le planning.'
+          'Les critères de sélection.',
+          'L’offre commerciale.',
+          'L’accord / contrat.',
+          'La charte projet.'
         ],
         answer: 2,
-        explanation: 'Avant d’agir, il faut analyser l’impact réel sur le projet. Un retard fournisseur ne signifie pas automatiquement un retard global.'
+        explanation: 'Les clauses juridiques et les modalités de règlement des différends figurent dans l’accord contractuel.'
       },
       {
         id: 28,
         domain: 'Procurement & Contract Management',
-        eco: 'Processus',
+        eco: 'Personne',
         source: 'Procurement & Contract Management',
-        text: 'Le chef de projet souhaite mettre fin à une relation difficile avec un fournisseur. Dans quel document doit-il vérifier la clause de résiliation et le mécanisme de résolution des litiges ?',
+        sourceNote: 'Inspirée des PDF Procurement sur résolution directe des différends.',
+        text: 'Le chef de projet et un fournisseur se reprochent mutuellement des manquements contractuels. Quelle est la meilleure première démarche ?',
         options: [
-          'Les critères de sélection des fournisseurs.',
-          'L’offre du fournisseur.',
-          'L’accord / contrat.',
-          'La charte du projet.'
+          'Remplacer immédiatement le fournisseur.',
+          'Recourir tout de suite à l’arbitrage.',
+          'Chercher une résolution directe et collaborative avec le fournisseur.',
+          'Lancer un audit d’approvisionnement avant tout échange.'
         ],
         answer: 2,
-        explanation: 'Les clauses de résiliation, de règlement des litiges et les autres dispositions juridiques figurent dans l’accord contractuel.'
+        explanation: 'La résolution directe du problème entre les parties est à privilégier avant d’escalader vers médiation ou arbitrage.'
       },
       {
         id: 29,
         domain: 'Scénarios PMP',
         eco: 'Personne',
         source: 'PMP Scenarios',
-        text: 'Le chef de projet constate des désaccords constants entre les membres de l’équipe pendant les réunions. Que doit-il faire ?',
+        sourceNote: 'Inspirée des PDF PMP Scenarios sur conflit récurrent en réunion.',
+        text: 'Le chef de projet observe des désaccords constants entre les membres de l’équipe pendant les réunions. Que doit-il faire ?',
         options: [
-          'Laisser l’équipe résoudre seule le problème avec le temps.',
-          'Intervenir pour résoudre les désaccords et guider l’équipe vers une culture de collaboration.',
-          'Demander au sponsor de remplacer les membres en conflit.',
-          'Supprimer les réunions pour éviter les tensions.'
+          'Laisser l’équipe régler cela seule.',
+          'Intervenir pour résoudre les désaccords et promouvoir la collaboration.',
+          'Supprimer les réunions.',
+          'Demander au sponsor de remplacer l’équipe.'
         ],
         answer: 1,
-        explanation: 'Le chef de projet doit traiter le conflit de façon constructive afin de restaurer la coopération et la collaboration dans l’équipe.'
+        explanation: 'Le chef de projet doit agir pour restaurer une culture de coopération et éviter que le conflit ne dégrade la performance collective.'
       },
       {
         id: 30,
         domain: 'Scénarios PMP',
         eco: 'Processus',
         source: 'PMP Scenarios',
-        text: 'Le projet a choisi un cadre Kanban pour l’exécution. Sur quoi le chef de projet doit-il surtout se concentrer ?',
+        sourceNote: 'Inspirée des PDF PMP Scenarios sur Kanban.',
+        text: 'Le projet a choisi Kanban comme cadre de travail. Sur quoi le chef de projet doit-il principalement se concentrer ?',
         options: [
-          'Un planning figé avec des lots mensuels.',
-          'Un workflow continu et la limitation du travail en cours (WIP).',
+          'Un planning détaillé figé sur toute la durée du projet.',
+          'Le flux continu et la limitation du travail en cours (WIP).',
           'Une validation unique en fin de projet.',
-          'Une forte documentation préalable avant tout démarrage.'
+          'La documentation exhaustive avant tout démarrage.'
         ],
         answer: 1,
-        explanation: 'En Kanban, l’optimisation du flux et la limitation du WIP sont essentielles pour améliorer la fluidité et réduire l’encombrement du système.'
+        explanation: 'Kanban vise l’optimisation du flux et la maîtrise du WIP afin de fluidifier la livraison de valeur.'
       }
     ];
 
@@ -867,9 +899,30 @@
       return `ATT-${Date.now()}`;
     }
 
+    function validateStartForm() {
+      const name = document.getElementById('candidateName').value.trim();
+      const email = document.getElementById('candidateEmail').value.trim();
+      const wantsEmail = document.getElementById('sendResultsByEmail').checked;
+      const msg = document.getElementById('startMessage');
+      msg.textContent = '';
+
+      if (!name) {
+        msg.textContent = 'Le nom du participant est obligatoire.';
+        return null;
+      }
+      if (wantsEmail && !email) {
+        msg.textContent = 'Pour préparer l’envoi des résultats par email, veuillez saisir une adresse email.';
+        return null;
+      }
+      participant = { name, email, wantsEmail };
+      return participant;
+    }
+
     function startExam() {
+      if (!validateStartForm()) return;
       currentAttemptId = createAttemptId();
       remainingSeconds = EXAM_DURATION_SECONDS;
+      document.getElementById('candidateDisplay').textContent = participant.name;
       renderQuestions();
       updateAnsweredCount();
       document.getElementById('timer').textContent = formatTime(remainingSeconds);
@@ -877,9 +930,7 @@
       timerInterval = setInterval(() => {
         remainingSeconds -= 1;
         document.getElementById('timer').textContent = formatTime(remainingSeconds);
-        if (remainingSeconds <= 0) {
-          submitExam(false);
-        }
+        if (remainingSeconds <= 0) submitExam(false);
       }, 1000);
       showOnly('examView');
     }
@@ -887,7 +938,7 @@
     function renderQuestions() {
       const container = document.getElementById('questionsContainer');
       container.innerHTML = questions.map((q, idx) => `
-        <div class="question-card" id="qcard-${q.id}">
+        <div class="question-card">
           <div class="question-meta">
             <span class="pill">Question ${idx + 1}</span>
             <span class="pill">${q.domain}</span>
@@ -909,18 +960,13 @@
 
     function updateAnsweredCount() {
       const answered = questions.filter(q => document.querySelector(`input[name="q${q.id}"]:checked`)).length;
-      const el = document.getElementById('answeredCount');
-      if (el) el.textContent = answered;
+      document.getElementById('answeredCount').textContent = answered;
     }
 
     function collectAnswers() {
       return questions.map(q => {
         const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
-        return {
-          id: q.id,
-          selected: selected ? Number(selected.value) : null,
-          correct: q.answer
-        };
+        return { id: q.id, selected: selected ? Number(selected.value) : null, correct: q.answer };
       });
     }
 
@@ -939,29 +985,18 @@
 
       answers.forEach(ans => {
         const q = questions.find(item => item.id === ans.id);
-        const isCorrect = ans.selected === ans.correct;
-        if (isCorrect) {
+        const ok = ans.selected === ans.correct;
+        if (ok) {
           score += 1;
           byDomain[q.domain].correct += 1;
           byEco[q.eco].correct += 1;
         }
       });
-
       return { answers, score, byDomain, byEco };
     }
 
     function percent(correct, total) {
-      if (!total) return 0;
-      return Math.round((correct / total) * 100);
-    }
-
-    function submitExam(manual) {
-      clearInterval(timerInterval);
-      const results = computeResults();
-      renderCorrections(results.answers);
-      saveAttempt(results);
-      renderResultPage(results, manual);
-      showOnly('resultView');
+      return total ? Math.round((correct / total) * 100) : 0;
     }
 
     function renderCorrections(answers) {
@@ -975,11 +1010,8 @@
           if (ans.selected === optIdx && ans.selected !== q.answer) label.classList.add('incorrect');
         });
         const exp = document.getElementById(`exp-${q.id}`);
-        if (exp) {
-          const ok = ans.selected === q.answer;
-          exp.className = `explanation ${ok ? 'ok' : 'bad'}`;
-          exp.innerHTML = `<strong>${ok ? 'Bonne réponse.' : 'Correction.'}</strong> Réponse attendue : <strong>${String.fromCharCode(65 + q.answer)}</strong>. ${q.explanation}`;
-        }
+        exp.className = `explanation ${ans.selected === q.answer ? 'ok' : 'bad'}`;
+        exp.innerHTML = `<strong>${ans.selected === q.answer ? 'Bonne réponse.' : 'Correction.'}</strong> Réponse attendue : <strong>${String.fromCharCode(65 + q.answer)}</strong>. ${q.explanation}<br><span class="small">Source pédagogique : ${q.sourceNote}</span>`;
       });
     }
 
@@ -998,8 +1030,8 @@
     function renderDetailedReview(answers) {
       return questions.map((q, idx) => {
         const ans = answers.find(a => a.id === q.id);
-        const user = ans.selected !== null ? `${String.fromCharCode(65 + ans.selected)}` : 'Aucune réponse';
-        const good = `${String.fromCharCode(65 + q.answer)}`;
+        const user = ans.selected !== null ? String.fromCharCode(65 + ans.selected) : 'Aucune réponse';
+        const good = String.fromCharCode(65 + q.answer);
         const ok = ans.selected === q.answer;
         return `
           <div class="question-card">
@@ -1012,19 +1044,67 @@
             <div class="explanation ${ok ? 'ok' : 'bad'}">
               <strong>Votre réponse :</strong> ${user}<br>
               <strong>Bonne réponse :</strong> ${good}<br>
-              <strong>Explication :</strong> ${q.explanation}
+              <strong>Explication :</strong> ${q.explanation}<br>
+              <strong>Référence :</strong> ${q.sourceNote}
             </div>
           </div>
         `;
       }).join('');
     }
 
+    function buildEmailBody(results) {
+      let lines = [];
+      lines.push(`Examen blanc PMP - Résultats`);
+      lines.push(`Participant : ${participant.name}`);
+      lines.push(`Email : ${participant.email || 'Non renseigné'}`);
+      lines.push(`Score : ${results.score}/30 (${percent(results.score, questions.length)}%)`);
+      lines.push(`Date : ${new Date().toLocaleString('fr-FR')}`);
+      lines.push('');
+      lines.push('Performance par domaine :');
+      Object.entries(results.byDomain).forEach(([label, data]) => {
+        lines.push(`- ${label} : ${data.correct}/${data.total} (${percent(data.correct, data.total)}%)`);
+      });
+      lines.push('');
+      lines.push('Performance par ECO :');
+      Object.entries(results.byEco).forEach(([label, data]) => {
+        lines.push(`- ${label} : ${data.correct}/${data.total} (${percent(data.correct, data.total)}%)`);
+      });
+      lines.push('');
+      lines.push('Détail des réponses :');
+      questions.forEach((q, idx) => {
+        const ans = results.answers.find(a => a.id === q.id);
+        const selected = ans.selected !== null ? String.fromCharCode(65 + ans.selected) : 'NR';
+        const correct = String.fromCharCode(65 + q.answer);
+        lines.push(`${idx + 1}. ${q.text}`);
+        lines.push(`   Réponse participant : ${selected} | Bonne réponse : ${correct}`);
+      });
+      return lines.join('\n');
+    }
+
+    function tryPrepareEmail(results) {
+      if (!(participant.wantsEmail && participant.email)) return '';
+      const subject = encodeURIComponent(`Résultats PMP - ${participant.name}`);
+      const body = encodeURIComponent(buildEmailBody(results));
+      return `mailto:${participant.email}?subject=${subject}&body=${body}`;
+    }
+
+    function submitExam(manual) {
+      clearInterval(timerInterval);
+      const results = computeResults();
+      renderCorrections(results.answers);
+      saveAttempt(results);
+      renderResultPage(results, manual);
+      showOnly('resultView');
+    }
+
     function renderResultPage(results, manual) {
       const scorePct = percent(results.score, questions.length);
+      const mailtoLink = tryPrepareEmail(results);
       document.getElementById('resultView').innerHTML = `
         <div class="result-box">
           <h2 class="section-title">Résultats de l'examen</h2>
           <div class="result-score">${results.score}/30 — ${scorePct}%</div>
+          <p><strong>Participant :</strong> ${participant.name}</p>
           <p>${manual ? 'Examen soumis manuellement.' : 'Le temps est écoulé. L’examen a été soumis automatiquement.'}</p>
           <div class="dashboard-grid">
             <div>
@@ -1036,8 +1116,14 @@
               <div class="bars">${renderBarRows(results.byEco)}</div>
             </div>
           </div>
+          ${mailtoLink ? `
+            <div class="success">
+              Vous avez demandé l’envoi des résultats par email. Le bouton ci-dessous va <strong>ouvrir votre application de messagerie</strong> avec un email prérempli contenant vos réponses et résultats.
+            </div>
+          ` : ''}
           <div class="controls">
-            <button class="btn-primary" onclick="startExam()">Recommencer un nouvel essai</button>
+            ${mailtoLink ? `<a href="${mailtoLink}"><button class="btn-secondary" type="button">Préparer l'email des résultats</button></a>` : ''}
+            <button class="btn-primary" onclick="startOver()">Nouvel essai</button>
             <button class="btn-light" onclick="showTrainerLogin()">Accès formateur</button>
             <button class="btn-light" onclick="goHome()">Accueil</button>
           </div>
@@ -1049,9 +1135,15 @@
       `;
     }
 
+    function startOver() {
+      clearInterval(timerInterval);
+      remainingSeconds = EXAM_DURATION_SECONDS;
+      showOnly('homeView');
+    }
+
     function getAttempts() {
       try {
-        return JSON.parse(localStorage.getItem('pmp_exam_attempts') || '[]');
+        return JSON.parse(localStorage.getItem('pmp_exam_attempts_v2') || '[]');
       } catch {
         return [];
       }
@@ -1062,6 +1154,8 @@
       const payload = {
         attemptId: currentAttemptId || createAttemptId(),
         date: new Date().toLocaleString('fr-FR'),
+        participantName: participant.name,
+        participantEmail: participant.email || '',
         score: results.score,
         total: questions.length,
         percent: percent(results.score, questions.length),
@@ -1069,22 +1163,23 @@
         byEco: results.byEco
       };
       attempts.unshift(payload);
-      localStorage.setItem('pmp_exam_attempts', JSON.stringify(attempts));
+      localStorage.setItem('pmp_exam_attempts_v2', JSON.stringify(attempts));
     }
 
     function saveProgress() {
       const progress = collectAnswers();
-      localStorage.setItem('pmp_exam_progress', JSON.stringify({
+      localStorage.setItem('pmp_exam_progress_v2', JSON.stringify({
         savedAt: new Date().toLocaleString('fr-FR'),
         remainingSeconds,
-        progress
+        progress,
+        participant
       }));
       alert('Progression sauvegardée localement dans ce navigateur.');
     }
 
     function showTrainerLogin() {
       document.getElementById('trainerPassword').value = '';
-      document.getElementById('trainerLoginMessage').textContent = 'Entrez le mot de passe formateur pour consulter le tableau de bord.';
+      document.getElementById('trainerLoginMessage').textContent = 'Entrez le mot de passe formateur pour consulter le dashboard.';
       showOnly('trainerLoginView');
     }
 
@@ -1101,7 +1196,6 @@
     function aggregateAttempts(attempts) {
       const domainAgg = {};
       const ecoAgg = {};
-
       attempts.forEach(attempt => {
         Object.entries(attempt.byDomain || {}).forEach(([label, data]) => {
           if (!domainAgg[label]) domainAgg[label] = { correct: 0, total: 0 };
@@ -1114,27 +1208,22 @@
           ecoAgg[label].total += data.total;
         });
       });
-
-      const avg = attempts.length
-        ? Math.round(attempts.reduce((sum, a) => sum + a.percent, 0) / attempts.length)
-        : 0;
-
+      const avg = attempts.length ? Math.round(attempts.reduce((s, a) => s + a.percent, 0) / attempts.length) : 0;
       return { domainAgg, ecoAgg, avg };
     }
 
     function renderTrainerDashboard() {
       const attempts = getAttempts();
       const { domainAgg, ecoAgg, avg } = aggregateAttempts(attempts);
-
       document.getElementById('trainerView').innerHTML = `
         <div class="hero">
           <h1>Dashboard formateur</h1>
-          <p>Mot de passe validé. Les données ci-dessous proviennent des tentatives enregistrées dans ce navigateur.</p>
+          <p>Vue consolidée des résultats enregistrés dans ce navigateur.</p>
         </div>
 
         <div class="dashboard-grid">
           <div class="card">
-            <h2 class="section-title">Vue générale</h2>
+            <h2 class="section-title">Indicateurs globaux</h2>
             <div class="meta-list">
               <div class="meta-item"><strong>Nombre de tentatives</strong><span>${attempts.length}</span></div>
               <div class="meta-item"><strong>Moyenne générale</strong><span>${avg}%</span></div>
@@ -1147,10 +1236,9 @@
               <button class="btn-light" onclick="goHome()">Accueil</button>
             </div>
           </div>
-
           <div class="card">
-            <h2 class="section-title">Lecture du dashboard</h2>
-            <p class="small">Le tableau de bord montre les performances cumulées par domaine de connaissance et par domaine ECO. Sans base de données distante, cela représente les résultats saisis sur cet appareil / ce navigateur uniquement.</p>
+            <h2 class="section-title">Note technique</h2>
+            <p class="small">Le dashboard fonctionne sans backend. Les résultats affichés ici correspondent donc aux tentatives faites sur ce navigateur. Pour un suivi centralisé en ligne par tous les participants, il faudra ajouter une base de données ou un service externe.</p>
           </div>
         </div>
 
@@ -1172,15 +1260,19 @@
               <thead>
                 <tr>
                   <th>Date</th>
+                  <th>Participant</th>
+                  <th>Email</th>
                   <th>ID tentative</th>
                   <th>Score</th>
-                  <th>Pourcentage</th>
+                  <th>%</th>
                 </tr>
               </thead>
               <tbody>
                 ${attempts.map(a => `
                   <tr>
                     <td>${a.date}</td>
+                    <td>${a.participantName}</td>
+                    <td>${a.participantEmail || '-'}</td>
                     <td>${a.attemptId}</td>
                     <td>${a.score}/${a.total}</td>
                     <td>${a.percent}%</td>
@@ -1194,9 +1286,8 @@
     }
 
     function clearDashboardData() {
-      const ok = confirm('Voulez-vous vraiment supprimer toutes les tentatives enregistrées localement ?');
-      if (!ok) return;
-      localStorage.removeItem('pmp_exam_attempts');
+      if (!confirm('Supprimer toutes les tentatives enregistrées localement ?')) return;
+      localStorage.removeItem('pmp_exam_attempts_v2');
       renderTrainerDashboard();
     }
   </script>
