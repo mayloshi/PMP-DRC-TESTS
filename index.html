@@ -1,36 +1,617 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>PMP Test - Chapitre 1</title>
-  <style>
-    body { font-family: Arial; margin: 40px; }
-    .question { margin-bottom: 20px; }
-    button { padding: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Examen Blanc PMP - 30 questions (40 min) | Tableau de bord formateur</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+        }
+        /* Conteneur principal */
+        .app-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        /* EN-TÊTE */
+        .exam-header {
+            background: linear-gradient(135deg, #0b2b44, #1a4a6f);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .title-box h1 {
+            margin: 0;
+            font-size: 1.7rem;
+        }
+        .title-box p {
+            margin: 5px 0 0;
+            opacity: 0.85;
+        }
+        .timer-box {
+            background: #00000055;
+            backdrop-filter: blur(6px);
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: bold;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            font-family: monospace;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        button {
+            background: #2c7da0;
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        button.danger {
+            background: #bc6c25;
+        }
+        button.secondary {
+            background: #3a5a78;
+        }
+        button:hover {
+            filter: brightness(1.05);
+            transform: scale(1.02);
+        }
+        /* grille question + navigation */
+        .exam-layout {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        .questions-panel {
+            flex: 3;
+            min-width: 260px;
+        }
+        .nav-panel {
+            flex: 1;
+            min-width: 220px;
+            background: white;
+            border-radius: 28px;
+            padding: 20px 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        .question-card {
+            background: white;
+            border-radius: 28px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+            transition: 0.1s;
+        }
+        .question-text {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: #0b2b44;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 15px 0 10px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f9fafc;
+            padding: 10px 15px;
+            border-radius: 40px;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+        }
+        .option:hover {
+            background: #eef2ff;
+        }
+        input[type="radio"] {
+            transform: scale(1.1);
+            accent-color: #1a4a6f;
+        }
+        .badge {
+            display: inline-block;
+            background: #e2e8f0;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 12px;
+            color: #1e293b;
+        }
+        .nav-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .nav-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #eef2ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.1s;
+            color: #1e293b;
+        }
+        .nav-btn.answered {
+            background: #2c7da0;
+            color: white;
+        }
+        .nav-btn.current {
+            border: 3px solid #f4a261;
+            background: #1e4a6b;
+            color: white;
+            transform: scale(1.05);
+        }
+        .submit-area {
+            margin-top: 20px;
+            text-align: right;
+        }
+        /* résultats + dashboard */
+        .results-dashboard {
+            margin-top: 40px;
+            background: white;
+            border-radius: 28px;
+            padding: 20px 25px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .stats-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 15px 20px;
+            flex: 1;
+            min-width: 160px;
+            text-align: center;
+            border-left: 6px solid #2c7da0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .admin-only {
+            background: #fff7ed;
+            padding: 20px;
+            border-radius: 24px;
+            margin-top: 30px;
+        }
+        .toggle-dash {
+            background: #6c757d;
+        }
+        hr {
+            margin: 20px 0;
+        }
+        @media (max-width: 780px) {
+            .exam-layout {
+                flex-direction: column;
+            }
+            .timer-box {
+                font-size: 1.3rem;
+                padding: 5px 16px;
+            }
+        }
+        footer {
+            font-size: 0.8rem;
+            text-align: center;
+            margin-top: 40px;
+            color: #475569;
+        }
+    </style>
 </head>
 <body>
+<div class="app-container">
+    <div class="exam-header">
+        <div class="title-box">
+            <h1>📋 Examen Blanc PMP</h1>
+            <p>30 questions | 40 minutes | Domaines & ECO (Personne/Processus/Environnement commercial)</p>
+        </div>
+        <div class="timer-box" id="timerDisplay">40:00</div>
+    </div>
 
-<h1>Test PMP - Chapitre 1</h1>
+    <div class="exam-layout">
+        <div class="questions-panel" id="questionsContainer"></div>
+        <div class="nav-panel">
+            <h3>🗂️ Navigation rapide</h3>
+            <div id="navButtons" class="nav-grid"></div>
+            <div class="submit-area">
+                <button id="submitExamBtn" class="danger">✅ Soumettre l'examen</button>
+                <button id="resetExamBtn" class="secondary" style="margin-top: 10px;">🔄 Réinitialiser</button>
+            </div>
+            <hr>
+            <div>
+                <p><strong>📊 Légende ECO</strong><br>
+                🧑‍🤝‍🧑 Personne : leadership, équipe, conflits<br>
+                ⚙️ Processus : gestion technique, risques, planning, qualité<br>
+                🏢 Environnement commercial : conformité, réglementation, valeur biz</p>
+            </div>
+        </div>
+    </div>
 
-<div class="question">
-  <p>1. Quel est le rôle principal du chef de projet ?</p>
-  <button onclick="checkAnswer('a')">A. Gérer les ressources humaines</button><br>
-  <button onclick="checkAnswer('b')">B. Atteindre les objectifs du projet</button><br>
-  <button onclick="checkAnswer('c')">C. Contrôler uniquement le budget</button>
+    <!-- Section résultats / Dashboard formateur -->
+    <div class="results-dashboard" id="dashboardSection">
+        <div class="dashboard-header">
+            <h2>📈 Résultats & Tableau de bord formateur</h2>
+            <button id="refreshDashboardBtn" class="secondary">🔄 Actualiser scores</button>
+        </div>
+        <div id="studentResultArea" style="margin-bottom: 30px;">
+            <p><em>🔍 Après avoir soumis l'examen, vos scores détaillés apparaîtront ici. Le formateur accède à l'historique et aux moyennes par domaine ci-dessous.</em></p>
+        </div>
+        <div class="admin-only" id="trainerDashboard">
+            <h3>👨‍🏫 Vue formateur – Statistiques globales (tentatives enregistrées)</h3>
+            <div id="trainerStats"></div>
+            <div id="attemptsList"></div>
+            <button id="clearHistoryBtn" style="background:#a03e2c;">🧹 Effacer l'historique des tentatives</button>
+        </div>
+    </div>
+    <footer>© Examen blanc conforme PMP – Questions basées sur les scénarios réels. 30 questions / 40 min.</footer>
 </div>
 
-<p id="result"></p>
-
 <script>
-function checkAnswer(answer) {
-  if(answer === 'b') {
-    document.getElementById("result").innerHTML = "✅ Bonne réponse";
-  } else {
-    document.getElementById("result").innerHTML = "❌ Mauvaise réponse";
-  }
-}
-</script>
+    // --------------------------------------------------------------
+    // 30 QUESTIONS (en français) avec: texte, options, correct (0-index), domaineConnaissance, ecoDomain
+    // Extraites et adaptées des fichiers fournis (Risk, Quality, Agile, Predictive, Team, Comm, Procurement, Fundamentals...)
+    // --------------------------------------------------------------
+    const QUESTIONS = [
+        { text: "Le chef de projet remarque des désaccords constants entre les membres de l'équipe lors des réunions. Quelle est la meilleure action ?", options: ["Ignorer les désaccords pour ne pas ralentir", "Intervenir pour résoudre et orienter vers une culture de collaboration", "Demander au sponsor de trancher", "Changer la composition de l'équipe"], correct: 1, domaine: "Gestion d'équipe / Conflits", eco: "Personne" },
+        { text: "Un fournisseur a du mal à respecter les exigences de qualité. Quelle devrait être la première action du chef de projet ?", options: ["Remplacer immédiatement le fournisseur", "Fournir un feedback pour améliorer la performance, puis envisager un remplacement en dernier recours", "Pénaliser financièrement", "Demander une extension des délais"], correct: 1, domaine: "Gestion des approvisionnements", eco: "Processus" },
+        { text: "Un membre clé de l'équipe quitte le projet avant la finalisation. Que doit faire le chef de projet en premier ?", options: ["Engager un remplacement sans analyse", "Évaluer l'impact sur le projet, assurer le transfert des connaissances et suivre le plan des ressources", "Arrêter le projet temporairement", "Revoir le budget uniquement"], correct: 1, domaine: "Gestion des ressources", eco: "Personne" },
+        { text: "Un accident du travail cause une blessure à un membre de l'équipe. Quelle action prioritaire ?", options: ["Fermer le chantier définitivement", "Investigar las causas y desarrollar un plan para evitar recurrencia", "Informer seulement les RH", "Attendre les conclusions de l'assurance"], correct: 1, domaine: "Santé/Sécurité & Risques", eco: "Processus" },
+        { text: "Le client souhaite être impliqué à chaque étape du développement. Quelle approche adopter ?", options: ["Prédictive classique", "Agile pour implication continue", "Cycle en V", "Kanban sans réunion client"], correct: 1, domaine: "Méthodologie Agile", eco: "Processus" },
+        { text: "Le projet est en retard, le sponsor demande une livraison plus tôt. Quelle technique le chef de projet applique en priorité ?", options: ["Compression du calendrier (fast-tracking ou crashing)", "Ajouter des tampons", "Réduire la portée sans accord", "Augmenter les coûts"], correct: 0, domaine: "Planification / Calendrier", eco: "Processus" },
+        { text: "Le chef de projet utilise le Kanban. Que doit-il surveiller en priorité ?", options: ["Le nombre de story points", "Le flux de travail continu et limiter le WIP", "Les revues de sprint", "La vélocité"], correct: 1, domaine: "Agile / Kanban", eco: "Processus" },
+        { text: "Un cadre supérieur critique les livrables du projet. Quelle action ?", options: ["Ignorer la critique", "Analyser la raison et prendre des actions correctives appropriées", "Modifier la charte", "Demander une réunion d'urgence au comité"], correct: 1, domaine: "Communication / parties prenantes", eco: "Personne" },
+        { text: "Une information confidentielle du projet a fuité. Quelle démarche ?", options: ["Ne rien faire", "Enquêter sur l'incident et appliquer des mesures disciplinaires selon les politiques", "Changer le mot de passe", "Blâmer un fournisseur"], correct: 1, domaine: "Gouvernance / Sécurité", eco: "Environnement commercial" },
+        { text: "L'équipe agile rencontre trop d'obstacles. En tant que leader serviteur, que fait le chef de projet ?", options: ["Attendre que l'équipe résolve", "Faciliter et éliminer les impediments", "Ajouter des ressources", "Reporter les user stories"], correct: 1, domaine: "Agile / Servant leadership", eco: "Personne" },
+        { text: "Le projet a un SPI de 1,10 et un CPI de 0,80. Que faire ?", options: ["Ne rien faire", "Aplatir les ressources pour étaler les coûts", "Accélérer (crash) les activités critiques", "Réduire la portée"], correct: 1, domaine: "Valeur acquise (EVM)", eco: "Processus" },
+        { text: "Lors d'une rétrospective, un membre suggère de changer la durée du sprint. Que fait le Scrum Master ?", options: ["Accepter immédiatement", "Refuser car le timebox est fixe", "Investiguer la cause sous-jacente et adapter le processus", "Changer le Product Owner"], correct: 2, domaine: "Agile / Scrum", eco: "Processus" },
+        { text: "Un chef de projet reçoit une demande de modification d'exigence en mode Agile. Que faire ?", options: ["Bloquer la demande", "Soumettre au CCB", "Accueillir favorablement la demande", "Repousser à la prochaine version sans discussion"], correct: 2, domaine: "Gestion de changement Agile", eco: "Processus" },
+        { text: "Deux membres d'équipe ont des opinions divergentes sur la stratégie de messagerie. Quelle technique de résolution ?", options: ["Forcer une décision", "Mener des études de marché pour des données objectives", "Éviter le conflit", "Faire appel au sponsor"], correct: 1, domaine: "Gestion des conflits", eco: "Personne" },
+        { text: "Un fournisseur demande un paiement pour 50% des travaux. Quel document vérifier ?", options: ["Le plan de management des approvisionnements", "Le contrat", "La demande de prix", "Le registre des risques"], correct: 1, domaine: "Gestion des contrats", eco: "Processus" },
+        { text: "Le chef de projet doit calculer la réserve de gestion pour des risques non identifiés. Il doit s'assurer que :", options: ["La réserve de contingence est incluse dans la baseline", "Une réserve de management est allouée pour les inconnus inconnus", "Les risques sont tous qualifiés", "Une analyse Monte Carlo est faite"], correct: 1, domaine: "Gestion des risques", eco: "Processus" },
+        { text: "Pendant l'exécution, l'équipe découvre que des fonctionnalités livrées ne correspondent pas à la portée. Quel document utiliser ?", options: ["La matrice de traçabilité des exigences", "Le dictionnaire WBS", "La charte", "Le registre des leçons apprises"], correct: 0, domaine: "Gestion du périmètre", eco: "Processus" },
+        { text: "Le sponsor exige de terminer une semaine plus tôt. Quelle première action ?", options: ["Crash le planning", "Fast-tracking (parallélisme) en priorité", "Ajouter des ressources sans analyse", "Demander une dérogation"], correct: 1, domaine: "Planification", eco: "Processus" },
+        { text: "Un membre de l'équipe refuse de participer aux réunions. Que faire ?", options: ["Le sanctionner", "Discuter pour comprendre la cause profonde et rappeler l'importance selon la charte d'équipe", "L'exclure du projet", "Informer son manager"], correct: 1, domaine: "Gestion d'équipe", eco: "Personne" },
+        { text: "Le PM doit choisir entre deux projets. Quel outil financier utiliser ?", options: ["VAN, TRI ou ratio B/C", "Diagramme de Gantt", "Matrice RACI", "Analyse SWOT"], correct: 0, domaine: "Sélection de projet", eco: "Environnement commercial" },
+        { text: "Une équipe Scrum devient trop grande (plus de 9 membres). Que recommandez-vous ?", options: ["Augmenter le timebox", "Diviser l'équipe et utiliser Scrum of Scrums", "Passer en mode prédictif", "Réduire les rôles"], correct: 1, domaine: "Agile scaling", eco: "Processus" },
+        { text: "Le projet est en phase de tempête prolongée (storming). Rôle du PM ?", options: ["Forcer l'exécution", "Coacher pour créer une culture de confiance, transparence et collaboration", "Changer le sponsor", "Annuler le projet"], correct: 1, domaine: "Dynamique d'équipe", eco: "Personne" },
+        { text: "Un audit qualité externe va avoir lieu. À quoi s'attendre ?", options: ["Détection de défauts produit", "Vérifier la conformité aux processus et procédures", "Mesurer la satisfaction client", "Calculer la vélocité"], correct: 1, domaine: "Qualité", eco: "Processus" },
+        { text: "Le promoteur demande un rapport de performance de l'équipe Kanban. Que montrer ?", options: ["Le graphique de vélocité", "Le tableau Kanban pour affichage visuel de l'avancement", "Le backlog produit", "Le registre des risques"], correct: 1, domaine: "Métriques Agile", eco: "Processus" },
+        { text: "Un membre clé refuse de signer l'acceptation des livrables. Que faire en premier ?", options: ["Fermer le projet sans sa signature", "Identifier et discuter des raisons, résoudre les problèmes", "Escalader au sponsor", "Modifier le contrat"], correct: 1, domaine: "Validation des livrables", eco: "Personne" },
+        { text: "Le PM doit estimer des coûts à haut niveau rapidement. Quelle technique ?", options: ["Estimation paramétrique", "Estimation analogue basée sur projet similaire", "Bottom-up", "PERT"], correct: 1, domaine: "Estimation", eco: "Processus" },
+        { text: "Dans un projet prédictif, des réglementations révisées arrivent. Que mettre à jour en priorité ?", options: ["Plan de management de la qualité", "Plan de communication", "Plan des coûts", "Plan d'approvisionnement"], correct: 0, domaine: "Conformité / Qualité", eco: "Environnement commercial" },
+        { text: "Le Product Owner reçoit une plainte d'un utilisateur (défaut). En Agile, que faire ?", options: ["Corriger immédiatement", "Créer un élément dans le backlog produit et le prioriser", "Repousser la release", "Changer l'équipe"], correct: 1, domaine: "Agile / Gestion de backlog", eco: "Processus" },
+        { text: "Le PM utilise le coût de la qualité. Le rapport indique : formation 10k$, rework 10k$, inspection 5k$, rebut 3k$, garantie 2k$. Quel est le coût d'évaluation ?", options: ["2000$", "3000$", "5000$", "10000$"], correct: 2, domaine: "Gestion de la qualité", eco: "Processus" },
+        { text: "Des parties prenantes résistent au projet. Que faire ?", options: ["Ignorer leur résistance", "Comprendre la cause, les impliquer, ajuster le plan d'engagement", "Les exclure du registre", "Menacer"], correct: 1, domaine: "Engagement parties prenantes", eco: "Personne" }
+    ];
 
+    // Vérification de la longueur : 30 questions
+    console.log("Nb questions:", QUESTIONS.length);
+
+    // Variables globales
+    let userAnswers = new Array(QUESTIONS.length).fill(null);
+    let examSubmitted = false;
+    let timerInterval = null;
+    let timeSeconds = 40 * 60; // 40 minutes
+
+    // DOM elements
+    const questionsContainer = document.getElementById("questionsContainer");
+    const navButtonsDiv = document.getElementById("navButtons");
+    const timerDisplay = document.getElementById("timerDisplay");
+    const submitBtn = document.getElementById("submitExamBtn");
+    const resetBtn = document.getElementById("resetExamBtn");
+    const refreshDashBtn = document.getElementById("refreshDashboardBtn");
+    const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+
+    // Stockage local des tentatives (pour formateur)
+    let attempts = [];
+
+    function loadAttemptsFromStorage() {
+        const stored = localStorage.getItem("pmp_exam_attempts");
+        if(stored) {
+            attempts = JSON.parse(stored);
+        } else {
+            attempts = [];
+        }
+        updateTrainerDashboard();
+    }
+
+    function saveAttempts() {
+        localStorage.setItem("pmp_exam_attempts", JSON.stringify(attempts));
+    }
+
+    // Sauvegarder une tentative (score, details)
+    function saveAttempt(scoreData) {
+        const attempt = {
+            timestamp: new Date().toISOString(),
+            totalScore: scoreData.total,
+            maxScore: QUESTIONS.length,
+            percent: ((scoreData.total / QUESTIONS.length)*100).toFixed(1),
+            scoresByDomain: scoreData.byDomain,
+            scoresByECO: scoreData.byECO
+        };
+        attempts.unshift(attempt);
+        if(attempts.length > 20) attempts.pop(); // garder les 20 dernieres
+        saveAttempts();
+        updateTrainerDashboard();
+    }
+
+    // Calcul des scores par domaine et ECO
+    function computeScores() {
+        let correctCount = 0;
+        let domainMap = new Map(); // domaine -> {correct, total}
+        let ecoMap = new Map();    // ECO -> {correct, total}
+        for(let i=0; i<QUESTIONS.length; i++) {
+            const q = QUESTIONS[i];
+            const userChoice = userAnswers[i];
+            const isCorrect = (userChoice !== null && userChoice === q.correct);
+            if(isCorrect) correctCount++;
+            // Domaine
+            let dom = q.domaine || "Autre";
+            if(!domainMap.has(dom)) domainMap.set(dom, {correct:0, total:0});
+            let d = domainMap.get(dom);
+            d.total++;
+            if(isCorrect) d.correct++;
+            // ECO
+            let eco = q.eco;
+            if(!ecoMap.has(eco)) ecoMap.set(eco, {correct:0, total:0});
+            let e = ecoMap.get(eco);
+            e.total++;
+            if(isCorrect) e.correct++;
+        }
+        // transformer maps en objets
+        let byDomain = {};
+        for(let [k,v] of domainMap.entries()) byDomain[k] = {correct: v.correct, total: v.total, percent: (v.correct/v.total)*100};
+        let byECO = {};
+        for(let [k,v] of ecoMap.entries()) byECO[k] = {correct: v.correct, total: v.total, percent: (v.correct/v.total)*100};
+        return { total: correctCount, byDomain, byECO };
+    }
+
+    // Affichage des résultats pour l'étudiant
+    function displayStudentResults() {
+        const scores = computeScores();
+        const percentTotal = ((scores.total / QUESTIONS.length)*100).toFixed(1);
+        let html = `<div style="background:#e9f5f9; border-radius:24px; padding:15px;"><h3>📌 Vos résultats</h3>
+        <p><strong>Score total : ${scores.total} / ${QUESTIONS.length} (${percentTotal}%)</strong></p>
+        <div class="stats-grid">`;
+        for(let [dom, data] of Object.entries(scores.byDomain)) {
+            html += `<div class="stat-card"><strong>${dom}</strong><br>${data.correct}/${data.total}<br>${data.percent.toFixed(0)}%</div>`;
+        }
+        html += `</div><div class="stats-grid"><h4>✅ Détail par domaine ECO</h4>`;
+        for(let [eco, data] of Object.entries(scores.byECO)) {
+            let label = eco === "Personne" ? "🧑‍🤝‍🧑 Personne" : (eco === "Processus" ? "⚙️ Processus" : "🏢 Environnement commercial");
+            html += `<div class="stat-card"><strong>${label}</strong><br>${data.correct}/${data.total}<br>${data.percent.toFixed(0)}%</div>`;
+        }
+        html += `</div></div>`;
+        document.getElementById("studentResultArea").innerHTML = html;
+        return scores;
+    }
+
+    // Mise à jour dashboard formateur
+    function updateTrainerDashboard() {
+        if(attempts.length === 0) {
+            document.getElementById("trainerStats").innerHTML = "<p>Aucune tentative enregistrée. Les étudiants soumettront leurs examens pour voir l'historique.</p>";
+            document.getElementById("attemptsList").innerHTML = "";
+            return;
+        }
+        // Statistiques globales moyennes par domaine et ECO
+        let aggregatedDomain = new Map();
+        let aggregatedECO = new Map();
+        for(let att of attempts) {
+            for(let [dom, val] of Object.entries(att.scoresByDomain)) {
+                if(!aggregatedDomain.has(dom)) aggregatedDomain.set(dom, {sumPercent:0, count:0});
+                let d = aggregatedDomain.get(dom);
+                d.sumPercent += val.percent;
+                d.count++;
+            }
+            for(let [eco, val] of Object.entries(att.scoresByECO)) {
+                if(!aggregatedECO.has(eco)) aggregatedECO.set(eco, {sumPercent:0, count:0});
+                let e = aggregatedECO.get(eco);
+                e.sumPercent += val.percent;
+                e.count++;
+            }
+        }
+        let statsHtml = `<h4>📊 Performance moyenne par domaine (toutes tentatives)</h4><div class="stats-grid">`;
+        for(let [dom, agg] of aggregatedDomain.entries()) {
+            let avg = agg.sumPercent / agg.count;
+            statsHtml += `<div class="stat-card"><strong>${dom}</strong><br>Moyenne ${avg.toFixed(1)}%</div>`;
+        }
+        statsHtml += `</div><h4>📊 Performance moyenne par ECO</h4><div class="stats-grid">`;
+        for(let [eco, agg] of aggregatedECO.entries()) {
+            let labelE = eco === "Personne" ? "Personne" : (eco === "Processus" ? "Processus" : "Business Env.");
+            let avg = agg.sumPercent / agg.count;
+            statsHtml += `<div class="stat-card"><strong>${labelE}</strong><br>${avg.toFixed(1)}%</div>`;
+        }
+        statsHtml += `</div>`;
+        document.getElementById("trainerStats").innerHTML = statsHtml;
+        let listHtml = `<h4>📋 Historique des tentatives (${attempts.length})</h4><table><tr><th>Date/heure</th><th>Score (%)</th><th>Détail (domaines)</th></tr>`;
+        for(let att of attempts) {
+            let shortDom = Object.keys(att.scoresByDomain).slice(0,2).join(", ");
+            listHtml += `<tr><td>${new Date(att.timestamp).toLocaleString()}</td><td>${att.percent}% (${att.totalScore}/${QUESTIONS.length})</td><td>${shortDom}...</td></tr>`;
+        }
+        listHtml += `</table>`;
+        document.getElementById("attemptsList").innerHTML = listHtml;
+    }
+
+    // Sauvegarde et soumission
+    function submitExam() {
+        if(examSubmitted) {
+            alert("Examen déjà soumis. Rafraîchir pour recommencer.");
+            return;
+        }
+        // vérifier au moins une réponse? facultatif
+        examSubmitted = true;
+        if(timerInterval) clearInterval(timerInterval);
+        const scores = displayStudentResults();
+        saveAttempt(scores);
+        // désactiver les radios
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = true);
+        submitBtn.disabled = true;
+        alert(`Examen terminé ! Score ${scores.total}/${QUESTIONS.length}. Dashboard formateur mis à jour.`);
+    }
+
+    // réinitialiser examen complet
+    function resetExam() {
+        if(timerInterval) clearInterval(timerInterval);
+        userAnswers.fill(null);
+        examSubmitted = false;
+        timeSeconds = 40 * 60;
+        updateTimerDisplay();
+        startTimer();
+        renderQuestions();
+        renderNav();
+        document.getElementById("studentResultArea").innerHTML = "<p><em>🔍 Après avoir soumis l'examen, vos scores détaillés apparaîtront ici.</em></p>";
+        submitBtn.disabled = false;
+        // réactiver tous les champs
+        document.querySelectorAll('input[type="radio"]').forEach(r => r.disabled = false);
+    }
+
+    function updateTimerDisplay() {
+        let mins = Math.floor(timeSeconds / 60);
+        let secs = timeSeconds % 60;
+        timerDisplay.innerText = `${mins.toString().padStart(2,'0')}:${secs.toString().padStart(2,'0')}`;
+        if(timeSeconds <= 0) {
+            clearInterval(timerInterval);
+            alert("Temps écoulé ! L'examen va être soumis automatiquement.");
+            submitExam();
+        }
+    }
+
+    function startTimer() {
+        if(timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if(!examSubmitted && timeSeconds > 0) {
+                timeSeconds--;
+                updateTimerDisplay();
+                if(timeSeconds === 0) submitExam();
+            } else if(timeSeconds <= 0) {
+                clearInterval(timerInterval);
+            }
+        }, 1000);
+    }
+
+    // Gestion réponse
+    function setAnswer(qIndex, optionIndex) {
+        if(examSubmitted) return;
+        userAnswers[qIndex] = optionIndex;
+        renderNav();
+        // mettre en surbrillance visuelle
+        const radioGroup = document.querySelector(`input[name="q${qIndex}"]:checked`);
+        if(radioGroup) radioGroup.checked = true;
+    }
+
+    function renderQuestions() {
+        questionsContainer.innerHTML = "";
+        QUESTIONS.forEach((q, idx) => {
+            const card = document.createElement("div");
+            card.className = "question-card";
+            const selectedVal = userAnswers[idx];
+            card.innerHTML = `<div><span class="badge">Q${idx+1} · ${q.domaine}</span> <span class="badge" style="background:#d9e6f5;">${q.eco === "Personne" ? "👥 Personne" : q.eco === "Processus" ? "⚙️ Processus" : "🏢 Business"}</span></div>
+            <div class="question-text">${idx+1}. ${q.text}</div>
+            <div class="options" id="options-${idx}"></div>`;
+            const optionsDiv = card.querySelector(`.options`);
+            q.options.forEach((opt, optIdx) => {
+                const optDiv = document.createElement("label");
+                optDiv.className = "option";
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = `q${idx}`;
+                radio.value = optIdx;
+                if(selectedVal === optIdx) radio.checked = true;
+                radio.addEventListener("change", (e) => {
+                    if(!examSubmitted) setAnswer(idx, optIdx);
+                });
+                optDiv.appendChild(radio);
+                optDiv.appendChild(document.createTextNode(` ${String.fromCharCode(65+optIdx)}. ${opt}`));
+                optionsDiv.appendChild(optDiv);
+            });
+            questionsContainer.appendChild(card);
+        });
+    }
+
+    function renderNav() {
+        navButtonsDiv.innerHTML = "";
+        for(let i=0; i<QUESTIONS.length; i++) {
+            const btn = document.createElement("div");
+            btn.className = "nav-btn";
+            if(userAnswers[i] !== null) btn.classList.add("answered");
+            btn.innerText = i+1;
+            btn.addEventListener("click", () => {
+                document.querySelector(`.question-card`)?.scrollIntoView({behavior:"smooth"});
+                const target = document.querySelectorAll(".question-card")[i];
+                if(target) target.scrollIntoView({behavior:"smooth", block:"center"});
+            });
+            navButtonsDiv.appendChild(btn);
+        }
+    }
+
+    // Initialisation
+    function init() {
+        renderQuestions();
+        renderNav();
+        startTimer();
+        loadAttemptsFromStorage();
+        submitBtn.onclick = submitExam;
+        resetBtn.onclick = resetExam;
+        refreshDashBtn.onclick = () => { updateTrainerDashboard(); };
+        clearHistoryBtn.onclick = () => {
+            if(confirm("Supprimer tout l'historique des tentatives ?")) {
+                attempts = [];
+                saveAttempts();
+                updateTrainerDashboard();
+            }
+        };
+    }
+    init();
+</script>
 </body>
 </html>
