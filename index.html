@@ -127,6 +127,7 @@ th, td { border-bottom:1px solid var(--line); padding:10px 8px; text-align:left;
         </div>
       </div>
       <h1>Examen blanc PMP</h1>
+      <p>Version 3.3</p>
       <p>34 questions • 40 minutes • français</p>
     </div>
 
@@ -325,8 +326,6 @@ function renderQuestions() {
     <div class="question-card">
       <div class="question-meta">
         <span class="pill">Question ${index + 1}</span>
-        <span class="pill">${q.domain}</span>
-        <span class="pill">ECO : ${q.eco}</span>
       </div>
       <h3>${q.text}</h3>
       ${q.options.map((opt, optIndex) => `
