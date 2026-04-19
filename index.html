@@ -507,7 +507,7 @@ function tryPrepareEmail(results) {
 }
 
 function submitRemote(results) {
-  if (!(APP_CONFIG.ENABLE_REMOTE_SUBMIT && APP_CONFIG.RESULT_ENDPOINT && APP_CONFIG.RESULT_ENDPOINT !== 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE')) return;
+  if (!(APP_CONFIG.ENABLE_REMOTE_SUBMIT && APP_CONFIG.RESULT_ENDPOINT && APP_CONFIG.RESULT_ENDPOINT !== 'https://script.google.com/macros/s/AKfycbxaLL3C7UKfvaQABO9PkwTQ8ANtMVHFECQblIrmq0Pe6ZRAsX7C7c6-L8d-iN71P6YLdg/exec')) return;
   const payload = {
     appTitle: APP_CONFIG.APP_TITLE,
     submittedAt: new Date().toISOString(),
