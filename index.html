@@ -127,7 +127,8 @@ th, td { border-bottom:1px solid var(--line); padding:10px 8px; text-align:left;
         </div>
       </div>
       <h1>Examen blanc PMP</h1>
-      <p>Version 3.5</p>
+      <p>Version 3.5.1</p>
+      <p class="small">Dernière mise à jour de la page : <strong id="pageUpdatedAt">2026-04-21 21:43:40 UTC</strong></p>
       <p>34 questions • 40 minutes • français</p>
     </div>
 
@@ -231,13 +232,14 @@ th, td { border-bottom:1px solid var(--line); padding:10px 8px; text-align:left;
 <script>
 const TRAINER_PASSWORD = '221008';
 const APP_CONFIG = {
-  RESULT_ENDPOINT: 'https://script.google.com/macros/s/AKfycby4DSxwXRsIcjHi16ZaiS69uyJqhzQYzTatRRaO4bfG279FgJ2KIP8P2T2gr2upKlwX/exec',
+  RESULT_ENDPOINT: 'https://script.google.com/macros/s/AKfycbxeEP8sy8RprcLMwhIncSbZMF6OyUE8PP9PtXeUQyXDvMuNklP5m6A6Ct4bZuiEKo6XsA/exec',
   ENABLE_REMOTE_SUBMIT: true,
-  APP_TITLE: 'Examen blanc PMP - v3.5'
-  ,DASHBOARD_FETCH_LIMIT: 500,
+  APP_TITLE: 'Examen blanc PMP - v3.5.1',
+  DASHBOARD_FETCH_LIMIT: 500,
   STORAGE_KEY_ATTEMPTS: 'pmp_exam_attempts_v32',
   STORAGE_KEY_LAST: 'pmp_exam_last_attempt_v32',
-  STORAGE_KEY_PROGRESS: 'pmp_exam_progress_v32'
+  STORAGE_KEY_PROGRESS: 'pmp_exam_progress_v32',
+  PAGE_LAST_UPDATED: '2026-04-21 21:43:40 UTC'
 };
 const EXAM_DURATION_SECONDS = 40 * 60;
 const TOTAL_QUESTIONS = 34;
@@ -248,6 +250,12 @@ let participant = { name:'', email:'', wantsEmail:false };
 let lastRemoteSubmit = { attempted:false, success:false, message:'' };
 let trainerDashboardMode = 'remote';
 const questions = [{"id": 1, "domain": "Fondamentaux du management de projet", "eco": "Processus", "text": "Le sponsor du projet informe le chef de projet qu’il doute que le produit résultant satisfasse la demande métier. Il souhaite donc maintenir les coûts au minimum. Que doit faire le chef de projet ?", "options": ["Identifier et mettre en œuvre les exigences nécessaires pour réaliser un Produit Minimum Viable (MVP).", "Recueillir toutes les exigences et exécuter le projet selon une approche incrémentale.", "Exclure certaines parties prenantes du processus de définition du périmètre afin de limiter les exigences.", "Signer avec le sponsor un contrat à coût fixe afin de limiter les coûts du projet."], "answer": 0, "explanation": "Le Produit Minimum Viable (MVP) sert à définir le périmètre de la première version en identifiant les exigences qui apporteront de la valeur aux clients. Une approche incrémentale ne convient pas ici, car le client n’obtiendra pas un produit utilisable avant la fin du projet. Il n’est pas approprié d’exclure certaines parties prenantes pour limiter les exigences. Le chef de projet doit impliquer toutes les parties prenantes dans la collecte et la priorisation des fonctionnalités du produit. Enfin, un contrat à coût fixe ne résout pas le problème, car la préoccupation principale du sponsor est de vérifier la demande métier du produit."}, {"id": 2, "domain": "Fondamentaux du management de projet", "eco": "Processus", "text": "Un chef de projet pilote un projet de développement logiciel suivant une approche Agile. Pendant l’exécution, il reçoit du client une demande de modification d’une exigence. Que doit-il faire ?", "options": ["Bloquer la demande de changement.", "Accueillir la demande de changement.", "Éviter la demande de changement.", "Transmettre la demande de changement au Change Control Board (CCB)."], "answer": 1, "explanation": "La flexibilité est l’un des aspects les plus importants de l’approche Agile ; le périmètre de travail peut évoluer en réponse à de nouvelles exigences. Une approche Agile, adaptative ou pilotée par le changement encourage la collecte régulière du retour des parties prenantes. Contrairement à l’approche prédictive, l’approche Agile n’implique pas de Change Control Board (CCB)."}, {"id": 3, "domain": "Fondamentaux du management de projet", "eco": "Environnement commercial", "text": "Une organisation ayant besoin d’un logiciel de comptabilité effectue une analyse make-or-buy. L’organisation décide de développer en interne, car l’analyse montre une période de retour sur investissement inférieure à 3 ans. Cependant, lors de l’acquisition des ressources, le chef de projet découvre que le tarif du développeur utilisé dans l’analyse make-or-buy ne représente que la moitié du tarif actuel du marché. Que doit-il faire en premier ?", "options": ["Soumettre une demande de changement.", "Informer le sponsor de cette découverte.", "Ne rien faire ; tant que le SPI et le CPI du projet sont corrects, cela ne pose pas de problème.", "Mettre à jour le rapport d’analyse make-or-buy."], "answer": 1, "explanation": "Le chef de projet doit notifier au sponsor tout risque identifié susceptible d’impacter la valeur métier du projet. Les mesures de valeur métier servent à garantir que les livrables du projet restent cohérents avec le business case et les plans de réalisation des bénéfices. Une analyse make-or-buy est considérée comme un outil de mesure de la valeur métier financière."}, {"id": 4, "domain": "Agile Project Management", "eco": "Personne", "text": "Lors de l’examen d’un Epic important, les membres d’une équipe auto-organisée ont des interprétations différentes de la manière de le découper, ce qui révèle un manque de compréhension commune de l’objectif du projet. Que doit faire le chef de projet ?", "options": ["Demander à l’équipe de consulter le release plan.", "Demander à l’équipe de consulter les critères d’acceptation de l’Epic.", "Rappeler à l’équipe l’objectif du sprint.", "Rappeler à l’équipe la vision du projet."], "answer": 3, "explanation": "Le chef de projet doit rappeler à l’équipe la vision du projet, car l’équipe semble manquer d’une compréhension commune de l’objectif global. L’objectif du sprint ne clarifie que la vision de l’itération, pas celle du projet entier. De même, se référer au release plan n’aide qu’à comprendre l’objectif de cette release particulière. Les critères d’acceptation de l’Epic aident à comprendre l’Epic, mais pas à saisir la finalité globale du projet."}, {"id": 5, "domain": "Agile Project Management", "eco": "Processus", "text": "Après avoir terminé une release, l’équipe Scrum examine son burndown chart. Même s’il n’y a eu aucun changement d’estimation, le graphique montre une augmentation de la valeur en story points pendant le 3e sprint. Comment cela peut-il s’expliquer ?", "options": ["La vélocité de l’équipe a diminué.", "La vélocité de l’équipe a augmenté.", "Du travail a été ajouté au Product Backlog.", "Du travail a été retiré du Product Backlog."], "answer": 2, "explanation": "Lorsque du travail lié à une release est ajouté au Product Backlog, le total des story points de la release augmente naturellement. Si aucun travail n’avait été ajouté au Product Backlog, l’équipe aurait dû s’attendre à ce que le total de story points diminue selon sa vélocité au sprint 3. Cela est indépendant du fait que la vélocité ait augmenté ou diminué par rapport aux sprints précédents."}, {"id": 6, "domain": "Agile Project Management", "eco": "Personne", "text": "À mi-chemin de l’itération en cours, le rapport d’avancement révèle que le projet Agile est en retard. Le chef de projet ne s’y attendait pas, car il avait soigneusement séquencé et attribué tout le travail pour atteindre l’objectif de l’itération. Qu’aurait-il dû faire différemment pour éviter ce problème ?", "options": ["Former l’équipe à la mise en œuvre de l’approche Agile.", "Encourager l’équipe à enregistrer sa progression dans le système de reporting.", "Mettre en place une réserve de contingence.", "Encourager l’équipe à s’auto-organiser afin d’assurer son adhésion."], "answer": 3, "explanation": "Comme il pilote un projet Agile, le chef de projet aurait dû permettre à l’équipe de s’auto-organiser en gérant elle-même la sélection et la priorisation des tâches d’itération, plutôt que de s’occuper seul du séquencement et de l’affectation du travail. Cela assure un niveau élevé d’adhésion de la part de l’équipe."}, {"id": 7, "domain": "Agile Project Management", "eco": "Environnement commercial", "text": "Une organisation a choisi un projet pilote pour expérimenter l’approche Agile. Elle a recruté un coach Agile pour aider le chef de projet, car elle n’utilisait jusque-là que la méthode prédictive. Lors de la quatrième rétrospective de sprint, l’équipe se plaint que plusieurs processus organisationnels freinent son avancement, provoquant retards et rework. Que doit faire le chef de projet ?", "options": ["Commencer à consacrer une partie des daily stand-up à la résolution des impediments.", "Mener une analyse des causes racines lors de la prochaine rétrospective.", "Identifier les processus organisationnels qui posent problème et travailler à les supprimer, les modifier ou les alléger.", "Encourager l’équipe à être auto-organisée et à traiter seule tout problème qui se présente."], "answer": 2, "explanation": "Lorsque des processus organisationnels entravent le travail, le chef de projet doit identifier ceux qui causent les difficultés et agir pour les supprimer, les modifier ou les alléger afin de réduire les retards et le rework."}, {"id": 8, "domain": "Predictive Project Management", "eco": "Processus", "text": "En phase de démarrage du projet, le sponsor demande au chef de projet de fournir avant la fin de la journée une estimation approximative des coûts du projet. Que doit-il faire dans cette situation ?", "options": ["Créer les éléments du Product Backlog, estimer le nombre d’itérations nécessaires pour les réaliser, puis additionner le coût estimé de chaque itération.", "Créer la WBS et additionner le coût estimé de chaque work package.", "Créer le plan de management des coûts.", "Fournir une estimation basée sur des projets antérieurs similaires."], "answer": 3, "explanation": "Comme le sponsor demande cette estimation à très court terme, à un stade précoce du projet avec peu ou pas d’informations disponibles, la méthode la plus pratique consiste à s’appuyer sur les données de projets passés similaires. Cela correspond à l’estimation analogique."}, {"id": 9, "domain": "Predictive Project Management", "eco": "Processus", "text": "Un chef de projet est chargé de piloter un projet marketing pour un parti politique. Lors d’un appel téléphonique, le représentant du parti demande d’ajouter des publicités sur les réseaux sociaux au projet. Le chef de projet l’informe que cela coûtera 8 000 $ supplémentaires, ce que le représentant accepte. Pourtant, lorsque le chef de projet envoie la facture incluant ces frais, le représentant refuse de payer en affirmant que le projet avait un retard inacceptable qui aurait dû être pénalisé. Qu’aurait dû faire le chef de projet pour éviter cette situation ?", "options": ["Utiliser un canal de communication plus approprié et formel, et demander également une extension du planning pour intégrer le travail supplémentaire.", "Réduire le périmètre pour équilibrer le coût du service additionnel.", "Demander un prix plus bas pour le service supplémentaire.", "Laisser le représentant décider seul du changement."], "answer": 0, "explanation": "Cette situation aurait pu être évitée si le chef de projet avait utilisé une communication plus formelle pour discuter et approuver les changements aux termes du contrat. En outre, il n’a analysé que l’impact sur le coût sans examiner correctement l’impact sur le délai et les autres contraintes."}, {"id": 10, "domain": "Predictive Project Management", "eco": "Processus", "text": "Un couple souhaite construire une tiny house. Pour avancer malgré plusieurs incertitudes sur le design intérieur, il décide de lancer les travaux de construction et de préciser les détails du design plus tard. Quelle technique est utilisée ?", "options": ["Rolling wave.", "Fast-tracking.", "Crashing.", "Decomposition."], "answer": 0, "explanation": "La méthode du Rolling Wave est utilisée pour gérer l’incertitude en planifiant le travail à court terme en détail tout en planifiant les tâches futures de manière plus globale. C’est une forme d’élaboration progressive."}, {"id": 11, "domain": "Predictive Project Management", "eco": "Personne", "text": "Un sponsor soumet une demande de changement au Change Control Board (CCB), dont le chef de projet est membre. Le comité compte cinq membres et leurs avis divergent sur l’acceptation ou le rejet de la demande. Quelle est la meilleure ligne de conduite ?", "options": ["Chercher à atteindre un consensus.", "Faire voter et laisser la majorité décider.", "Laisser le membre le plus expérimenté décider.", "Laisser le directeur du comité décider."], "answer": 0, "explanation": "La collaboration est la meilleure approche pour résoudre un conflit entre membres. Elle implique un dialogue ouvert permettant de confronter les points de vue et d’aboutir à un consensus."}, {"id": 12, "domain": "Communication & Stakeholder Management", "eco": "Environnement commercial", "text": "Un chef de projet pilote un projet de construction d’une usine électrique dans une zone forestière afin de répondre à la demande croissante en énergie des communautés voisines. Un groupe d’écologistes lance cependant des protestations médiatisées contre le projet, provoquant une forte perturbation. Qu’aurait dû faire le chef de projet pour éviter cette situation ?", "options": ["Travailler avec l’équipe projet pour étudier des mesures de mitigation et des solutions alternatives favorisant la conservation.", "Souscrire un contrat avec une compagnie d’assurance pour protéger le projet contre ce type de risque.", "Engager un dialogue ouvert avec les écologistes pour comprendre leurs préoccupations et leur point de vue sur l’impact du projet.", "Collaborer avec le sponsor pour offrir des incitations financières aux écologistes afin d’obtenir leur soutien."], "answer": 2, "explanation": "Engager un dialogue ouvert avec les écologistes montre une volonté réelle de traiter leurs préoccupations. En écoutant activement leur point de vue, le chef de projet peut construire la confiance et favoriser un meilleur soutien des parties prenantes."}, {"id": 13, "domain": "Communication & Stakeholder Management", "eco": "Personne", "text": "Un chef de projet a été affecté à un projet critique à l’étranger et travaille étroitement avec des parties prenantes étrangères. Deux mois après le démarrage, le sponsor reçoit un retour indiquant que certains acteurs trouvent les emails du chef de projet trop durs et abrasifs. Que doit-il faire ?", "options": ["Continuer à communiquer de la même manière, car il n’y a rien de mal à être clair et direct.", "Présenter des excuses pour toute offense involontaire causée par le ton des précédents emails et ajuster ses futurs messages pour qu’ils soient plus sensibles au contexte culturel et plus diplomatiques.", "Demander directement un retour aux parties prenantes étrangères pour mieux comprendre leurs préférences, et passer à des échanges exclusivement en face-à-face.", "Organiser une réunion pour expliquer que c’est ainsi qu’il a toujours communiqué dans ses projets précédents sans jamais recevoir de plainte."], "answer": 1, "explanation": "Le chef de projet doit présenter ses excuses pour toute offense involontaire causée par le ton de ses précédents emails et adapter ses messages futurs pour qu’ils soient plus diplomatiques et culturellement sensibles."}, {"id": 14, "domain": "Communication & Stakeholder Management", "eco": "Processus", "text": "Un chef de projet dirige un projet avec des membres d’équipe distants répartis sur différentes zones géographiques. Lors d’une rétrospective virtuelle bimensuelle, il découvre que certains membres ont oublié, manqué ou mal compris ce qui avait été discuté lors de la réunion précédente. Que doit-il faire ?", "options": ["Demander à tous les membres de parler anglais avec un accent américain.", "Créer une nouvelle norme de groupe demandant aux participants de lever la main lorsqu’ils ne comprennent pas quelque chose et enregistrer les sessions de réunion pour les partager.", "Passer à une réunion mensuelle afin que chacun ait davantage de temps pour assimiler les échanges.", "Supprimer les rétrospectives et se limiter aux emails de synthèse."], "answer": 1, "explanation": "Le chef de projet peut instaurer une règle de groupe invitant les participants à signaler lorsqu’ils ne comprennent pas, et enregistrer les réunions pour que chacun puisse les revoir. Cela améliore la compréhension et la mémorisation."}, {"id": 15, "domain": "Communication & Stakeholder Management", "eco": "Processus", "text": "À mi-projet, le sponsor désigne un inspecteur pour vérifier la qualité des livrables terminés. Le chef de projet ne le connaît pas personnellement, mais entend dire qu’il est difficile et peu flexible. Que doit-il faire ?", "options": ["Demander au sponsor de désigner un autre inspecteur.", "Ignorer cette désignation puisqu’il s’agit d’une partie prenante externe.", "Collaborer avec l’inspecteur et lui apporter l’assistance nécessaire.", "Utiliser ses compétences interpersonnelles pour convaincre l’inspecteur d’ignorer les problèmes qualité."], "answer": 2, "explanation": "Lorsqu’une nouvelle partie prenante apparaît, elle doit être analysée, priorisée, engagée puis suivie. Ici, le chef de projet doit collaborer avec l’inspecteur."}, {"id": 16, "domain": "Project Team Management", "eco": "Personne", "text": "Dans le cadre du développement d’une application bancaire mobile, le chef de projet et un membre de l’équipe chargé d’une tâche critique ont des visions opposées de la manière d’aborder un livrable clé. Le membre se sent micromanagé, tandis que le chef de projet estime que son travail est insuffisant. Le sponsor informe ensuite le chef de projet que ce membre sollicite son intervention. Que doit faire le chef de projet ?", "options": ["S’asseoir avec le membre concerné et le sponsor pour résoudre la situation de manière collaborative.", "Demander au sponsor de retirer ce membre de l’équipe projet.", "Consulter le responsable fonctionnel pour décider des mesures disciplinaires appropriées.", "Déclencher immédiatement une réunion de résolution de conflit avec toutes les parties possibles."], "answer": 0, "explanation": "S’asseoir avec le membre de l’équipe et le sponsor pour résoudre le problème de manière collaborative constitue une approche proactive. Un dialogue ouvert permet de trouver une solution qui satisfasse les deux parties et reste alignée sur les objectifs du projet."}, {"id": 17, "domain": "Project Team Management", "eco": "Personne", "text": "Dans un projet Agile de développement d’une application mobile de covoiturage, les membres de l’équipe facilitent à tour de rôle les daily stand-up. Cependant, l’un d’eux échoue régulièrement à bien jouer ce rôle : il est confus, n’engage pas les autres et monopolise la parole. Que doit faire le chef de projet ?", "options": ["Confier définitivement ce rôle à un autre membre plus fiable.", "Donner un feedback immédiat à la fin de chaque stand-up devant tout le monde pour que chacun apprenne de ses erreurs.", "Organiser des séances de coaching avec ce membre pour lui expliquer l’importance de son rôle de facilitateur et lui donner des conseils d’amélioration.", "Retirer ce membre de l’équipe projet."], "answer": 2, "explanation": "Organiser des séances de coaching est la meilleure option. Le coaching permet au chef de projet d’apporter du soutien, des orientations et du feedback afin d’aider le membre à progresser dans son rôle de facilitateur."}, {"id": 18, "domain": "Project Team Management", "eco": "Personne", "text": "Lors des trois derniers daily stand-up, le chef de projet remarque qu’un nouveau membre de l’équipe est bloqué sur l’une de ses tâches et ne semble faire aucun progrès. Que doit-il faire ?", "options": ["Demander à un membre expérimenté de reprendre complètement la tâche.", "Vérifier après le stand-up si d’autres membres peuvent l’aider sur la tâche.", "Exprimer sa déception au nouveau membre et l’encourager à fournir plus d’efforts.", "Demander au nouveau membre de relire les règles de fonctionnement de l’équipe."], "answer": 1, "explanation": "Le bon réflexe consiste à demander à un autre membre de l’équipe d’aider et de coacher le nouveau collègue. Étant nouveau, il peut manquer de certaines compétences ou de l’expérience nécessaire pour surmonter seul l’obstacle."}, {"id": 19, "domain": "Project Team Management", "eco": "Personne", "text": "Quatre mois après le démarrage du projet, le chef de projet constate que la performance de certains membres se détériore tandis que d’autres continuent à bien performer. Que doit-il faire pour remettre toute l’équipe sur les rails ?", "options": ["Parler ouvertement devant toute l’équipe de la mauvaise performance de certains membres afin de trouver une solution collective.", "Motiver les membres sous-performants en mettant en place un système compétitif de bonus pour les meilleurs.", "Éviter d’intervenir afin de laisser à chacun le temps de s’améliorer seul.", "Identifier les causes de la baisse de performance, recueillir un feedback structuré et mettre en place des solutions adaptées."], "answer": 3, "explanation": "L’objectif du chef de projet doit être de comprendre pourquoi un membre auparavant compétent est désormais en difficulté. Il doit d’abord identifier les symptômes, échanger avec les personnes concernées, comprendre la cause, proposer de l’aide, suivre les progrès et partager du feedback."}, {"id": 20, "domain": "Risk Management", "eco": "Environnement commercial", "text": "Un chef de projet est affecté à un projet logiciel qui nécessite une compétence de programmation spécialisée très demandée sur le marché. En plus, l’évolution rapide de ce langage rend le recrutement et la rétention des profils qualifiés de plus en plus difficiles. Que doit-il faire ?", "options": ["Recourir à une analyse des alternatives et prévoir une réserve de coût suffisante pour atténuer les risques liés à la forte rotation.", "Développer le logiciel avec un langage plus courant sans autre analyse.", "Inscrire toute l’équipe à un bootcamp afin qu’elle apprenne cette compétence spécialisée.", "Simplement signaler un risque de non-achèvement du projet sans plan de réponse."], "answer": 0, "explanation": "Le chef de projet fait face à un niveau élevé de volatilité. La volatilité existe dans des environnements soumis à un changement rapide et imprévisible. L’analyse des alternatives ainsi que l’utilisation de réserves de coût ou de délai sont des réponses adaptées à ce type de situation."}, {"id": 21, "domain": "Risk Management", "eco": "Processus", "text": "Un chef de projet est affecté à un nouveau projet Agile dans le secteur financier. L’équipe a identifié plusieurs risques susceptibles d’impacter la livraison. Le Product Owner recommande d’utiliser un backlog ajusté aux risques. Que doit faire le chef de projet ?", "options": ["S’assurer qu’une ou deux réponses aux risques au moins sont intégrées dans chaque sprint.", "Dédier un sprint entier au traitement de tous les risques identifiés.", "Veiller simplement à ce que le registre des risques soit toujours à jour.", "Réserver les rétrospectives à la seule revue du statut des risques."], "answer": 0, "explanation": "Un backlog ajusté aux risques inclut le travail et les actions destinés à traiter menaces et opportunités. En intégrant au moins une réponse à un risque dans chaque sprint, l’équipe peut traiter ces risques de manière itérative tout au long du projet."}, {"id": 22, "domain": "Risk Management", "eco": "Processus", "text": "Même si le plan de management de projet a été très bien élaboré, le chef de projet pense que des événements imprévus pourraient avoir un fort impact sur l’ensemble du projet. Que doit-il faire ensuite ?", "options": ["Identifier ces événements et mettre à jour le plan de management du projet.", "S’assurer qu’une réserve de management est prévue.", "Discuter de ces événements avec le sponsor afin de développer un fallback plan.", "Réaliser une analyse qualitative des risques pour prioriser chacun de ces événements."], "answer": 1, "explanation": "Les événements imprévus sont des unknown unknowns, c’est-à-dire qu’ils ne peuvent pas être prévus ou identifiés à l’avance. L’action appropriée consiste donc à prévoir une réserve de management pour pouvoir y répondre lorsqu’ils se produisent."}, {"id": 23, "domain": "Quality & Information Management", "eco": "Processus", "text": "Une marque de vêtements missionne un chef de projet pour développer une nouvelle plateforme e-commerce. Pendant le projet, il découvre qu’une des équipes de développement logiciel sous contrat ne respecte pas les exigences de performance : la qualité du code est insuffisante, ce qui provoque des plantages fréquents et des goulets de performance pendant les tests utilisateurs. Que doit-il faire ?", "options": ["Lancer une revue formelle avec l’équipe concernée afin d’évaluer les problèmes de performance et mettre en œuvre un plan d’actions correctives pour améliorer la qualité du code.", "Engager immédiatement une procédure judiciaire afin d’imposer le respect des exigences et d’obtenir réparation.", "Réaffecter silencieusement les fonctionnalités essentielles à d’autres équipes internes ou externes.", "Réaliser une évaluation indépendante puis attendre avant d’agir."], "answer": 0, "explanation": "Une revue structurée suivie d’un plan d’actions correctives élaboré de manière collaborative constitue la bonne réponse dans cette situation. Elle permet de traiter le problème de manière proactive et directe."}, {"id": 24, "domain": "Quality & Information Management", "eco": "Processus", "text": "Un chef de projet construction a signé un contrat à prix forfaitaire avec un fournisseur pour divers matériaux. À la date convenue, tous les matériaux sont livrés sur le chantier. Que doit-il faire ensuite ?", "options": ["Inspecter les matériaux pour vérifier leur conformité avec les exigences stipulées dans le contrat.", "Commencer immédiatement les travaux avec les matériaux fournis afin d’éviter tout retard.", "Utiliser une partie des matériaux pendant que le reste est inspecté.", "Payer le fournisseur puis clôturer le contrat."], "answer": 0, "explanation": "Avant d’utiliser les matériaux approvisionnés, le chef de projet et l’équipe doivent mener une inspection pour s’assurer qu’ils sont conformes aux spécifications et normes du contrat. Si les matériaux passent l’inspection, alors le fournisseur peut être payé et le contrat clôturé."}, {"id": 25, "domain": "Quality & Information Management", "eco": "Processus", "text": "Un chef de projet dirige une équipe d’ingénieurs chargée de construire une machine d’emballage. La machine a passé toutes les vérifications internes, mais lorsque le client la reçoit, il demande si elle répond bien aux exigences. Que doit faire le chef de projet ensuite ?", "options": ["Confirmer que le produit a été testé en interne et clôturer formellement le projet.", "Effectuer le processus de contrôle qualité et utiliser la réserve de contingence pour corriger les éventuels problèmes.", "Collaborer avec le client pour obtenir son approbation formelle que le produit est conforme aux exigences.", "Envoyer un ingénieur chez le client pour revérifier les exigences du produit."], "answer": 2, "explanation": "À ce stade, l’objectif principal du processus de validation du périmètre consiste à travailler avec les parties prenantes pour obtenir leur approbation formelle du périmètre et des livrables. Le client doit confirmer que le produit répond à ses exigences."}, {"id": 26, "domain": "Procurement & Contract Management", "eco": "Processus", "text": "Pendant l’exécution d’un projet de construction, le fournisseur informe le chef de projet qu’il pourrait y avoir un retard de trois jours sur la livraison d’une nouvelle commande de barres d’acier. Que doit faire le chef de projet ensuite ?", "options": ["Négocier immédiatement ce retard avec le fournisseur pour le réduire.", "Chercher un autre fournisseur.", "Évaluer l’impact du retard.", "Mettre à jour immédiatement le planning du projet."], "answer": 2, "explanation": "Le chef de projet doit évaluer l’impact du retard avant de prendre une décision. Une activité retardée n’entraîne pas nécessairement un retard de l’ensemble du projet."}, {"id": 27, "domain": "Procurement & Contract Management", "eco": "Processus", "text": "Après de nombreux problèmes avec l’un des fournisseurs du projet, le chef de projet décide de mettre fin à la relation professionnelle. À quel document doit-il se référer pour vérifier la clause de résiliation et le mécanisme alternatif de résolution des litiges ?", "options": ["Les critères de sélection des fournisseurs.", "L’offre du fournisseur.", "L’accord / contrat.", "La charte du projet."], "answer": 2, "explanation": "L’inclusion d’une clause de résolution des litiges ainsi qu’une clause de résiliation dans un accord d’approvisionnement est une pratique courante. Ces dispositions figurent dans l’accord."}, {"id": 28, "domain": "Procurement & Contract Management", "eco": "Personne", "text": "Le chef de projet a un différend majeur avec l’un des fournisseurs : il estime que le vendeur n’a pas livré des matières premières conformes aux exigences de qualité, tandis que le vendeur se plaint de paiements tardifs. Que doit faire le chef de projet ?", "options": ["Ne pas perdre plus de temps et simplement remplacer le fournisseur.", "Faire intervenir immédiatement une tierce partie pour arbitrage ou médiation.", "Collaborer directement avec le fournisseur pour résoudre le problème.", "Conduire un audit d’approvisionnement."], "answer": 2, "explanation": "Travailler directement avec le fournisseur pour parvenir à un accord constitue l’approche de résolution de problème la plus directe et devrait être le premier choix. Si cette négociation échoue, la médiation ou l’arbitrage peuvent ensuite être envisagés."}, {"id": 29, "domain": "PMP Scenarios", "eco": "Personne", "text": "Le chef de projet remarque des désaccords constants entre les membres de l’équipe pendant les réunions. Que doit-il faire ?", "options": ["Attendre en espérant que l’équipe règle la situation seule.", "Intervenir pour résoudre les désaccords et guider l’équipe vers une culture de collaboration et de coopération.", "Demander au sponsor de remplacer les personnes concernées.", "Supprimer les réunions d’équipe."], "answer": 1, "explanation": "Le chef de projet doit intervenir pour résoudre les désaccords et guider l’équipe vers une culture de collaboration et de coopération."}, {"id": 30, "domain": "PMP Scenarios", "eco": "Processus", "text": "Un cadre Kanban a été choisi pour mettre en œuvre le projet. Sur quoi le chef de projet doit-il se concentrer ?", "options": ["Une documentation détaillée et figée dès le départ.", "Le flux continu et la limitation du Work In Progress (WIP).", "Une unique revue finale en fin de projet.", "Des phases strictes avec gates de validation."], "answer": 1, "explanation": "Lorsque Kanban est choisi, le chef de projet doit se concentrer sur le flux continu et la limitation du Work In Progress (WIP)."}, {"id": 31, "domain": "Earned Value Management", "eco": "Processus", "text": "Un sponsor demande une lecture rapide de la performance d’un projet. Le chef de projet calcule : PV = 300 000 $, EV = 240 000 $, AC = 270 000 $. Quelle interprétation est correcte ?", "options": ["Le projet est en avance et sous budget.", "Le projet est en retard et au-dessus du budget.", "Le projet est en avance mais au-dessus du budget.", "Le projet est en retard mais sous budget."], "answer": 1, "explanation": "EV < PV signifie que le projet est en retard sur le plan du planning. EV < AC signifie également que le projet dépense plus que la valeur acquise, donc qu’il est au-dessus du budget."}, {"id": 32, "domain": "Earned Value Management", "eco": "Processus", "text": "Dans un projet de déploiement, le chef de projet observe CPI = 0,84 et SPI = 1,06. Le sponsor veut savoir où concentrer les actions correctives. Quelle réponse est la plus appropriée ?", "options": ["Le projet doit surtout traiter un problème de coût, car la performance coûts est faible alors que la performance planning est légèrement favorable.", "Le projet doit surtout traiter un problème de planning, car SPI est supérieur à 1.", "Le projet n’a pas besoin d’action corrective, car les deux indices sont proches de 1.", "Le projet doit être arrêté immédiatement, car CPI et SPI ne peuvent pas être utilisés ensemble."], "answer": 0, "explanation": "Un CPI inférieur à 1 indique une surconsommation budgétaire. Un SPI supérieur à 1 indique au contraire une légère avance sur le planning. L’action corrective doit donc d’abord cibler la performance coûts."}, {"id": 33, "domain": "Earned Value Management", "eco": "Processus", "text": "Le sponsor d’un projet à fort enjeu demande un forecast rapide si la performance coût actuelle se poursuit. Le BAC est de 1 200 000 $ et le CPI actuel est de 0,80. Quelle estimation à terminaison (EAC) le chef de projet peut-il communiquer en utilisant l’hypothèse la plus simple basée sur la performance actuelle ?", "options": ["960 000 $", "1 200 000 $", "1 500 000 $", "1 920 000 $"], "answer": 2, "explanation": "Avec l’hypothèse simple EAC = BAC / CPI, on obtient 1 200 000 / 0,80 = 1 500 000 $. Cela signifie que, si la performance actuelle se poursuit, le coût final estimé sera supérieur au budget initial."}, {"id": 34, "domain": "Earned Value Management", "eco": "Processus", "text": "Pendant une revue de performance, le chef de projet présente CV = +40 000 $ et SV = -25 000 $. Quelle lecture est correcte ?", "options": ["Le projet est sous budget mais en retard.", "Le projet est au-dessus du budget mais en avance.", "Le projet est sous budget et en avance.", "Le projet est au-dessus du budget et en retard."], "answer": 0, "explanation": "Un Cost Variance positif signifie que le projet dépense moins que la valeur acquise : il est sous budget. Un Schedule Variance négatif signifie que la valeur acquise est inférieure à la valeur planifiée : le projet est en retard."}];
+
+
+function refreshFromServer() {
+  const clean = window.location.origin + window.location.pathname;
+  window.location.href = clean + '?refresh=' + Date.now();
+}
 
 function showOnly(id) {
   ['homeView','examView','resultView','trainerLoginView','trainerView'].forEach(view => {
@@ -511,7 +519,7 @@ function tryPrepareEmail(results) {
 
 async function submitRemote(results) {
   lastRemoteSubmit = { attempted:false, success:false, message:'' };
-  if (!(APP_CONFIG.ENABLE_REMOTE_SUBMIT && APP_CONFIG.RESULT_ENDPOINT && APP_CONFIG.RESULT_ENDPOINT !== 'https://script.google.com/macros/s/AKfycby4DSxwXRsIcjHi16ZaiS69uyJqhzQYzTatRRaO4bfG279FgJ2KIP8P2T2gr2upKlwX/exec')) {
+  if (!(APP_CONFIG.ENABLE_REMOTE_SUBMIT && APP_CONFIG.RESULT_ENDPOINT && APP_CONFIG.RESULT_ENDPOINT !== 'https://script.google.com/macros/s/AKfycbxeEP8sy8RprcLMwhIncSbZMF6OyUE8PP9PtXeUQyXDvMuNklP5m6A6Ct4bZuiEKo6XsA/exec')) {
     lastRemoteSubmit = { attempted:false, success:false, message:'Endpoint non configuré.' };
     return lastRemoteSubmit;
   }
@@ -682,29 +690,108 @@ function aggregateAttempts(attempts) {
   return { domainAgg, ecoAgg, avg };
 }
 
-async function fetchRemoteDashboard() {
-  if (!(APP_CONFIG.RESULT_ENDPOINT && APP_CONFIG.RESULT_ENDPOINT !== 'https://script.google.com/macros/s/AKfycby4DSxwXRsIcjHi16ZaiS69uyJqhzQYzTatRRaO4bfG279FgJ2KIP8P2T2gr2upKlwX/exec')) {
+
+async function fetchRemoteDashboard(password) {
+  if (!(APP_CONFIG.RESULT_ENDPOINT && APP_CONFIG.RESULT_ENDPOINT !== 'https://script.google.com/macros/s/AKfycbxeEP8sy8RprcLMwhIncSbZMF6OyUE8PP9PtXeUQyXDvMuNklP5m6A6Ct4bZuiEKo6XsA/exec')) {
     throw new Error('Endpoint non configuré');
   }
-  const url = APP_CONFIG.RESULT_ENDPOINT + '?action=dashboard&limit=' + encodeURIComponent(APP_CONFIG.DASHBOARD_FETCH_LIMIT);
-  const res = await fetch(url, { method:'GET' });
+  const url = APP_CONFIG.RESULT_ENDPOINT
+    + '?action=dashboard&limit=' + encodeURIComponent(APP_CONFIG.DASHBOARD_FETCH_LIMIT)
+    + '&password=' + encodeURIComponent(password || '');
+  const res = await fetch(url, { method:'GET', cache:'no-store' });
   const data = await res.json();
   if (!(res.ok && data.status === 'ok')) throw new Error(data.message || 'Impossible de charger le dashboard distant');
   return data;
 }
 
+async function fetchAttemptAnswersRemote(attemptId, password) {
+  const url = APP_CONFIG.RESULT_ENDPOINT
+    + '?action=answers&attemptId=' + encodeURIComponent(attemptId)
+    + '&password=' + encodeURIComponent(password || '');
+  const res = await fetch(url, { method:'GET', cache:'no-store' });
+  const data = await res.json();
+  if (!(res.ok && data.status === 'ok')) throw new Error(data.message || 'Impossible de charger les réponses');
+  return data.answers || [];
+}
+
+async function deleteAttemptRemote(attemptId, password) {
+  const res = await fetch(APP_CONFIG.RESULT_ENDPOINT, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action:'deleteAttempt', attemptId, password })
+  });
+  const data = await res.json();
+  if (!(res.ok && data.status === 'ok')) throw new Error(data.message || 'Suppression impossible');
+  return data;
+}
+
+function renderAttemptAnswersPanel(attemptId, answers) {
+  const panel = document.getElementById('attemptAnswersPanel');
+  if (!panel) return;
+  panel.innerHTML = `
+    <div class="card" style="margin-top:20px;">
+      <h2 class="section-title">Réponses de la tentative ${attemptId}</h2>
+      ${answers.length ? answers.map((a, idx) => `
+        <div class="question-card">
+          <div style="font-weight:700; margin-bottom:8px;">Question ${idx + 1}</div>
+          <div style="line-height:1.5; margin-bottom:8px;">${a.question || ''}</div>
+          <div class="small"><strong>Domaine :</strong> ${a.domain || '-'} • <strong>ECO :</strong> ${a.eco || '-'}</div>
+          <div class="explanation ${(String(a.selected_label||'') === String(a.correct_label||'')) ? 'ok' : 'bad'}">
+            <strong>Réponse participant :</strong> ${a.selected_label || 'NR'}<br>
+            <strong>Bonne réponse :</strong> ${a.correct_label || ''}<br>
+            <strong>Résultat :</strong> ${(String(a.selected_label||'') === String(a.correct_label||'')) ? 'Correct' : 'Incorrect'}
+          </div>
+        </div>
+      `).join('') : '<p class="small">Aucune réponse trouvée pour cette tentative.</p>'}
+    </div>`;
+}
+
+async function viewAttemptAnswers(attemptId) {
+  const pwd = document.getElementById('trainerPassword').value.trim();
+  try {
+    const answers = await fetchAttemptAnswersRemote(attemptId, pwd);
+    renderAttemptAnswersPanel(attemptId, answers);
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  } catch (e) {
+    alert(e.message || 'Impossible de charger les réponses.');
+  }
+}
+
+async function removeAttempt(attemptId) {
+  const pwd = document.getElementById('trainerPassword').value.trim();
+  if (!confirm('Supprimer définitivement cette tentative de la base de données ?')) return;
+  try {
+    await deleteAttemptRemote(attemptId, pwd);
+    await renderTrainerDashboard();
+  } catch (e) {
+    alert(e.message || 'Suppression impossible.');
+  }
+}
+
 async function renderTrainerDashboard() {
+  const pwd = document.getElementById('trainerPassword').value.trim();
   let attempts = [];
   let sourceText = 'Google Sheets';
+  let serverUpdatedAt = '';
   try {
-    const remote = await fetchRemoteDashboard();
+    const remote = await fetchRemoteDashboard(pwd);
     attempts = remote.attempts || [];
+    serverUpdatedAt = remote.generatedAt || '';
     trainerDashboardMode = 'remote';
-    sourceText = 'Google Sheets';
   } catch (e) {
-    attempts = getAttempts();
-    trainerDashboardMode = 'local';
-    sourceText = 'stockage local du navigateur';
+    document.getElementById('trainerView').innerHTML = `
+      <div class="hero">
+        <h1>Dashboard formateur</h1>
+        <p>Impossible de charger les données depuis Google Sheets.</p>
+        <p class="small">${(e && e.message) ? e.message : 'Erreur inconnue'}</p>
+      </div>
+      <div class="card">
+        <div class="controls">
+          <button class="btn-light" type="button" onclick="refreshFromServer()">Rafraîchir depuis le serveur</button>
+          <button class="btn-light" type="button" onclick="showTrainerLogin()">Retour</button>
+        </div>
+      </div>`;
+    return;
   }
   const { domainAgg, ecoAgg, avg } = aggregateAttempts(attempts);
   const globalStatus = classifyGlobal(avg);
@@ -718,6 +805,7 @@ async function renderTrainerDashboard() {
       </div>
       <h1>Dashboard formateur</h1>
       <p>Source des données : <strong>${sourceText}</strong></p>
+      <p class="small">Dernière synchronisation serveur : <strong>${serverUpdatedAt || '-'}</strong></p>
     </div>
 
     <div class="dashboard-grid">
@@ -730,9 +818,9 @@ async function renderTrainerDashboard() {
           <div class="meta-item"><strong>Questions</strong><span>${TOTAL_QUESTIONS}</span></div>
         </div>
         <div class="controls">
-          <button class="btn-light" type="button" onclick="renderTrainerDashboard()">Actualiser</button>
+          <button class="btn-light" type="button" onclick="renderTrainerDashboard()">Actualiser les données</button>
+          <button class="btn-light" type="button" onclick="refreshFromServer()">Rafraîchir la page depuis le serveur</button>
           <button class="btn-light" type="button" onclick="goHome()">Accueil</button>
-          ${trainerDashboardMode === 'local' ? '<button class="btn-danger" type="button" onclick="clearDashboardData()">Effacer les données locales</button>' : ''}
         </div>
       </div>
       <div class="card">
@@ -761,7 +849,7 @@ async function renderTrainerDashboard() {
       <h2 class="section-title">Historique des tentatives</h2>
       ${attempts.length ? `
       <table>
-        <thead><tr><th>Date</th><th>Participant</th><th>Email</th><th>ID tentative</th><th>Score</th><th>%</th><th>Résultat</th></tr></thead>
+        <thead><tr><th>Date</th><th>Participant</th><th>Email</th><th>ID tentative</th><th>Score</th><th>%</th><th>Résultat</th><th>Actions</th></tr></thead>
         <tbody>
           ${attempts.map(a => `
             <tr>
@@ -772,19 +860,23 @@ async function renderTrainerDashboard() {
               <td>${a.score}/${a.total}</td>
               <td>${a.percent}%</td>
               <td>${a.globalLabel || a.global_label || classifyGlobal(Number(a.percent || 0)).label}</td>
+              <td>
+                <div class="controls" style="margin-top:0;">
+                  <button class="btn-light" type="button" onclick="viewAttemptAnswers('${(a.attemptId || a.attempt_id || '').replace(/'/g, "\'")}')">Afficher les réponses</button>
+                  <button class="btn-danger" type="button" onclick="removeAttempt('${(a.attemptId || a.attempt_id || '').replace(/'/g, "\'")}')">Supprimer</button>
+                </div>
+              </td>
             </tr>`).join('')}
         </tbody>
       </table>` : '<p class="small">Aucune tentative trouvée.</p>'}
-    </div>`;
+    </div>
+    <div id="attemptAnswersPanel"></div>`;
 }
 
 function clearDashboardData() {
-  if (!confirm('Supprimer toutes les tentatives enregistrées localement ?')) return;
-  localStorage.removeItem(APP_CONFIG.STORAGE_KEY_ATTEMPTS);
-  localStorage.removeItem(APP_CONFIG.STORAGE_KEY_LAST);
-  localStorage.removeItem(APP_CONFIG.STORAGE_KEY_PROGRESS);
-  renderTrainerDashboard();
+  alert('Le dashboard formateur lit désormais Google Sheets. Cette fonction locale n’est plus utilisée.');
 }
+
 
 function downloadLastAttemptCSV() {
   const raw = localStorage.getItem(APP_CONFIG.STORAGE_KEY_LAST);
