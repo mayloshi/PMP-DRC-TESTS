@@ -520,7 +520,7 @@ function tryPrepareEmail(results) {
 async function submitRemote(results) {
   lastRemoteSubmit = { attempted:false, success:false, message:'' };
   if (!(APP_CONFIG.ENABLE_REMOTE_SUBMIT && APP_CONFIG.RESULT_ENDPOINT && APP_CONFIG.RESULT_ENDPOINT !== 'https://script.google.com/macros/s/AKfycbxeEP8sy8RprcLMwhIncSbZMF6OyUE8PP9PtXeUQyXDvMuNklP5m6A6Ct4bZuiEKo6XsA/exec')) {
-    lastRemoteSubmit = { attempted:false, success:false, message:'Endpoint non configuré.' };
+    lastRemoteSubmit = { attempted:false, success:false, message:'Endpoint non .' };
     return lastRemoteSubmit;
   }
   const payload = {
