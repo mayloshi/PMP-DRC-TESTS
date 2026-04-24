@@ -331,9 +331,22 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
    apostrophe issues (l', d', n', etc.)
    ============================================= */
 
+/* ================================================================
+   ✏️  CONFIGURATION — MODIFIEZ UNIQUEMENT CETTE SECTION
+   ================================================================ */
+
+// 👉 Collez ici l'URL de votre Google Apps Script Web App
+//    (Déployer > Gérer les déploiements > URL de l'application Web)
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMjQyDD868SqeG6QVTpkGhubWXsvAdObVC6s0nUvzYtnwjMdemfeL_202tqZQbUF0v/exec";
+
+// Mot de passe du dashboard formateur
 const TRAINER_PASSWORD = "221008";
+
+/* ================================================================
+   ⚙️  CONFIGURATION AVANCÉE (ne pas modifier sauf si nécessaire)
+   ================================================================ */
 const APP_CONFIG = {
-  RESULT_ENDPOINT: "https://script.google.com/macros/s/AKfycbxMjQyDD868SqeG6QVTpkGhubWXsvAdObVC6s0nUvzYtnwjMdemfeL_202tqZQbUF0v/exec",
+  RESULT_ENDPOINT: GOOGLE_APPS_SCRIPT_URL,
   ENABLE_REMOTE_SUBMIT: true,
   APP_TITLE: "Examen blanc PMP - v4.0",
   DASHBOARD_FETCH_LIMIT: 500,
@@ -773,8 +786,7 @@ function saveAttemptLocal(results) {
 }
 async function submitRemote(results) {
   lastRemoteSubmit = { attempted: false, success: false, message: "" };
-  if (!(APP_CONFIG.ENABLE_REMOTE_SUBMIT && APP_CONFIG.RESULT_ENDPOINT &&
-      APP_CONFIG.RESULT_ENDPOINT !== "https://script.google.com/macros/s/AKfycbxMjQyDD868SqeG6QVTpkGhubWXsvAdObVC6s0nUvzYtnwjMdemfeL_202tqZQbUF0v/exec")) {
+  if (!(APP_CONFIG.ENABLE_REMOTE_SUBMIT && GOOGLE_APPS_SCRIPT_URL && GOOGLE_APPS_SCRIPT_URL !== "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE")) {
     lastRemoteSubmit = { attempted: false, success: false, message: currentLang === "fr" ? "Endpoint non configuré." : "Endpoint not configured." };
     return;
   }
@@ -894,7 +906,7 @@ function showTrainerLogin() {
   applyTranslations();
 }
 async function apiGet(action, extra) {
-  if (!APP_CONFIG.RESULT_ENDPOINT || APP_CONFIG.RESULT_ENDPOINT === "https://script.google.com/macros/s/AKfycbxMjQyDD868SqeG6QVTpkGhubWXsvAdObVC6s0nUvzYtnwjMdemfeL_202tqZQbUF0v/exec")
+  if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL === "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE")
     throw new Error(currentLang === "fr"
       ? "Google Apps Script non configuré. Remplacez PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE dans le code HTML."
       : "Google Apps Script not configured. Replace PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE in the HTML code.");
@@ -906,7 +918,7 @@ async function apiGet(action, extra) {
   return data;
 }
 async function apiPost(payload) {
-  if (!APP_CONFIG.RESULT_ENDPOINT || APP_CONFIG.RESULT_ENDPOINT === "https://script.google.com/macros/s/AKfycbxMjQyDD868SqeG6QVTpkGhubWXsvAdObVC6s0nUvzYtnwjMdemfeL_202tqZQbUF0v/exec")
+  if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL === "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE")
     throw new Error(currentLang === "fr"
       ? "Google Apps Script non configuré. Remplacez PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE dans le code HTML."
       : "Google Apps Script not configured.");
@@ -918,7 +930,8 @@ async function apiPost(payload) {
   if (!res.ok || data.status !== "ok") throw new Error(data.message || "Erreur");
   return data;
 }
-async function viewAttemptAnswers(attemptId) {
+async function viewAttemptAnswers(encodedId) {
+  const attemptId = decodeURIComponent(encodedId);
   const panel = document.getElementById("answersPanel");
   panel.innerHTML = `<div class="card" style="margin-top:16px;"><p class="small">⏳ ${currentLang === "fr" ? "Chargement..." : "Loading..."}</p></div>`;
   try {
@@ -953,7 +966,8 @@ async function viewAttemptAnswers(attemptId) {
     </div>`;
   }
 }
-async function removeAttempt(attemptId) {
+async function removeAttempt(encodedId) {
+  const attemptId = decodeURIComponent(encodedId);
   if (!confirm(currentLang === "fr" ? "Supprimer définitivement cette tentative ?" : "Permanently delete this attempt?")) return;
   try {
     await apiPost({ action: "deleteAttempt", attemptId });
@@ -962,7 +976,8 @@ async function removeAttempt(attemptId) {
     alert((currentLang === "fr" ? "Erreur : " : "Error: ") + err.message);
   }
 }
-async function grantRetake(attemptId) {
+async function grantRetake(encodedId) {
+  const attemptId = decodeURIComponent(encodedId);
   if (!confirm(currentLang === "fr" ? "Autoriser une reprise ?" : "Allow a retake?")) return;
   try {
     await apiPost({ action: "allowRetake", attemptId });
@@ -1083,7 +1098,7 @@ async function renderTrainerDashboard() {
           <tbody>
             ${attempts.map(a => {
               const name = a.participantName || a.participant_name || "-";
-              const aid = String(a.attemptId || a.attempt_id || "").replace(/\/g, "\\").replace(/"/g, '\"');
+              const aid = encodeURIComponent(String(a.attemptId || a.attempt_id || ""));
               return `<tr>
                 <td style="white-space:nowrap;">${String(a.date || a.submitted_at || "-").substring(0, 19)}</td>
                 <td><strong>${name}</strong></td>
@@ -1182,11 +1197,15 @@ function downloadDashboardCSV() {
   } catch (e) { alert("Export failed: " + e.message); }
 }
 function dlCSV(rows, filename) {
-  const csv = rows.map(r => r.map(v => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("
-");
-  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
+  var csv = rows.map(function(r) {
+    return r.map(function(v) {
+      return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+    }).join(",");
+  }).join("\n");
+  var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url; a.download = filename; a.click();
   URL.revokeObjectURL(url);
 }
 
