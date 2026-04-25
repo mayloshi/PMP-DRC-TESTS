@@ -347,7 +347,7 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
 
 // 👉 Collez ici l'URL de votre Google Apps Script Web App
 //    (Déployer > Gérer les déploiements > URL de l'application Web)
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxMjQyDD868SqeG6QVTpkGhubWXsvAdObVC6s0nUvzYtnwjMdemfeL_202tqZQbUF0v/exec";
+const GOOGLE_APPS_SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 
 // Mot de passe du dashboard formateur
 const TRAINER_PASSWORD = "221008";
@@ -519,6 +519,13 @@ function dom(q) {
     ? (q.domain_fr || q.domain || "")
     : (q.domain || q.domain_fr || "");
 }
+const ECO_FR = { "Processus": "Processus", "Personne": "Personne", "Environnement commercial": "Environnement commercial" };
+const ECO_EN = { "Processus": "Process", "Personne": "People", "Environnement commercial": "Business Environment" };
+function ecoLabel(q) {
+  const raw = q.eco || "";
+  if (currentLang === "fr") return ECO_FR[raw] || raw;
+  return ECO_EN[raw] || raw;
+}
 
 /* ── NAVIGATION ── */
 function showOnly(id) {
@@ -634,8 +641,6 @@ function renderQuestions() {
     const options = opts(q);
     return `<div class="question-card" id="qcard-${q.id}">
       <div style="margin-bottom:10px;">
-        <span class="pill">${dom(q)}</span>
-        <span class="pill">ECO: ${q.eco || ""}</span>
         <span class="pill">#${idx + 1}</span>
       </div>
       <h3>${idx + 1}. ${txt(q, "text")}</h3>
@@ -713,7 +718,7 @@ function computeResults() {
     const q = currentQuestions.find(x => x.id === a.id);
     const ok = a.selected === a.correct;
     if (ok) score++;
-    const d = dom(q), e = q.eco || "";
+    const d = dom(q), e = ecoLabel(q);
     if (!byDomain[d]) byDomain[d] = { correct: 0, total: 0 };
     if (!byEco[e]) byEco[e] = { correct: 0, total: 0 };
     byDomain[d].total++; byEco[e].total++;
@@ -754,7 +759,7 @@ function renderDetailedReview(answers) {
     return `<div class="question-card">
       <div style="margin-bottom:10px;">
         <span class="pill">${dom(q)}</span>
-        <span class="pill">ECO: ${q.eco || ""}</span>
+        <span class="pill">ECO: ${ecoLabel(q)}</span>
         <span class="pill">#${idx + 1}</span>
       </div>
       <h3>${idx + 1}. ${txt(q, "text")}</h3>
@@ -796,7 +801,10 @@ function saveAttemptLocal(results) {
     testType: TEST_CONFIGS[currentTestIndex].name,
     score: results.score, total: results.total, percent: results.globalPercent,
     globalLabel: results.globalStatus.label, byDomain: results.byDomain, byEco: results.byEco,
-    answers: results.answers
+    answers: results.answers.map(a => {
+      const q = currentQuestions.find(x => x.id === a.id);
+      return { ...a, domain: q ? dom(q) : "", eco: q ? ecoLabel(q) : "", question: q ? txt(q, "text") : "" };
+    })
   };
   try {
     const ex = JSON.parse(localStorage.getItem(APP_CONFIG.STORAGE_KEY_ATTEMPTS) || "[]");
@@ -967,7 +975,7 @@ async function viewAttemptAnswers(encodedId) {
       ${answers.map((a, idx) => {
         const ok = String(a.selected_label || a.selectedLabel || "") === String(a.correct_label || a.correctLabel || "");
         return `<div class="question-card">
-          <div class="small" style="margin-bottom:6px;"><span class="pill">${a.domain || "-"}</span><span class="pill">ECO: ${a.eco || "-"}</span></div>
+          <div class="small" style="margin-bottom:6px;"><span class="pill">${a.domain || "-"}</span><span class="pill">ECO: ${currentLang === "fr" ? (ECO_FR[a.eco] || a.eco || "-") : (ECO_EN[a.eco] || a.eco || "-")}</span></div>
           <p style="font-weight:600;margin:0 0 8px;">#${idx + 1}. ${a.question || ""}</p>
           <div class="explanation ${ok ? "ok" : "bad"}">
             <strong>${currentLang === "fr" ? "Réponse" : "Answer"}:</strong> ${a.selected_label || a.selectedLabel || "NR"} &nbsp;
@@ -1202,10 +1210,47 @@ function downloadLastAttemptCSV() {
     const raw = localStorage.getItem(APP_CONFIG.STORAGE_KEY_LAST);
     if (!raw) { alert(currentLang === "fr" ? "Aucun résultat récent." : "No recent result."); return; }
     const attempt = JSON.parse(raw);
-    const rows = [["Date","Participant","Email","Test","ID","Score","%","Résultat"]];
+    const lang = currentLang;
+    const isEn = lang === "en";
+    const h1 = isEn ? ["Date","Participant","Email","Test","ID","Score","%","Result"] : ["Date","Participant","Email","Test","ID","Score","%","Résultat"];
+    const rows = [h1];
     rows.push([attempt.date, attempt.participantName, attempt.participantEmail || "", attempt.testType || "", attempt.attemptId, `${attempt.score}/${attempt.total}`, `${attempt.percent}%`, attempt.globalLabel || ""]);
-    rows.push([]); rows.push(["QuestionID","Réponse","Bonne réponse"]);
-    (attempt.answers || []).forEach(a => rows.push([a.id, a.selected === null ? "NR" : String.fromCharCode(65 + a.selected), String.fromCharCode(65 + a.correct)]));
+    rows.push([]);
+    // Per-domain breakdown
+    if (attempt.byDomain) {
+      rows.push([isEn ? "--- By Domain ---" : "--- Par domaine ---"]);
+      rows.push([isEn ? "Domain" : "Domaine", isEn ? "Correct" : "Correct", isEn ? "Total" : "Total", "%"]);
+      Object.entries(attempt.byDomain).forEach(([k, v]) => rows.push([k, v.correct, v.total, `${v.percent}%`]));
+      rows.push([]);
+    }
+    // Per-ECO breakdown
+    if (attempt.byEco) {
+      rows.push([isEn ? "--- By ECO ---" : "--- Par ECO ---"]);
+      rows.push(["ECO", isEn ? "Correct" : "Correct", isEn ? "Total" : "Total", "%", isEn ? "Interpretation" : "Interprétation"]);
+      Object.entries(attempt.byEco).forEach(([k, v]) => rows.push([k, v.correct, v.total, `${v.percent}%`, v.interpretation || ""]));
+      rows.push([]);
+    }
+    // Per-question detail
+    const qHeader = isEn
+      ? ["#","ID","Domain","ECO","Question","Your Answer","Correct Answer","Result"]
+      : ["#","ID","Domaine","ECO","Question","Votre réponse","Bonne réponse","Résultat"];
+    rows.push(qHeader);
+    (attempt.answers || []).forEach((a, i) => {
+      const selected = a.selected === null ? (isEn ? "NR" : "NR") : String.fromCharCode(65 + a.selected);
+      const correct = String.fromCharCode(65 + a.correct);
+      const ok = a.selected === a.correct;
+      const resultLabel = ok ? (isEn ? "Correct" : "Correct") : (isEn ? "Incorrect" : "Incorrect");
+      rows.push([
+        i + 1,
+        a.id,
+        a.domain || "",
+        a.eco || "",
+        a.question || "",
+        selected,
+        correct,
+        resultLabel
+      ]);
+    });
     dlCSV(rows, `resultat-pmp-${attempt.attemptId}.csv`);
   } catch (e) { alert("Export failed: " + e.message); }
 }
