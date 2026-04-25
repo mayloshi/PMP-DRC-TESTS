@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Examen blanc PMP — v4.0</title>
+<title>Examen blanc PMP — v4.1</title>
 <style>
 :root{
   --bg:#f5f6fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;
@@ -137,8 +137,8 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
       </div>
     </div>
     <h1 id="homeTitle">Examen blanc PMP</h1>
-    <p id="homeSubtitle">Version 4.0 — Choisissez un test ci-dessous</p>
-    <p class="small">Dernière mise à jour : <strong>2026-04-23</strong></p>
+    <p id="homeSubtitle">Version 4.1 — Choisissez un test ci-dessous</p>
+    <p class="small">Dernière mise à jour : <strong>2026-04-25</strong></p>
   </div>
 
   <div class="test-cards">
@@ -262,6 +262,11 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
         <label for="trainerPassword" id="labelPwd">Mot de passe</label>
         <input id="trainerPassword" type="password" placeholder="••••••"/>
       </div>
+      <div class="field" style="margin-top:14px;">
+        <label for="appScriptUrlInput" id="labelAppScriptUrl" style="font-size:.85rem;color:#6b7280;">🔗 Google Apps Script URL <span style="font-weight:400;">(optionnel)</span></label>
+        <input id="appScriptUrlInput" type="url" placeholder="https://script.google.com/macros/s/..." style="font-size:.82rem;"/>
+        <p class="small" style="margin-top:4px;color:#9ca3af;" id="appScriptUrlHint">Coller l'URL du Web App déployé. Sauvegardée localement.</p>
+      </div>
       <div class="controls">
         <button class="btn-primary" onclick="loginTrainer()" id="btnLoginTrainer">Entrer</button>
         <button class="btn-light" onclick="goHome()">← <span id="btnLoginBackLbl">Retour</span></button>
@@ -336,7 +341,7 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
 
 <script>
 /* =============================================
-   PMP Exam v4.0 — All JS strings use double
+   PMP Exam v4.1 — All JS strings use double
    quotes or template literals to avoid French
    apostrophe issues (l', d', n', etc.)
    ============================================= */
@@ -358,11 +363,11 @@ const TRAINER_PASSWORD = "221008";
 const APP_CONFIG = {
   RESULT_ENDPOINT: GOOGLE_APPS_SCRIPT_URL,
   ENABLE_REMOTE_SUBMIT: true,
-  APP_TITLE: "Examen blanc PMP - v4.0",
+  APP_TITLE: "Examen blanc PMP - v4.1",
   DASHBOARD_FETCH_LIMIT: 500,
-  STORAGE_KEY_ATTEMPTS: "pmp_exam_attempts_v40",
-  STORAGE_KEY_LAST: "pmp_exam_last_attempt_v40",
-  STORAGE_KEY_PROGRESS: "pmp_exam_progress_v40"
+  STORAGE_KEY_ATTEMPTS: "pmp_exam_attempts_v41",
+  STORAGE_KEY_LAST: "pmp_exam_last_attempt_v41",
+  STORAGE_KEY_PROGRESS: "pmp_exam_progress_v41"
 };
 
 /* ── QUESTION BANKS ── */
@@ -399,7 +404,7 @@ let storedTrainerPwd = "";
 const TR = {
   fr: {
     homeTitle: "Examen blanc PMP",
-    homeSubtitle: "Version 4.0 — Choisissez un test ci-dessous",
+    homeSubtitle: "Version 4.1 — Choisissez un test ci-dessous",
     tc0h: "Test Débutant",
     tc0d: "Évaluez vos connaissances fondamentales PMP.",
     tc0l: "🇫🇷 FR / 🇬🇧 EN",
@@ -431,6 +436,7 @@ const TR = {
     testInfoTitle: "Structure du test",
     trainerLoginTitle: "🔐 Accès formateur",
     labelPwd: "Mot de passe",
+    appScriptUrlHint: "Coller l'URL du Web App déployé. Sauvegardée localement.",
     btnLoginTrainer: "Entrer",
     btnLoginBackLbl: "Retour",
     homeTrainerLbl: "Accès formateur",
@@ -442,7 +448,7 @@ const TR = {
   },
   en: {
     homeTitle: "PMP Mock Exam",
-    homeSubtitle: "Version 4.0 — Choose a test below",
+    homeSubtitle: "Version 4.1 — Choose a test below",
     tc0h: "Beginner Test",
     tc0d: "Assess your fundamental PMP knowledge.",
     tc0l: "🇫🇷 FR / 🇬🇧 EN",
@@ -474,6 +480,7 @@ const TR = {
     testInfoTitle: "Test Structure",
     trainerLoginTitle: "🔐 Trainer Access",
     labelPwd: "Password",
+    appScriptUrlHint: "Paste the deployed Web App URL. Saved locally.",
     btnLoginTrainer: "Enter",
     btnLoginBackLbl: "Back",
     homeTrainerLbl: "Trainer Access",
@@ -923,6 +930,16 @@ async function loginTrainer() {
     return;
   }
   storedTrainerPwd = pwd;
+  // Save AppScript URL from field if provided
+  const urlInput = document.getElementById("appScriptUrlInput");
+  if (urlInput && urlInput.value.trim()) {
+    const newUrl = urlInput.value.trim();
+    try {
+      localStorage.setItem("pmp_appscript_url", newUrl);
+      // Inject at runtime
+      APP_CONFIG.RESULT_ENDPOINT = newUrl;
+    } catch(e) {}
+  }
   msg.textContent = currentLang === "fr" ? "Chargement..." : "Loading...";
   await renderTrainerDashboard();
   msg.textContent = "";
@@ -931,6 +948,12 @@ async function loginTrainer() {
 function showTrainerLogin() {
   document.getElementById("trainerPassword").value = "";
   document.getElementById("trainerLoginMessage").textContent = "";
+  // Pre-fill AppScript URL from localStorage
+  const urlInput = document.getElementById("appScriptUrlInput");
+  if (urlInput) {
+    const saved = localStorage.getItem("pmp_appscript_url") || "";
+    urlInput.value = saved;
+  }
   showOnly("trainerLoginView");
   applyTranslations();
 }
@@ -1276,7 +1299,16 @@ function dlCSV(rows, filename) {
 }
 
 /* ── INIT ── */
-document.addEventListener("DOMContentLoaded", () => { applyTranslations(); });
+document.addEventListener("DOMContentLoaded", () => {
+  // Load saved AppScript URL from localStorage if available
+  try {
+    const savedUrl = localStorage.getItem("pmp_appscript_url");
+    if (savedUrl && savedUrl.startsWith("https://")) {
+      APP_CONFIG.RESULT_ENDPOINT = savedUrl;
+    }
+  } catch(e) {}
+  applyTranslations();
+});
 </script>
 </body>
 </html>
