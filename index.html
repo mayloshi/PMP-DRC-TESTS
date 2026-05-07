@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Examen blanc PMP — v4.1</title>
+<title>Examen blanc PMP — v5.0</title>
 <style>
 :root{
   --bg:#f5f6fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;
@@ -137,8 +137,8 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
       </div>
     </div>
     <h1 id="homeTitle">Examen blanc PMP</h1>
-    <p id="homeSubtitle">Version 4.1 — Choisissez un test ci-dessous</p>
-    <p class="small">Dernière mise à jour : <strong>2026-04-25</strong></p>
+    <p id="homeSubtitle">Version 5.0 — Choisissez un test ci-dessous</p>
+    <p class="small">Dernière mise à jour : <strong>2026-05-07</strong></p>
   </div>
 
   <div class="test-cards">
@@ -263,8 +263,8 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
         <input id="trainerPassword" type="password" placeholder="••••••"/>
       </div>
       <div class="field" style="margin-top:14px;">
-        <label for="appScriptUrlInput" id="labelAppScriptUrl" style="font-size:.85rem;color:#6b7280;">🔗  Apps Script URL <span style="font-weight:400;">(optionnel)</span></label>
-        <input id="appScriptUrlInput" type="url" placeholder="https://script..com/macros/s/..." style="font-size:.82rem;"/>
+        <label for="appScriptUrlInput" id="labelAppScriptUrl" style="font-size:.85rem;color:#6b7280;">🔗 Google Apps Script URL <span style="font-weight:400;">(optionnel)</span></label>
+        <input id="appScriptUrlInput" type="url" placeholder="https://script.google.com/macros/s/..." style="font-size:.82rem;"/>
         <p class="small" style="margin-top:4px;color:#9ca3af;" id="appScriptUrlHint">Coller l'URL du Web App déployé. Sauvegardée localement.</p>
       </div>
       <div class="controls">
@@ -279,46 +279,155 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
 <!-- TRAINER DASHBOARD -->
 <section id="trainerView" class="hidden"><div class="container" id="trainerInner"></div></section>
 
-<!-- IMPORT -->
+<!-- IMPORT v5.0 -->
 <section id="importView" class="hidden">
   <div class="container">
-    <div class="card" style="max-width:720px;margin:0 auto;">
-      <h2 class="section-title">📂 <span id="importTitleLbl">Importer un questionnaire</span></h2>
-      <p class="small" id="importDescLbl">Importez un fichier JSON pour créer un Test personnalisé (Test 4). Il doit être un tableau d'objets respectant le format ci-dessous.</p>
+    <h2 class="section-title">📂 <span id="importTitleLbl">Importer des questions</span></h2>
+    <p class="small" id="importDescLbl" style="margin-bottom:18px;">Ajoutez des questions manuellement, importez un fichier CSV (Excel) ou JSON. Les questions forment un test personnalisé.</p>
+
+    <!-- IMPORT TABS -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="btn-primary" id="itab-form" onclick="showImportTab('form')">✏️ Saisie manuelle</button>
+      <button class="btn-light"   id="itab-csv"  onclick="showImportTab('csv')">📊 Import CSV / Excel</button>
+      <button class="btn-light"   id="itab-json" onclick="showImportTab('json')">{ } Import JSON</button>
+      <button class="btn-light"   id="itab-list" onclick="showImportTab('list')">📋 Questions importées (<span id="importedCount">0</span>)</button>
+    </div>
+
+    <!-- TAB: FORM -->
+    <div id="itab-form-panel" class="card" style="max-width:820px;">
+      <h3 class="section-title" style="font-size:1rem;">✏️ Ajouter une question</h3>
+
+      <div class="field" style="margin-bottom:12px;">
+        <label for="iq_lang" style="font-weight:700;display:block;margin-bottom:4px;">Langue principale de la question</label>
+        <select id="iq_lang" style="width:200px;padding:8px;border-radius:8px;border:1px solid #d1d5db;">
+          <option value="fr">🇫🇷 Français</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="both">🇫🇷 + 🇬🇧 Bilingue</option>
+        </select>
+      </div>
+
+      <div class="field" style="margin-bottom:12px;">
+        <label style="font-weight:700;display:block;margin-bottom:4px;">Type de question</label>
+        <select id="iq_type" onchange="updateFormQuestionType()" style="width:250px;padding:8px;border-radius:8px;border:1px solid #d1d5db;">
+          <option value="single">QCM — 1 bonne réponse</option>
+          <option value="multi">Choix multiples — plusieurs bonnes réponses</option>
+        </select>
+      </div>
+
+      <div class="field" style="margin-bottom:12px;">
+        <label for="iq_domain" style="font-weight:700;display:block;margin-bottom:4px;">Domaine / Domain</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <input type="text" id="iq_domain_fr" placeholder="Domaine (français)" style="padding:8px;border-radius:8px;border:1px solid #d1d5db;font-size:.9rem;"/>
+          <input type="text" id="iq_domain_en" placeholder="Domain (English)" style="padding:8px;border-radius:8px;border:1px solid #d1d5db;font-size:.9rem;"/>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom:12px;">
+        <label for="iq_eco" style="font-weight:700;display:block;margin-bottom:4px;">ECO (Process/People/Business)</label>
+        <select id="iq_eco" style="width:250px;padding:8px;border-radius:8px;border:1px solid #d1d5db;">
+          <option value="Processus">Processus / Process</option>
+          <option value="Personne">Personne / People</option>
+          <option value="Environnement commercial">Environnement commercial / Business Environment</option>
+        </select>
+      </div>
+
+      <div class="field" style="margin-bottom:12px;">
+        <label style="font-weight:700;display:block;margin-bottom:4px;">Question *</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <p class="small" style="margin-bottom:4px;">🇫🇷 Français</p>
+            <textarea id="iq_text_fr" rows="3" placeholder="Question en français..." style="width:100%;padding:8px;border-radius:8px;border:1px solid #d1d5db;font-size:.9rem;resize:vertical;"></textarea>
+          </div>
+          <div>
+            <p class="small" style="margin-bottom:4px;">🇬🇧 English</p>
+            <textarea id="iq_text_en" rows="3" placeholder="Question in English..." style="width:100%;padding:8px;border-radius:8px;border:1px solid #d1d5db;font-size:.9rem;resize:vertical;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom:12px;">
+        <label style="font-weight:700;display:block;margin-bottom:6px;">Options / Assertions * <span class="small" style="font-weight:400;">(cocher la/les bonne(s) réponse(s))</span></label>
+        <div id="iq_options_container"></div>
+        <button class="btn-light" onclick="addImportOption()" style="margin-top:6px;padding:6px 12px;font-size:.85rem;">+ Ajouter une option</button>
+      </div>
+
+      <div class="field" style="margin-bottom:12px;">
+        <label style="font-weight:700;display:block;margin-bottom:4px;">Explication de la réponse *</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <p class="small" style="margin-bottom:4px;">🇫🇷 Français</p>
+            <textarea id="iq_exp_fr" rows="3" placeholder="Explication en français..." style="width:100%;padding:8px;border-radius:8px;border:1px solid #d1d5db;font-size:.9rem;resize:vertical;"></textarea>
+          </div>
+          <div>
+            <p class="small" style="margin-bottom:4px;">🇬🇧 English</p>
+            <textarea id="iq_exp_en" rows="3" placeholder="Explanation in English..." style="width:100%;padding:8px;border-radius:8px;border:1px solid #d1d5db;font-size:.9rem;resize:vertical;"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div id="iq_msg" style="display:none;padding:10px;border-radius:8px;margin-bottom:10px;font-size:.9rem;"></div>
+      <div class="controls">
+        <button class="btn-primary" onclick="saveFormQuestion()">✅ Enregistrer cette question</button>
+        <button class="btn-light" onclick="resetImportForm()">🔄 Réinitialiser</button>
+        <button class="btn-light" onclick="goHome()">← Accueil</button>
+      </div>
+    </div>
+
+    <!-- TAB: CSV -->
+    <div id="itab-csv-panel" class="card" style="max-width:820px;display:none;">
+      <h3 class="section-title" style="font-size:1rem;">📊 Import depuis CSV / Excel</h3>
+      <p class="small" style="margin-bottom:14px;">
+        Téléchargez le modèle CSV, remplissez-le dans Excel ou Google Sheets, puis importez-le.<br>
+        <strong>Colonnes obligatoires :</strong> id, text_fr (ou text), option_a, option_b, option_c, option_d, answer<br>
+        <strong>Colonnes optionnelles :</strong> text, text_fr, domain, domain_fr, eco, option_a_fr…option_d_fr, explanation, explanation_fr
+      </p>
+      <pre class="json-schema" style="font-size:.75rem;line-height:1.5;">id,domain,domain_fr,eco,text,text_fr,option_a,option_b,option_c,option_d,option_a_fr,option_b_fr,option_c_fr,option_d_fr,answer,explanation,explanation_fr
+1001,"Agile PM","Agile PM","Processus","What is a sprint?","Qu'est-ce qu'un sprint?","A phase","An iteration","A task","A milestone","Une phase","Une itération","Une tâche","Un jalon",1,"A sprint is a fixed iteration.","Un sprint est une itération fixe."</pre>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+        <button class="btn-light" onclick="downloadCSVTemplate()">⬇️ Télécharger le modèle CSV</button>
+        <label class="btn-cyan" style="cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
+          📂 Choisir un fichier CSV
+          <input type="file" id="csvImportFile" accept=".csv,.txt" style="display:none;" onchange="handleCSVImport(event)"/>
+        </label>
+      </div>
+      <div id="csvImportPreview" style="margin-top:10px;"></div>
+      <div class="controls" style="margin-top:14px;">
+        <button class="btn-primary hidden" id="btnConfirmCSV" onclick="confirmCSVImport()">✅ Ajouter ces questions</button>
+        <button class="btn-light" onclick="goHome()">← Accueil</button>
+      </div>
+    </div>
+
+    <!-- TAB: JSON -->
+    <div id="itab-json-panel" class="card" style="max-width:820px;display:none;">
+      <h3 class="section-title" style="font-size:1rem;">{ } Import JSON</h3>
+      <p class="small" id="importDescLbl2" style="margin-bottom:14px;">Importez un tableau JSON respectant le format ci-dessous.</p>
       <div class="import-area" onclick="document.getElementById('importFile').click()">
         <div style="font-size:2rem;">📄</div>
-        <p style="font-weight:700;" id="importDragLbl">Cliquez ici pour choisir un fichier JSON</p>
+        <p style="font-weight:700;" id="importDragLbl">Cliquez pour choisir un fichier JSON</p>
         <p class="small">Format : .json — UTF-8</p>
         <input type="file" id="importFile" accept=".json" style="display:none;" onchange="handleImportFile(event)"/>
       </div>
       <div id="importPreview" style="margin-top:14px;"></div>
-      <div style="margin-top:20px;">
-        <p class="small"><strong>📋 Format JSON requis :</strong></p>
-        <pre class="json-schema">[
-  {
-    "id": 1,
-    "domain": "Domain Name (English)",
-    "domain_fr": "Nom du domaine (Français)",
-    "eco": "Processus",
-    "text": "Question text in English",
-    "text_fr": "Texte de la question en Français",
-    "options": ["Option A EN","Option B EN","Option C EN","Option D EN"],
-    "options_fr": ["Option A FR","Option B FR","Option C FR","Option D FR"],
-    "answer": 0,
-    "explanation": "Explanation in English.",
-    "explanation_fr": "Explication en français."
-  }
-]</pre>
-        <p class="small" style="margin-top:8px;" id="importNotesLbl">
-          <strong>Champs requis :</strong> id, text, options (4 éléments), answer (0–3).<br>
-          Les champs <em>text_fr, options_fr, explanation_fr, domain_fr</em> sont optionnels.<br>
-          <em>eco</em> : Processus | Personne | Environnement commercial.<br>
-          Durée du test importé : <strong>65 minutes max</strong>.
-        </p>
+      <pre class="json-schema" style="margin-top:14px;font-size:.75rem;line-height:1.5;">[{"id":1,"domain":"Agile PM","domain_fr":"Agile PM","eco":"Processus","text":"What is a sprint?","text_fr":"Qu'est-ce qu'un sprint?","options":["A phase","An iteration","A task","A milestone"],"options_fr":["Une phase","Une itération","Une tâche","Un jalon"],"answer":1,"explanation":"A sprint is a fixed-length iteration.","explanation_fr":"Un sprint est une itération de durée fixe."}]</pre>
+      <p class="small" style="margin-top:8px;" id="importNotesLbl">
+        <strong>Champs requis :</strong> id, text (ou text_fr), options (4 éléments), answer (0–3 ou tableau pour choix multiples).<br>
+        <em>eco</em> : Processus | Personne | Environnement commercial.
+      </p>
+      <div class="controls" style="margin-top:14px;">
+        <button class="btn-primary hidden" id="btnConfirmImport" onclick="confirmImport()">✅ Confirmer l'import JSON</button>
+        <button class="btn-light" onclick="goHome()">← Accueil</button>
       </div>
-      <div class="controls">
-        <button class="btn-primary hidden" id="btnConfirmImport" onclick="confirmImport()">✅ Confirmer</button>
-        <button class="btn-light" onclick="goHome()">← Retour</button>
+    </div>
+
+    <!-- TAB: LIST -->
+    <div id="itab-list-panel" class="card" style="max-width:820px;display:none;">
+      <h3 class="section-title" style="font-size:1rem;">📋 Questions importées</h3>
+      <div id="importedQList"></div>
+      <div class="controls" style="margin-top:14px;">
+        <button class="btn-success" id="btnStartCustom" onclick="startCustomTest()" style="display:none;">▶ Lancer le test personnalisé</button>
+        <button class="btn-danger" onclick="clearAllImported()" style="font-size:.85rem;">🗑 Tout effacer</button>
+        <button class="btn-light" onclick="downloadImportedJSON()">⬇️ Exporter en JSON</button>
+        <button class="btn-light" onclick="goHome()">← Accueil</button>
       </div>
     </div>
   </div>
@@ -352,7 +461,7 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
 
 // 👉 Collez ici l'URL de votre Google Apps Script Web App
 //    (Déployer > Gérer les déploiements > URL de l'application Web)
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNZxsrjaz5JWCmfdsR0kEQ1idfHHXt9fvkIfGheVX-uo9rtouIGiGUptF-q6Oy-0tQQA/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJYIzTV_w62Z9XmDVswMgMSPSw3mJyl295s03-rdFOy7w1vwEsndIiatAZOatAflli/exec";
 
 // Mot de passe du dashboard formateur
 const TRAINER_PASSWORD = "221008";
@@ -363,11 +472,11 @@ const TRAINER_PASSWORD = "221008";
 const APP_CONFIG = {
   RESULT_ENDPOINT: GOOGLE_APPS_SCRIPT_URL,
   ENABLE_REMOTE_SUBMIT: true,
-  APP_TITLE: "Examen blanc PMP - v4.1",
+  APP_TITLE: "Examen blanc PMP - v5.0",
   DASHBOARD_FETCH_LIMIT: 500,
-  STORAGE_KEY_ATTEMPTS: "pmp_exam_attempts_v41",
-  STORAGE_KEY_LAST: "pmp_exam_last_attempt_v41",
-  STORAGE_KEY_PROGRESS: "pmp_exam_progress_v41"
+  STORAGE_KEY_ATTEMPTS: "pmp_exam_attempts_v50",
+  STORAGE_KEY_LAST: "pmp_exam_last_attempt_v50",
+  STORAGE_KEY_PROGRESS: "pmp_exam_progress_v50"
 };
 
 /* ── QUESTION BANKS ── */
@@ -404,7 +513,7 @@ let storedTrainerPwd = "";
 const TR = {
   fr: {
     homeTitle: "Examen blanc PMP",
-    homeSubtitle: "Version 4.1 — Choisissez un test ci-dessous",
+    homeSubtitle: "Version 5.0 — Choisissez un test ci-dessous",
     tc0h: "Test Débutant",
     tc0d: "Évaluez vos connaissances fondamentales PMP.",
     tc0l: "🇫🇷 FR / 🇬🇧 EN",
@@ -448,7 +557,7 @@ const TR = {
   },
   en: {
     homeTitle: "PMP Mock Exam",
-    homeSubtitle: "Version 4.1 — Choose a test below",
+    homeSubtitle: "Version 5.0 — Choose a test below",
     tc0h: "Beginner Test",
     tc0d: "Assess your fundamental PMP knowledge.",
     tc0l: "🇫🇷 FR / 🇬🇧 EN",
@@ -1209,8 +1318,229 @@ async function renderTrainerDashboard() {
     <div id="answersPanel"></div>`;
 }
 
-/* ── IMPORT ── */
-function showImportPanel() { showOnly("importView"); applyTranslations(); }
+/* ── IMPORT v5.0 ── */
+let importOptionCount = 0;
+let pendingCSVData = null;
+
+function showImportPanel() {
+  showOnly("importView");
+  applyTranslations();
+  showImportTab("form");
+  initImportForm();
+  refreshImportedList();
+}
+
+function showImportTab(tab) {
+  ["form","csv","json","list"].forEach(t => {
+    const panel = document.getElementById("itab-" + t + "-panel");
+    const btn   = document.getElementById("itab-" + t);
+    if (panel) panel.style.display = t === tab ? "" : "none";
+    if (btn) {
+      btn.className = t === tab ? "btn-primary" : "btn-light";
+    }
+  });
+  if (tab === "list") refreshImportedList();
+}
+
+function initImportForm() {
+  importOptionCount = 0;
+  document.getElementById("iq_options_container").innerHTML = "";
+  ["iq_text_fr","iq_text_en","iq_exp_fr","iq_exp_en","iq_domain_fr","iq_domain_en"].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = "";
+  });
+  for (let i = 0; i < 4; i++) addImportOption();
+  updateFormQuestionType();
+}
+
+function addImportOption() {
+  const idx = importOptionCount++;
+  const letter = String.fromCharCode(65 + idx);
+  const container = document.getElementById("iq_options_container");
+  const div = document.createElement("div");
+  div.id = "iq_opt_row_" + idx;
+  div.style.cssText = "display:grid;grid-template-columns:auto 1fr 1fr auto;gap:8px;align-items:center;margin-bottom:8px;";
+  div.innerHTML = `
+    <div style="display:flex;align-items:center;gap:6px;">
+      <input type="checkbox" id="iq_correct_${idx}" style="width:16px;height:16px;accent-color:#5b21b6;" title="Bonne réponse">
+      <span style="font-weight:700;color:#5b21b6;width:20px;">${letter}.</span>
+    </div>
+    <input type="text" id="iq_opt_fr_${idx}" placeholder="Option ${letter} (FR)" style="padding:7px;border-radius:8px;border:1px solid #d1d5db;font-size:.88rem;"/>
+    <input type="text" id="iq_opt_en_${idx}" placeholder="Option ${letter} (EN)" style="padding:7px;border-radius:8px;border:1px solid #d1d5db;font-size:.88rem;"/>
+    <button onclick="removeImportOption(${idx})" style="padding:5px 8px;border-radius:6px;border:1px solid #e5e7eb;background:#fff;color:#dc2626;cursor:pointer;font-size:.8rem;" title="Supprimer">✕</button>`;
+  container.appendChild(div);
+}
+
+function removeImportOption(idx) {
+  const el = document.getElementById("iq_opt_row_" + idx);
+  if (el) el.remove();
+}
+
+function updateFormQuestionType() {
+  const isMulti = document.getElementById("iq_type").value === "multi";
+  document.querySelectorAll("[id^=iq_correct_]").forEach(cb => {
+    const label = cb.closest ? cb.closest("div") : null;
+    if (label) label.title = isMulti ? "Cocher toutes les bonnes réponses" : "Cocher la bonne réponse";
+  });
+}
+
+function showIQMsg(msg, isError) {
+  const el = document.getElementById("iq_msg");
+  el.style.display = "block";
+  el.style.background = isError ? "#fee2e2" : "#dcfce7";
+  el.style.color = isError ? "#991b1b" : "#166534";
+  el.style.border = isError ? "1px solid #fca5a5" : "1px solid #22c55e";
+  el.textContent = msg;
+  if (!isError) setTimeout(() => { el.style.display = "none"; }, 4000);
+}
+
+function saveFormQuestion() {
+  const textFr = document.getElementById("iq_text_fr").value.trim();
+  const textEn = document.getElementById("iq_text_en").value.trim();
+  const expFr  = document.getElementById("iq_exp_fr").value.trim();
+  const expEn  = document.getElementById("iq_exp_en").value.trim();
+  const domFr  = document.getElementById("iq_domain_fr").value.trim();
+  const domEn  = document.getElementById("iq_domain_en").value.trim();
+  const eco    = document.getElementById("iq_eco").value;
+  const isMulti = document.getElementById("iq_type").value === "multi";
+
+  if (!textFr && !textEn) { showIQMsg("❌ Saisissez au moins la question (FR ou EN).", true); return; }
+  if (!expFr && !expEn)   { showIQMsg("❌ L'explication est obligatoire.", true); return; }
+
+  const optsFr = [], optsEn = [], correctIdxs = [];
+  for (let i = 0; i < importOptionCount; i++) {
+    const row = document.getElementById("iq_opt_row_" + i);
+    if (!row) continue;
+    const fr = document.getElementById("iq_opt_fr_" + i);
+    const en = document.getElementById("iq_opt_en_" + i);
+    const cb = document.getElementById("iq_correct_" + i);
+    if (!fr || (!fr.value.trim() && !(en && en.value.trim()))) continue;
+    const frVal = fr ? fr.value.trim() : "";
+    const enVal = en ? en.value.trim() : "";
+    if (!isMulti && cb && cb.checked && correctIdxs.length > 0) {
+      showIQMsg("❌ Pour un QCM, cochez une seule bonne réponse.", true); return;
+    }
+    if (cb && cb.checked) correctIdxs.push(optsFr.length);
+    optsFr.push(frVal || enVal);
+    optsEn.push(enVal || frVal);
+  }
+
+  if (optsFr.length < 2) { showIQMsg("❌ Ajoutez au moins 2 options.", true); return; }
+  if (correctIdxs.length === 0) { showIQMsg("❌ Cochez au moins une bonne réponse.", true); return; }
+
+  const answer = isMulti ? correctIdxs : correctIdxs[0];
+  const q = {
+    id: Date.now(),
+    domain: domEn || domFr || "Custom",
+    domain_fr: domFr || domEn || "Custom",
+    eco: eco,
+    text: textEn || textFr,
+    text_fr: textFr || textEn,
+    options: optsEn,
+    options_fr: optsFr,
+    answer: answer,
+    explanation: expEn || expFr,
+    explanation_fr: expFr || expEn
+  };
+
+  const existing = loadImportedQuestions();
+  existing.push(q);
+  saveImportedQuestions(existing);
+  updateCustomTest(existing);
+  showIQMsg("✅ Question enregistrée ! (" + existing.length + " au total)", false);
+  initImportForm();
+  document.getElementById("importedCount").textContent = existing.length;
+}
+
+function resetImportForm() { initImportForm(); }
+
+/* CSV IMPORT */
+function downloadCSVTemplate() {
+  const csv = "id,domain,domain_fr,eco,text,text_fr,option_a,option_b,option_c,option_d,option_a_fr,option_b_fr,option_c_fr,option_d_fr,answer,explanation,explanation_fr\n"
+    + "1001,\"Agile PM\",\"Agile PM\",\"Processus\",\"What is a sprint?\",\"Qu'est-ce qu'un sprint?\",\"A phase\",\"An iteration\",\"A task\",\"A milestone\",\"Une phase\",\"Une itération\",\"Une tâche\",\"Un jalon\",1,\"A sprint is a fixed iteration.\",\"Un sprint est une itération fixe.\"\n"
+    + "1002,\"Risk Mgmt\",\"Gestion des risques\",\"Environnement commercial\",\"What is a risk register?\",\"Qu'est-ce qu'un registre des risques?\",\"A budget tool\",\"A risk tracker\",\"A schedule\",\"A WBS\",\"Un outil budgétaire\",\"Un suivi des risques\",\"Un planning\",\"Une WBS\",1,\"A risk register records identified risks.\",\"Un registre des risques documente les risques identifiés.\"";
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "pmp_questions_modele.csv";
+  a.click();
+}
+
+function handleCSVImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const text = e.target.result.replace(/^\uFEFF/, "");
+      const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+      if (lines.length < 2) throw new Error("Le fichier CSV est vide ou ne contient pas de données.");
+      const headers = parseCSVLine_(lines[0]).map(h => h.trim().toLowerCase());
+      const questions = [];
+      for (let i = 1; i < lines.length; i++) {
+        const vals = parseCSVLine_(lines[i]);
+        const row = {};
+        headers.forEach((h, j) => row[h] = (vals[j] || "").trim());
+        if (!row.text && !row.text_fr) continue;
+        const optsFr = [row.option_a_fr||"",row.option_b_fr||"",row.option_c_fr||"",row.option_d_fr||""];
+        const optsEn = [row.option_a||"",row.option_b||"",row.option_c||"",row.option_d||""];
+        let answer = parseInt(row.answer);
+        if (isNaN(answer)) answer = 0;
+        questions.push({
+          id: parseInt(row.id) || (Date.now() + i),
+          domain: row.domain || "Custom", domain_fr: row.domain_fr || row.domain || "Custom",
+          eco: row.eco || "Processus",
+          text: row.text || row.text_fr || "",
+          text_fr: row.text_fr || row.text || "",
+          options: optsEn.map((o,i) => o || optsFr[i] || ""),
+          options_fr: optsFr.map((o,i) => o || optsEn[i] || ""),
+          answer: answer,
+          explanation: row.explanation || row.explanation_fr || "",
+          explanation_fr: row.explanation_fr || row.explanation || ""
+        });
+      }
+      if (!questions.length) throw new Error("Aucune question valide trouvée.");
+      pendingCSVData = questions;
+      document.getElementById("csvImportPreview").innerHTML = `
+        <div style="background:#dcfce7;border:1px solid #22c55e;border-radius:10px;padding:14px;color:#166534;">
+          ✅ <strong>${questions.length} question(s) prête(s) à importer</strong><br>
+          <span class="small">Domaines : ${[...new Set(questions.map(q => q.domain_fr || q.domain || "?"))].slice(0,5).join(", ")}</span>
+        </div>`;
+      const btn = document.getElementById("btnConfirmCSV");
+      btn.classList.remove("hidden"); btn.style.display = "inline-flex";
+    } catch (err) {
+      document.getElementById("csvImportPreview").innerHTML = `<div style="background:#fee2e2;border:1px solid #ef4444;border-radius:10px;padding:14px;color:#991b1b;">❌ ${err.message}</div>`;
+      pendingCSVData = null;
+    }
+  };
+  reader.readAsText(file, "utf-8");
+}
+
+function parseCSVLine_(line) {
+  const result = []; let cur = ""; let inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === "\"") { if (inQ && line[i+1] === "\"") { cur += "\""; i++; } else inQ = !inQ; }
+    else if (line[i] === "," && !inQ) { result.push(cur); cur = ""; }
+    else cur += line[i];
+  }
+  result.push(cur);
+  return result;
+}
+
+function confirmCSVImport() {
+  if (!pendingCSVData) return;
+  const existing = loadImportedQuestions();
+  const merged = [...existing, ...pendingCSVData];
+  saveImportedQuestions(merged);
+  updateCustomTest(merged);
+  document.getElementById("importedCount").textContent = merged.length;
+  alert(pendingCSVData.length + " question(s) importée(s) avec succès ! Total : " + merged.length);
+  pendingCSVData = null;
+  document.getElementById("csvImportPreview").innerHTML = "";
+  document.getElementById("btnConfirmCSV").classList.add("hidden");
+  showImportTab("list");
+}
+
+/* JSON IMPORT */
 function handleImportFile(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -1220,15 +1550,24 @@ function handleImportFile(event) {
       const data = JSON.parse(e.target.result);
       if (!Array.isArray(data) || !data.length) throw new Error("Le fichier doit être un tableau JSON non vide.");
       const first = data[0];
-      const missing = ["id", "text", "options", "answer"].filter(k => !(k in first));
-      if (missing.length) throw new Error("Champs manquants : " + missing.join(", "));
-      if (!Array.isArray(first.options) || first.options.length < 4) throw new Error("options doit contenir 4 éléments.");
-      if (typeof first.answer !== "number" || first.answer < 0 || first.answer > 3) throw new Error("answer doit être un entier entre 0 et 3.");
-      pendingImportData = data;
+      if (!first.text && !first.text_fr) throw new Error("Champ manquant : text ou text_fr.");
+      if (!Array.isArray(first.options) && !first.option_a) throw new Error("options (tableau) ou option_a/b/c/d requis.");
+      pendingImportData = data.map((q, i) => ({
+        id: q.id || (Date.now() + i),
+        domain: q.domain || "Custom", domain_fr: q.domain_fr || q.domain || "Custom",
+        eco: q.eco || "Processus",
+        text: q.text || q.text_fr || "",
+        text_fr: q.text_fr || q.text || "",
+        options: q.options || [q.option_a||"",q.option_b||"",q.option_c||"",q.option_d||""],
+        options_fr: q.options_fr || [q.option_a_fr||"",q.option_b_fr||"",q.option_c_fr||"",q.option_d_fr||""],
+        answer: q.answer !== undefined ? q.answer : 0,
+        explanation: q.explanation || q.explanation_fr || "",
+        explanation_fr: q.explanation_fr || q.explanation || ""
+      }));
       document.getElementById("importPreview").innerHTML = `
         <div style="background:#dcfce7;border:1px solid #22c55e;border-radius:10px;padding:14px;color:#166534;">
-          ✅ <strong>${data.length} question(s) chargée(s)</strong><br>
-          <span class="small">Domaines : ${[...new Set(data.map(q => q.domain_fr || q.domain || "?"))].slice(0, 5).join(", ")}</span>
+          ✅ <strong>${pendingImportData.length} question(s) chargée(s)</strong><br>
+          <span class="small">Domaines : ${[...new Set(pendingImportData.map(q => q.domain_fr || q.domain || "?"))].slice(0,5).join(", ")}</span>
         </div>`;
       const btn = document.getElementById("btnConfirmImport");
       btn.classList.remove("hidden"); btn.style.display = "inline-flex";
@@ -1239,27 +1578,118 @@ function handleImportFile(event) {
   };
   reader.readAsText(file, "utf-8");
 }
+
 function confirmImport() {
   if (!pendingImportData) return;
-  customQuestions = pendingImportData;
-  TEST_CONFIGS[4].total = customQuestions.length;
-  const cc = document.getElementById("customTestCard");
-  cc.innerHTML = `
-    <div class="test-cards">
-      <div class="test-card" style="border-color:#166534;">
-        <div class="tc-icon">📋</div>
-        <h3>${currentLang === "fr" ? "Test personnalisé" : "Custom Test"}</h3>
-        <p class="small">${customQuestions.length} ${currentLang === "fr" ? "questions importées" : "imported questions"}</p>
-        <div class="tc-meta">
-          <span class="tc-tag">${customQuestions.length} questions</span>
-          <span class="tc-tag">65 min</span>
-          <span class="tc-tag">🇫🇷 FR / 🇬🇧 EN</span>
+  const existing = loadImportedQuestions();
+  const merged = [...existing, ...pendingImportData];
+  saveImportedQuestions(merged);
+  updateCustomTest(merged);
+  document.getElementById("importedCount").textContent = merged.length;
+  alert(pendingImportData.length + " question(s) importée(s) ! Total : " + merged.length);
+  pendingImportData = null;
+  document.getElementById("importPreview").innerHTML = "";
+  document.getElementById("btnConfirmImport").classList.add("hidden");
+  showImportTab("list");
+}
+
+/* QUESTION STORE */
+const IQ_KEY = "pmp_imported_questions_v50";
+function loadImportedQuestions() {
+  try { return JSON.parse(localStorage.getItem(IQ_KEY) || "[]"); } catch(e) { return []; }
+}
+function saveImportedQuestions(qs) {
+  try { localStorage.setItem(IQ_KEY, JSON.stringify(qs)); } catch(e) {}
+}
+function updateCustomTest(qs) {
+  customQuestions = qs.length ? qs : null;
+  if (qs.length > 0) {
+    TEST_CONFIGS[4].total = qs.length;
+    const cc = document.getElementById("customTestCard");
+    if (cc) cc.innerHTML = `
+      <div class="test-cards">
+        <div class="test-card" style="border-color:#166534;">
+          <div class="tc-icon">📋</div>
+          <h3>${currentLang === "fr" ? "Test personnalisé" : "Custom Test"}</h3>
+          <p class="small">${qs.length} ${currentLang === "fr" ? "questions importées" : "imported questions"}</p>
+          <div class="tc-meta">
+            <span class="tc-tag">${qs.length} questions</span>
+            <span class="tc-tag">65 min</span>
+            <span class="tc-tag">🇫🇷 FR / 🇬🇧 EN</span>
+          </div>
+          <button class="btn-success" onclick="selectTest(3)">▶ ${currentLang === "fr" ? "Commencer" : "Start"}</button>
         </div>
-        <button class="btn-success" onclick="selectTest(3)">▶ ${currentLang === "fr" ? "Commencer" : "Start"}</button>
-      </div>
-    </div>`;
-  alert(pendingImportData.length + (currentLang === "fr" ? " questions importées avec succès !" : " questions imported successfully!"));
+      </div>`;
+  }
+}
+
+function refreshImportedList() {
+  const qs = loadImportedQuestions();
+  document.getElementById("importedCount").textContent = qs.length;
+  const listEl = document.getElementById("importedQList");
+  const startBtn = document.getElementById("btnStartCustom");
+  if (!listEl) return;
+  if (startBtn) startBtn.style.display = qs.length ? "inline-flex" : "none";
+  if (!qs.length) {
+    listEl.innerHTML = `<p class="small" style="color:#6b7280;">Aucune question importée. Utilisez les onglets "Saisie manuelle", "CSV" ou "JSON".</p>`;
+    return;
+  }
+  listEl.innerHTML = `<table style="width:100%;font-size:.85rem;border-collapse:collapse;margin-bottom:12px;">
+    <thead><tr style="background:#f8fafc;">
+      <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">#</th>
+      <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">Domaine</th>
+      <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">ECO</th>
+      <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">Question (extrait)</th>
+      <th style="padding:8px;border:1px solid #e5e7eb;text-align:center;">✓</th>
+      <th style="padding:8px;border:1px solid #e5e7eb;text-align:center;">Action</th>
+    </tr></thead><tbody>
+    ${qs.map((q, i) => `<tr style="border-bottom:1px solid #f3f4f6;">
+      <td style="padding:6px 8px;">${i+1}</td>
+      <td style="padding:6px 8px;">${q.domain_fr || q.domain || "-"}</td>
+      <td style="padding:6px 8px;">${q.eco || "-"}</td>
+      <td style="padding:6px 8px;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${q.text_fr || q.text || ""}</td>
+      <td style="padding:6px 8px;text-align:center;">${Array.isArray(q.answer) ? q.answer.map(i => String.fromCharCode(65+i)).join("+") : String.fromCharCode(65+(q.answer||0))}</td>
+      <td style="padding:6px 8px;text-align:center;">
+        <button onclick="deleteImportedQuestion(${q.id})" style="padding:3px 8px;border-radius:6px;border:1px solid #fca5a5;background:#fee2e2;color:#991b1b;cursor:pointer;font-size:.78rem;">🗑</button>
+      </td>
+    </tr>`).join("")}
+    </tbody></table>`;
+  updateCustomTest(qs);
+}
+
+function deleteImportedQuestion(id) {
+  let qs = loadImportedQuestions();
+  qs = qs.filter(q => q.id !== id);
+  saveImportedQuestions(qs);
+  updateCustomTest(qs);
+  refreshImportedList();
+}
+
+function clearAllImported() {
+  if (!confirm(currentLang === "fr" ? "Supprimer toutes les questions importées ?" : "Delete all imported questions?")) return;
+  saveImportedQuestions([]);
+  customQuestions = null;
+  const cc = document.getElementById("customTestCard");
+  if (cc) cc.innerHTML = "";
+  refreshImportedList();
+}
+
+function downloadImportedJSON() {
+  const qs = loadImportedQuestions();
+  if (!qs.length) { alert("Aucune question à exporter."); return; }
+  const blob = new Blob([JSON.stringify(qs, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "pmp_questions_export_" + new Date().toISOString().slice(0,10) + ".json";
+  a.click();
+}
+
+function startCustomTest() {
+  const qs = loadImportedQuestions();
+  if (!qs.length) { alert("Aucune question disponible."); return; }
+  updateCustomTest(qs);
   goHome();
+  setTimeout(() => selectTest(3), 100);
 }
 
 /* ── CSV EXPORT ── */
@@ -1338,11 +1768,18 @@ function dlCSV(rows, filename) {
 
 /* ── INIT ── */
 document.addEventListener("DOMContentLoaded", () => {
-  // Load saved AppScript URL from localStorage if available
   try {
     const savedUrl = localStorage.getItem("pmp_appscript_url");
     if (savedUrl && savedUrl.startsWith("https://")) {
       APP_CONFIG.RESULT_ENDPOINT = savedUrl;
+    }
+  } catch(e) {}
+  // Load previously imported questions
+  try {
+    const imported = loadImportedQuestions();
+    if (imported.length > 0) {
+      updateCustomTest(imported);
+      document.querySelectorAll("[id=importedCount]").forEach(el => el.textContent = imported.length);
     }
   } catch(e) {}
   applyTranslations();
