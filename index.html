@@ -659,7 +659,7 @@ function goHome() {
 
 /* ── TEST SELECTION ── */
 function selectTest(idx) {
-  if (idx === 3 && !customQuestions) {
+  if (idx === 4 && !customQuestions) {
     alert(currentLang === "fr" ? "Aucun questionnaire importé." : "No questionnaire imported.");
     return;
   }
@@ -667,8 +667,8 @@ function selectTest(idx) {
   document.getElementById("registrationPanel").classList.remove("hidden");
   document.getElementById("homeBottomControls").classList.add("hidden");
   const cfg = TEST_CONFIGS[idx];
-  const n = (idx === 3 && customQuestions) ? customQuestions.length : cfg.total;
-  const d = idx === 3 ? 65 : Math.round(cfg.duration / 60);
+  const n = (idx === 4 && customQuestions) ? customQuestions.length : cfg.total;
+  const d = idx === 4 ? 65 : Math.round(cfg.duration / 60);
   const lang = currentLang;
   document.getElementById("testInfoContent").innerHTML =
     `<div class="meta-list">
@@ -1617,7 +1617,7 @@ function updateCustomTest(qs) {
             <span class="tc-tag">65 min</span>
             <span class="tc-tag">🇫🇷 FR / 🇬🇧 EN</span>
           </div>
-          <button class="btn-success" onclick="selectTest(3)">▶ ${currentLang === "fr" ? "Commencer" : "Start"}</button>
+          <button class="btn-success" onclick="selectTest(4)">▶ ${currentLang === "fr" ? "Commencer" : "Start"}</button>
         </div>
       </div>`;
   }
@@ -1689,7 +1689,7 @@ function startCustomTest() {
   if (!qs.length) { alert("Aucune question disponible."); return; }
   updateCustomTest(qs);
   goHome();
-  setTimeout(() => selectTest(3), 100);
+  setTimeout(() => selectTest(4), 100);
 }
 
 /* ── CSV EXPORT ── */
