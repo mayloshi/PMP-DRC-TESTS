@@ -472,7 +472,7 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
 
 // 👉 Collez ici l'URL de votre Google Apps Script Web App
 //    (Déployer > Gérer les déploiements > URL de l'application Web)
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJYIzTV_w62Z9XmDVswMgMSPSw3mJyl295s03-rdFOy7w1vwEsndIiatAZOatAflli/exec";
+let GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwJYIzTV_w62Z9XmDVswMgMSPSw3mJyl295s03-rdFOy7w1vwEsndIiatAZOatAflli/execE";
 
 // Mot de passe du dashboard formateur
 const TRAINER_PASSWORD = "221008";
@@ -1104,6 +1104,7 @@ async function loginTrainer() {
       localStorage.setItem("pmp_appscript_url", newUrl);
       // Inject at runtime
       APP_CONFIG.RESULT_ENDPOINT = newUrl;
+      GOOGLE_APPS_SCRIPT_URL = newUrl;
     } catch(e) {}
   }
   msg.textContent = currentLang === "fr" ? "Chargement..." : "Loading...";
@@ -1936,6 +1937,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedUrl = localStorage.getItem("pmp_appscript_url");
     if (savedUrl && savedUrl.startsWith("https://")) {
       APP_CONFIG.RESULT_ENDPOINT = savedUrl;
+      GOOGLE_APPS_SCRIPT_URL = savedUrl;
     }
   } catch(e) {}
   // Load previously imported questions
