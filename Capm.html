@@ -229,7 +229,7 @@ th{background:#f8fafc;font-weight:700;font-size:.85rem;color:#374151;}
 </div><!-- /container -->
 
 <script>
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbziYkxiHA4_dzFl7ErRqDMReAPiXdlB5v-7eRQR-HEK_G0OQTTCBMsKtBkNVUGtoUXcVQ/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGIGt4xOCx0WdjrR1G4CCpouQMYiiaKmy0IsSjwCh7k81ZgbrZr6jeyib2rzVMZ3yr/exec";
 const TRAINER_PASSWORD = "221008";
 const MAX_ATTEMPTS = 3;
 const EXAM_DURATION = 80 * 60;
@@ -1578,7 +1578,9 @@ let participant = {name:"", email:"", wantsEmail:false};
 let lastRemote = {attempted:false, success:false, message:""};
 let storedTrainerPwd = "";
 let currentAttemptNum = 1;
-let googleScriptUrl = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+let googleScriptUrl = (typeof GOOGLE_APPS_SCRIPT_URL !== "undefined" && !GOOGLE_APPS_SCRIPT_URL.includes("PASTE"))
+  ? GOOGLE_APPS_SCRIPT_URL
+  : "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
 
 function setLang(lang) {
   currentLang = lang;
@@ -1756,22 +1758,37 @@ function classifyGlobal(p) {
     : {label: currentLang==="fr"?"❌ Insuffisant":"❌ Insufficient", cls:"global-fail"};
 }
 
+// Déduit la catégorie ECO depuis le nom du domaine
+function domainToEco(domain) {
+  const d = (domain || "").toLowerCase();
+  if (d.includes("people") || d.includes("équipe") || d.includes("leadership")) return "People";
+  if (d.includes("fondament") || d.includes("business") || d.includes("environnement")) return "Business Environment";
+  return "Process"; // Prédictif, Agile, Hybride → Process par défaut
+}
+
 function computeResults() {
   const answers = collectAnswers();
   let score = 0;
   const byDomain = {};
+  const byEco    = {};
   answers.forEach(a => {
     const q = QUESTIONS.find(x => x.id===a.id);
     const ok = a.selected === a.correct;
     if (ok) score++;
     const d = q.domain;
+    const eco = q.eco || domainToEco(d);
+    a.eco = eco; // stocké sur l'objet pour le payload
     if (!byDomain[d]) byDomain[d] = {correct:0, total:0};
     byDomain[d].total++;
     if (ok) byDomain[d].correct++;
+    if (!byEco[eco]) byEco[eco] = {correct:0, total:0};
+    byEco[eco].total++;
+    if (ok) byEco[eco].correct++;
   });
   Object.keys(byDomain).forEach(k => { byDomain[k].percent = pct(byDomain[k].correct, byDomain[k].total); });
+  Object.keys(byEco).forEach(k   => { byEco[k].percent    = pct(byEco[k].correct,    byEco[k].total);    });
   const globalPercent = pct(score, QUESTIONS.length);
-  return {score, total:QUESTIONS.length, globalPercent, globalStatus:classifyGlobal(globalPercent), byDomain, answers};
+  return {score, total:QUESTIONS.length, globalPercent, globalStatus:classifyGlobal(globalPercent), byDomain, byEco, answers};
 }
 
 // Corrections — domaine révélé après soumission
@@ -1866,7 +1883,8 @@ function saveAttemptLocal(results) {
     total: results.total,
     percent: results.globalPercent,
     globalLabel: results.globalStatus.label,
-    byDomain: results.byDomain
+    byDomain: results.byDomain,
+    byEco: results.byEco || {}
   };
   try {
     const ex = JSON.parse(localStorage.getItem(STORAGE_ATTEMPTS)||"[]");
@@ -1898,11 +1916,13 @@ async function submitRemote(results, attemptNum) {
     percent: results.globalPercent,
     globalLabel: results.globalStatus.label,
     byDomain: results.byDomain,
+    byEco: results.byEco || {},
     answers: results.answers.map(a => {
       const q = QUESTIONS.find(x => x.id===a.id);
       return {
         questionId: a.id,
         domain: q.domain,
+        eco: a.eco || q.eco || "",
         question: q.q.replace(/\n/g," ").substring(0,120),
         selected: a.selected,
         correct: a.correct,
