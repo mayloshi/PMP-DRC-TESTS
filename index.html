@@ -575,7 +575,7 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
 
 // 👉 Collez ici l'URL de votre Google Apps Script Web App
 //    (Déployer > Gérer les déploiements > URL de l'application Web)
-let GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzriJo4exm-YsP5FKj8TMMgtO2kKzgoLUJ9tzjrdiLvIfEFc_R8IN9Yy0FW1zcXS_dE/exec";
+let GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzriJo4exm-YsP5FKj8TMMgtO2kKzgoLUJ9tzjrdiLvIfEFc_R8IN9Yy0FW1zcXS_dE/execE";
 
 // Mot de passe du dashboard formateur
 const TRAINER_PASSWORD = "221008";
@@ -1490,8 +1490,21 @@ async function renderTrainerDashboard() {
                 <td><span class="status-chip ${classifyGlobal(Number(a.percent || 0)).cls}">${a.globalLabel || a.global_label || classifyGlobal(Number(a.percent || 0)).label}</span></td>
                 <td><div class="tbl-actions">
                   <button class="btn-light" onclick="viewAttemptAnswers(this.dataset.id)" data-id="${aid}" title="Voir réponses">👁</button>
-                  <button class="btn-primary" onclick="openPmpEmailModal(this.dataset.id, ${JSON.stringify(name)}, ${JSON.stringify(a.participantEmail || a.participant_email || "")}, ${a.score}, ${a.total}, ${a.percent}, ${JSON.stringify(a.globalLabel || a.global_label || "")})" data-id="${aid}" title="Envoyer email résultats" style="background:#5b21b6;">📧</button>
-                  <button class="btn-light" onclick="openPmpMaxModal(${JSON.stringify(name)}, ${maxAtt})" title="Définir limite d'essais" style="background:#ede9fe;color:#5b21b6;">🔒</button>
+                  <button class="btn-primary"
+                    data-attemptid="${aid}"
+                    data-name="${encodeURIComponent(name)}"
+                    data-email="${encodeURIComponent(a.participantEmail || a.participant_email || "")}"
+                    data-score="${a.score}"
+                    data-total="${a.total}"
+                    data-percent="${a.percent}"
+                    data-label="${encodeURIComponent(a.globalLabel || a.global_label || "")}"
+                    onclick="openPmpEmailModalFromBtn(this)"
+                    title="Envoyer email résultats" style="background:#5b21b6;">📧</button>
+                  <button class="btn-light"
+                    data-name="${encodeURIComponent(name)}"
+                    data-max="${maxAtt}"
+                    onclick="openPmpMaxModalFromBtn(this)"
+                    title="Définir limite d'essais" style="background:#ede9fe;color:#5b21b6;">🔒</button>
                   <button class="btn-success" onclick="grantRetake(this.dataset.id)" data-id="${aid}" title="Autoriser reprise">🔄</button>
                   <button class="btn-danger" onclick="removeAttempt(this.dataset.id)" data-id="${aid}" title="Supprimer">🗑</button>
                 </div></td>
@@ -2183,6 +2196,28 @@ function closePmpMaxModal() {
   document.getElementById("pmpMaxModal").classList.remove("open");
   _pmpMaxParticipant = "";
 }
+// ── WRAPPERS data-* (fix v5.1.5 — évite les problèmes de quotes dans onclick) ──
+function openPmpEmailModalFromBtn(btn) {
+  const encodedId = btn.dataset.attemptid || "";
+  const name      = decodeURIComponent(btn.dataset.name   || "");
+  const email     = decodeURIComponent(btn.dataset.email  || "");
+  const score     = btn.dataset.score   || 0;
+  const total     = btn.dataset.total   || 0;
+  const percent   = btn.dataset.percent || 0;
+  const label     = decodeURIComponent(btn.dataset.label  || "");
+  openPmpEmailModal(encodedId, name, email, score, total, percent, label);
+}
+function openPmpMaxModalFromBtn(btn) {
+  const name = decodeURIComponent(btn.dataset.name || "");
+  const max  = parseInt(btn.dataset.max || "0", 10);
+  openPmpMaxModal(name, max);
+}
+function doSetMaxAttemptsFromBtn(btn, forceMax) {
+  const name = decodeURIComponent(btn.dataset.name || "");
+  const max  = (forceMax !== undefined) ? forceMax : parseInt(btn.dataset.max || "0", 10);
+  doSetMaxAttempts(name, max);
+}
+
 async function pmpConfirmSetMax() {
   if (!_pmpMaxParticipant) return;
   const max = parseInt(document.getElementById("pmpMaxInput").value, 10);
@@ -2239,8 +2274,15 @@ async function trainerLoadMaxList() {
         <td style="padding:8px;border:1px solid #e5e7eb;text-align:center;">${done}</td>
         <td style="padding:8px;border:1px solid #e5e7eb;">${status}</td>
         <td style="padding:8px;border:1px solid #e5e7eb;">
-          <button class="btn-light" onclick="openPmpMaxModal(${JSON.stringify(s.participantName)}, ${s.maxAttempts})" style="padding:4px 10px;font-size:.78rem;">✏ Modifier</button>
-          <button class="btn-success" onclick="doSetMaxAttempts(${JSON.stringify(s.participantName)}, 0)" style="padding:4px 10px;font-size:.78rem;">🔓 Lever</button>
+          <button class="btn-light"
+            data-name="${encodeURIComponent(s.participantName)}"
+            data-max="${s.maxAttempts}"
+            onclick="openPmpMaxModalFromBtn(this)"
+            style="padding:4px 10px;font-size:.78rem;">✏ Modifier</button>
+          <button class="btn-success"
+            data-name="${encodeURIComponent(s.participantName)}"
+            onclick="doSetMaxAttemptsFromBtn(this, 0)"
+            style="padding:4px 10px;font-size:.78rem;">🔓 Lever</button>
         </td>
       </tr>`;
     }).join("");
