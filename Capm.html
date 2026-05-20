@@ -229,7 +229,7 @@ th{background:#f8fafc;font-weight:700;font-size:.85rem;color:#374151;}
 </div><!-- /container -->
 
 <script>
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxYZbgMV5pQUCBzgbjJE7EWc4u9p20N8CBlabMBq8yucJvNtXkfHXDyNlhKKl7c9S2Q/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6TUc6EmToAzS0CP-kLE27jWb4zDvwCifIsvM3rGzUEgxYeH30BXiVyiOQaE-cpJFC/exec";
 const TRAINER_PASSWORD = "221008";
 const MAX_ATTEMPTS = 3;
 const EXAM_DURATION = 80 * 60;
@@ -1899,9 +1899,12 @@ async function submitRemote(results, attemptNum) {
   lastRemote = {attempted:false, success:false, message:""};
   const url = googleScriptUrl;
   if (!url || url==="PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
-    lastRemote.message = currentLang==="fr"?"Endpoint Google Sheets non configuré.":"Google Sheets endpoint not configured.";
+    lastRemote.message = currentLang==="fr"
+      ? "⚠️ Endpoint Google Sheets non configuré."
+      : "⚠️ Google Sheets endpoint not configured.";
     return;
   }
+
   const payload = {
     appTitle: "Examen blanc CAPM - Batch 3",
     submittedAt: new Date().toISOString(),
@@ -1931,17 +1934,73 @@ async function submitRemote(results, attemptNum) {
       };
     })
   };
+
+  // ── Stratégie 1 : fetch avec no-cors (pas de preflight, pas de réponse lisible)
+  // C'est la méthode la plus fiable pour Google Apps Script depuis un fichier local
+  // ou un domaine non-whitelisté. Les données arrivent bien côté serveur.
   try {
-    const res = await fetch(url, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload)});
-    const data = await res.json().catch(() => ({}));
+    await fetch(url, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {"Content-Type": "text/plain;charset=utf-8"},
+      body: JSON.stringify(payload)
+    });
+    // no-cors réussit toujours sans lever d'exception (même si le serveur répond 4xx)
+    // On suppose succès et on vérifie via le dashboard formateur
     lastRemote = {
       attempted: true,
-      success: res.ok && data.status==="ok",
-      message: data.message || (res.ok ? (currentLang==="fr"?"Résultats enregistrés.":"Results saved.") : (currentLang==="fr"?"Erreur serveur.":"Server error."))
+      success: true,
+      message: currentLang==="fr"
+        ? "☁️ Envoyé à Google Sheets. Vérifiez dans le dashboard formateur."
+        : "☁️ Sent to Google Sheets. Check in trainer dashboard."
     };
+    return;
   } catch(err) {
-    lastRemote = {attempted:true, success:false, message:currentLang==="fr"?"Erreur réseau.":"Network error."};
+    // no-cors ne devrait jamais échouer — si c'est le cas, on tente le formulaire
   }
+
+  // ── Stratégie 2 (fallback) : soumission via formulaire caché dans iframe
+  // Contourne complètement le CORS — technique officielle pour Apps Script
+  await new Promise((resolve) => {
+    const iframeName = "gasTarget_"+Date.now();
+    const iframe = document.createElement("iframe");
+    iframe.name = iframeName;
+    iframe.style.display = "none";
+    document.body.appendChild(iframe);
+
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = url;
+    form.target = iframeName;
+
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = "payload";
+    input.value = JSON.stringify(payload);
+    form.appendChild(input);
+    document.body.appendChild(form);
+
+    iframe.onload = () => {
+      document.body.removeChild(form);
+      document.body.removeChild(iframe);
+      resolve();
+    };
+    setTimeout(() => {
+      document.body.removeChild(form);
+      try { document.body.removeChild(iframe); } catch(e) {}
+      resolve();
+    }, 8000);
+
+    form.submit();
+  });
+
+  lastRemote = {
+    attempted: true,
+    success: true,
+    message: currentLang==="fr"
+      ? "☁️ Envoyé via formulaire. Vérifiez dans le dashboard formateur."
+      : "☁️ Sent via form. Check in trainer dashboard."
+  };
 }
 
 function renderResultPage(results, manual, attemptNum) {
@@ -1966,7 +2025,12 @@ function renderResultPage(results, manual, attemptNum) {
       <p style="margin:4px 0;"><span class="status-chip ${results.globalStatus.cls}">${results.globalStatus.label}</span>
         &nbsp;<span class="small">Seuil : 65% &nbsp;·&nbsp; ${attLeft>0?`${attLeft} essai(s) restant(s)`:"Aucun essai restant"}</span>
       </p>
-      ${lastRemote.attempted ? `<p class="small" style="color:${lastRemote.success?"#166534":"#dc2626"};font-weight:700;margin-top:8px;">${lastRemote.success?"☁️ ":"⚠️ "}${lastRemote.message}</p>` : ""}
+      ${lastRemote.attempted
+        ? `<p class="small" style="color:${lastRemote.success?"#166534":"#dc2626"};font-weight:700;margin-top:8px;">${lastRemote.message}</p>`
+        : `<p class="small" style="color:#92400e;background:#fef3c7;border-radius:6px;padding:6px 10px;margin-top:8px;">
+            ⚠️ Résultats <strong>non envoyés</strong> à Google Sheets — URL non configurée.
+            Configurez-la via le panneau 🔐 Formateur pour activer l'enregistrement.
+           </p>`}
       <p class="small" style="margin-top:6px;">${manual?"Examen soumis manuellement.":"⏰ Temps écoulé — soumis automatiquement."}</p>
       <div style="margin-top:20px;">
         <h3 style="margin-top:0;">Performance par domaine</h3>
@@ -2066,16 +2130,38 @@ function showTrainerLogin() {
 
 async function renderTrainerDashboard() {
   const inner = document.getElementById("trainerInner");
-  let attempts = [], sourceText = "💾 Local Storage";
+  let attempts = [], sourceText = "💾 Local Storage", remoteError = "";
   if (googleScriptUrl && !googleScriptUrl.includes("PASTE")) {
     try {
-      const res = await fetch(`${googleScriptUrl}?action=dashboard&password=${encodeURIComponent(storedTrainerPwd)}&limit=500`, {method:"GET", cache:"no-store"});
-      const data = await res.json();
-      if (res.ok && data.status==="ok") { attempts = data.attempts||[]; sourceText = "☁️ Google Sheets"; }
-    } catch(e) {}
-  }
-  if (!attempts.length) {
+      const res = await fetch(
+        `${googleScriptUrl}?action=dashboard&password=${encodeURIComponent(storedTrainerPwd)}&limit=500`,
+        {method:"GET", cache:"no-store", redirect:"follow"}
+      );
+      const text = await res.text();
+      let data = {};
+      try { data = JSON.parse(text); } catch(e) {
+        remoteError = "Réponse non-JSON du serveur (vérifiez le déploiement Apps Script).";
+      }
+      if (data.status === "ok") {
+        attempts = data.attempts || [];
+        sourceText = attempts.length
+          ? "☁️ Google Sheets (" + attempts.length + " tentative(s))"
+          : "☁️ Google Sheets — aucune tentative enregistrée";
+      } else {
+        remoteError = data.message || "Erreur Apps Script inconnue.";
+      }
+    } catch(e) {
+      remoteError = "Erreur réseau : " + e.message;
+    }
+    // Fallback localStorage seulement si erreur réseau/serveur (pas si Sheets répond 0)
+    if (remoteError && !attempts.length) {
+      try { attempts = JSON.parse(localStorage.getItem(STORAGE_ATTEMPTS)||"[]"); } catch(e) {}
+      if (attempts.length) sourceText = "💾 Local Storage (fallback — Sheets: " + remoteError + ")";
+    }
+  } else {
+    // Pas d'URL configurée → localStorage uniquement
     try { attempts = JSON.parse(localStorage.getItem(STORAGE_ATTEMPTS)||"[]"); } catch(e) {}
+    sourceText = "💾 Local Storage (URL Google Sheets non configurée)";
   }
   const avg = attempts.length ? Math.round(attempts.reduce((s,a) => s+Number(a.percent||0),0)/attempts.length) : 0;
   const gStatus = classifyGlobal(avg);
