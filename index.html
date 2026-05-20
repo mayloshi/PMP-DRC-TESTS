@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Examen blanc PMP — v5.1.5</title>
+<title>Examen blanc PMP — v5.1.6</title>
 <style>
 :root{
   --bg:#f5f6fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;
@@ -184,8 +184,8 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
       </div>
     </div>
     <h1 id="homeTitle">Examen blanc PMP</h1>
-    <p id="homeSubtitle">Version 5.1.5 — Choisissez un test ci-dessous</p>
-    <p class="small">Dernière mise à jour : <strong>2026-05-19</strong> &nbsp;·&nbsp; <span style="background:#ede9fe;color:#5b21b6;border-radius:999px;padding:3px 10px;font-size:.8rem;font-weight:700;">v5.1.5</span></p>
+    <p id="homeSubtitle">Version 5.1.6 — Choisissez un test ci-dessous</p>
+    <p class="small">Dernière mise à jour : <strong>2026-05-19</strong> &nbsp;·&nbsp; <span style="background:#ede9fe;color:#5b21b6;border-radius:999px;padding:3px 10px;font-size:.8rem;font-weight:700;">v5.1.6</span></p>
   </div>
 
   <div class="test-cards">
@@ -518,14 +518,29 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
     </div>
     <div class="pmp-modal-body">
       <div class="pmp-summary" id="pmpEmailSummary"></div>
-      <div class="pmp-info-box">
-        <strong>📌 Email HTML complet</strong>
-        Contient : score global, performance par domaine, par ECO, et le détail de chaque réponse.
-      </div>
+
       <div class="pmp-field">
-        <label for="pmpEmailTo">Adresse email du destinataire</label>
+        <label for="pmpEmailTo">Adresse email du destinataire <span style="color:#dc2626;">*</span></label>
         <input type="email" id="pmpEmailTo" placeholder="participant@exemple.com"/>
       </div>
+
+      <!-- Option : inclure les réponses détaillées -->
+      <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:12px;padding:14px;margin-bottom:12px;">
+        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
+          <input type="checkbox" id="pmpIncludeAnswers" checked
+            style="width:17px;height:17px;margin-top:2px;accent-color:#5b21b6;flex-shrink:0;cursor:pointer;"/>
+          <div>
+            <strong style="display:block;color:#5b21b6;font-size:.9rem;">📋 Inclure le détail des réponses</strong>
+            <span style="font-size:.8rem;color:#6b7280;line-height:1.4;">
+              Lorsque coché, l'email inclura question par question la réponse du participant et la bonne réponse.<br>
+              Décocher pour envoyer uniquement le score et les performances par domaine/ECO.
+            </span>
+          </div>
+        </label>
+      </div>
+
+      <!-- Zone de statut d'envoi -->
+      <div id="pmpEmailStatus" style="display:none;border-radius:10px;padding:11px 14px;font-size:.87rem;font-weight:600;margin-bottom:4px;"></div>
     </div>
     <div class="pmp-modal-foot">
       <button class="btn-light" onclick="closePmpEmailModal()">Annuler</button>
@@ -575,7 +590,7 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
 
 // 👉 Collez ici l'URL de votre Google Apps Script Web App
 //    (Déployer > Gérer les déploiements > URL de l'application Web)
-let GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzriJo4exm-YsP5FKj8TMMgtO2kKzgoLUJ9tzjrdiLvIfEFc_R8IN9Yy0FW1zcXS_dE/execE";
+let GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzriJo4exm-YsP5FKj8TMMgtO2kKzgoLUJ9tzjrdiLvIfEFc_R8IN9Yy0FW1zcXS_dE/exec";
 
 // Mot de passe du dashboard formateur
 const TRAINER_PASSWORD = "221008";
@@ -586,7 +601,7 @@ const TRAINER_PASSWORD = "221008";
 const APP_CONFIG = {
   RESULT_ENDPOINT: GOOGLE_APPS_SCRIPT_URL,
   ENABLE_REMOTE_SUBMIT: true,
-  APP_TITLE: "Examen blanc PMP - v5.1.5",
+  APP_TITLE: "Examen blanc PMP - v5.1.6",
   DASHBOARD_FETCH_LIMIT: 500,
   STORAGE_KEY_ATTEMPTS: "pmp_exam_attempts_v51",
   STORAGE_KEY_LAST: "pmp_exam_last_attempt_v51",
@@ -627,7 +642,7 @@ let storedTrainerPwd = "";
 const TR = {
   fr: {
     homeTitle: "Examen blanc PMP",
-    homeSubtitle: "Version 5.1.5 — Choisissez un test ci-dessous",
+    homeSubtitle: "Version 5.1.6 — Choisissez un test ci-dessous",
     tc0h: "Test Débutant",
     tc0d: "Évaluez vos connaissances fondamentales PMP.",
     tc0l: "🇫🇷 FR / 🇬🇧 EN",
@@ -675,7 +690,7 @@ const TR = {
   },
   en: {
     homeTitle: "PMP Mock Exam",
-    homeSubtitle: "Version 5.1.5 — Choose a test below",
+    homeSubtitle: "Version 5.1.6 — Choose a test below",
     tc0h: "Beginner Test",
     tc0d: "Assess your fundamental PMP knowledge.",
     tc0l: "🇫🇷 FR / 🇬🇧 EN",
@@ -1208,6 +1223,8 @@ async function loginTrainer() {
     return;
   }
   storedTrainerPwd = pwd;
+  // Persister le pwd en session pour les actions asynchrones (email, etc.)
+  try { sessionStorage.setItem("pmp_trainer_pwd_session", pwd); } catch(_) {}
   // Save AppScript URL from field if provided
   const urlInput = document.getElementById("appScriptUrlInput");
   if (urlInput && urlInput.value.trim()) {
@@ -2161,7 +2178,10 @@ function openPmpEmailModal(encodedId, name, email, score, total, percent, label)
   `;
   document.getElementById("pmpEmailTo").value = email || "";
   const btn = document.getElementById("pmpEmailSendBtn");
-  btn.disabled = false; btn.textContent = "📨 Envoyer";
+  btn.disabled = false; btn.innerHTML = "📨 Envoyer";
+  // Réinitialiser la zone de statut
+  const statusEl = document.getElementById("pmpEmailStatus");
+  if (statusEl) { statusEl.style.display = "none"; statusEl.textContent = ""; }
   document.getElementById("pmpEmailModal").classList.add("open");
 }
 function closePmpEmailModal() {
@@ -2169,19 +2189,80 @@ function closePmpEmailModal() {
   _pmpEmailAttemptId = "";
 }
 async function pmpConfirmSendEmail() {
-  if (!_pmpEmailAttemptId) return;
+  if (!_pmpEmailAttemptId) { pmpToast("Aucune tentative sélectionnée.", "err"); return; }
+
   const toEmail = (document.getElementById("pmpEmailTo").value || "").trim();
-  if (!toEmail || !toEmail.includes("@")) { pmpToast("Adresse email invalide.", "err"); return; }
-  const btn = document.getElementById("pmpEmailSendBtn");
-  btn.disabled = true; btn.textContent = "⏳ Envoi…";
-  try {
-    const data = await apiPost({ action: "sendResultEmail", attemptId: _pmpEmailAttemptId, overrideEmail: toEmail });
-    pmpToast("✅ Email envoyé à " + toEmail, "ok");
-    closePmpEmailModal();
-  } catch (err) {
-    pmpToast("❌ " + err.message, "err");
-    btn.disabled = false; btn.textContent = "📨 Réessayer";
+  if (!toEmail || !toEmail.includes("@")) {
+    pmpEmailStatus("❌ Adresse email invalide ou manquante.", false); return;
   }
+
+  // Récupérer le mot de passe (session courante ou localStorage en fallback)
+  const pwd = storedTrainerPwd
+    || localStorage.getItem("pmp_trainer_pwd_session")
+    || TRAINER_PASSWORD;
+
+  // Vérifier que l'URL GAS est configurée
+  const gasUrl = APP_CONFIG.RESULT_ENDPOINT || GOOGLE_APPS_SCRIPT_URL;
+  if (!gasUrl || gasUrl === "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
+    pmpEmailStatus("❌ Google Apps Script non configuré. Connectez-vous d'abord via l'accès formateur.", false);
+    return;
+  }
+
+  const includeAnswers = document.getElementById("pmpIncludeAnswers").checked;
+
+  const btn = document.getElementById("pmpEmailSendBtn");
+  btn.disabled = true;
+  btn.innerHTML = "⏳ Envoi en cours…";
+  pmpEmailStatus("⏳ Envoi en cours, veuillez patienter…", null);
+
+  const payload = {
+    action:          "sendResultEmail",
+    password:        pwd,
+    attemptId:       _pmpEmailAttemptId,
+    overrideEmail:   toEmail,
+    includeAnswers:  includeAnswers
+  };
+
+  try {
+    const res  = await fetch(gasUrl, {
+      method:  "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body:    JSON.stringify(payload)
+    });
+
+    let data = {};
+    try { data = await res.json(); } catch(_) { data = { status: "error", message: "Réponse invalide du serveur." }; }
+
+    if (data.status === "ok") {
+      pmpEmailStatus("✅ Email envoyé avec succès à " + toEmail + (includeAnswers ? " (avec détail des réponses)" : " (score uniquement)") + ".", true);
+      pmpToast("✅ Email envoyé à " + toEmail, "ok");
+      btn.innerHTML = "✅ Envoyé";
+      setTimeout(() => closePmpEmailModal(), 2200);
+    } else {
+      const msg = data.message || "Erreur inconnue du serveur.";
+      pmpEmailStatus("❌ Échec : " + msg, false);
+      btn.disabled = false;
+      btn.innerHTML = "📨 Réessayer";
+      pmpToast("❌ " + msg, "err");
+    }
+  } catch (err) {
+    const msg = err.message || "Erreur réseau.";
+    pmpEmailStatus("❌ Erreur réseau : " + msg + " — Vérifiez que le GAS est bien déployé en accès public.", false);
+    btn.disabled = false;
+    btn.innerHTML = "📨 Réessayer";
+    pmpToast("❌ " + msg, "err");
+  }
+}
+
+// Affiche un message dans la zone de statut du modal email
+function pmpEmailStatus(msg, success) {
+  const el = document.getElementById("pmpEmailStatus");
+  if (!el) return;
+  el.style.display = "block";
+  if (success === true)  { el.style.background = "#dcfce7"; el.style.color = "#166534"; el.style.border = "1px solid #22c55e"; }
+  if (success === false) { el.style.background = "#fee2e2"; el.style.color = "#991b1b"; el.style.border = "1px solid #fca5a5"; }
+  if (success === null)  { el.style.background = "#eff6ff"; el.style.color = "#1d4ed8"; el.style.border = "1px solid #93c5fd"; }
+  el.textContent = msg;
 }
 
 // ── MODAL LIMITE ─────────────────────────────────────────────
