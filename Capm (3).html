@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Examen blanc CAPM — Batch 3</title>
+<style>
+:root{
+  --bg:#f5f6fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;
+  --primary:#0f766e;--secondary:#f97316;--cyan:#06b6d4;--danger:#dc2626;
+  --ok:#166534;--ok-bg:#dcfce7;--warn:#9a3412;--warn-bg:#fff7ed;--bad-bg:#fee2e2;
+  --radius:20px;--shadow:0 12px 32px rgba(15,23,42,.08);--green:#16a34a;--teal:#0d9488;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);}
+.container{max-width:1180px;margin:0 auto;padding:24px;}
+.hero{background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(240,253,250,.88));border:1px solid var(--line);border-radius:28px;padding:28px;box-shadow:var(--shadow);margin-bottom:24px;}
+.brand-row{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
+.brand-stack{display:flex;gap:14px;flex-wrap:wrap;align-items:center;}
+.brand-chip{background:rgba(255,255,255,.95);border:1px solid rgba(229,231,235,.9);border-radius:16px;padding:10px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px rgba(15,23,42,.06);}
+.brand-chip img{height:46px;width:auto;object-fit:contain;display:block;border-radius:8px;background:white;}
+.capm-badge{background:linear-gradient(135deg,#0f766e,#0891b2);color:white;border-radius:12px;padding:6px 14px;font-size:.85rem;font-weight:700;letter-spacing:.5px;}
+.hero h1{margin:0 0 10px;font-size:2rem;color:#0f172a;}
+.hero p{margin:8px 0;line-height:1.55;color:#374151;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);}
+.section-title{margin:0 0 14px;font-size:1.18rem;font-weight:700;}
+.meta-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px;}
+.meta-item{background:#f8fafc;border:1px solid var(--line);border-radius:16px;padding:14px;}
+.meta-item strong{display:block;margin-bottom:4px;}
+.pill{display:inline-block;padding:6px 12px;border-radius:999px;background:#f3f4f6;border:1px solid #e5e7eb;color:#374151;font-size:.87rem;margin-right:6px;margin-bottom:6px;}
+.field{margin-bottom:14px;}
+.field label{display:block;margin-bottom:6px;font-weight:700;}
+.field input[type=text],.field input[type=email],.field input[type=password]{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #d1d5db;font-size:1rem;background:white;}
+.checkbox-row{display:flex;gap:10px;align-items:flex-start;background:#fafafa;border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:8px;}
+.small{color:var(--muted);font-size:.92rem;line-height:1.5;}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+button{border:none;border-radius:12px;padding:11px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:transform .15s ease;font-size:.95rem;gap:6px;}
+button:hover{transform:translateY(-1px);}
+.btn-primary{background:var(--primary);color:white;}
+.btn-light{background:#f3f4f6;color:#111827;border:1px solid var(--line);}
+.btn-danger{background:var(--danger);color:white;}
+.hidden{display:none!important;}
+.exam-header{position:sticky;top:0;z-index:20;background:rgba(245,246,251,.96);backdrop-filter:blur(8px);padding:14px 0 18px;margin-bottom:10px;border-bottom:1px solid var(--line);}
+.exam-topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.stats-inline{display:flex;gap:10px;flex-wrap:wrap;}
+.badge{background:white;border:1px solid var(--line);border-radius:999px;padding:8px 14px;box-shadow:var(--shadow);font-size:.9rem;}
+.timer-text{color:var(--teal);font-weight:800;}
+.timer-text.danger{color:var(--danger);}
+.timer-track{width:100%;height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;}
+.timer-fill{height:100%;background:var(--teal);border-radius:999px;transition:width .6s linear,background .3s ease;}
+.timer-fill.danger{background:var(--danger);}
+.question-card{background:white;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow);margin-bottom:20px;}
+.question-card h3{margin:0 0 16px;line-height:1.65;font-size:1.05rem;color:#0f172a;white-space:pre-wrap;}
+.option{display:flex;align-items:flex-start;gap:10px;border:1.5px solid var(--line);border-radius:14px;padding:13px 16px;margin-bottom:10px;cursor:pointer;background:#fff;line-height:1.55;transition:border-color .15s,background .15s;}
+.option:hover{border-color:var(--primary);background:#f0fdfa;}
+.option input{margin-top:2px;cursor:pointer;flex-shrink:0;}
+.opt-letter{font-weight:700;color:#0f766e;flex-shrink:0;min-width:22px;}
+.option.correct{background:var(--ok-bg);border-color:#22c55e;}
+.option.incorrect{background:var(--bad-bg);border-color:#ef4444;}
+.explanation-block{border-radius:14px;padding:16px;line-height:1.7;margin-top:14px;font-size:.93rem;}
+.explanation-block.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #86efac;}
+.explanation-block.bad{background:var(--warn-bg);color:var(--warn);border:1px solid #fdba74;}
+.expl-item{margin-bottom:10px;}
+.expl-label{font-weight:700;margin-bottom:3px;}
+.expl-global{margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,.08);}
+.result-box{background:white;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:28px;margin-bottom:24px;}
+.result-score{font-size:2.4rem;font-weight:800;color:var(--primary);margin:8px 0 14px;}
+.dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+.bars{display:grid;gap:14px;margin-top:14px;}
+.bar-row{display:grid;gap:6px;}
+.bar-track{width:100%;height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--cyan));border-radius:999px;}
+.status-chip{display:inline-block;padding:6px 12px;border-radius:999px;font-weight:700;color:#111827;font-size:.88rem;}
+.global-pass{background:#dcfce7;color:#166534;}
+.global-fail{background:#fee2e2;color:#991b1b;}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.92rem;}
+th,td{border-bottom:1px solid var(--line);padding:9px 8px;text-align:left;vertical-align:top;}
+th{background:#f8fafc;font-weight:700;font-size:.85rem;color:#374151;}
+.attempt-dots{display:flex;gap:4px;align-items:center;}
+.attempt-dot{width:11px;height:11px;border-radius:50%;}
+.dot-used{background:#dc2626;}
+.dot-avail{background:#d1d5db;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;}
+.modal-box{background:white;border-radius:20px;padding:24px;max-width:500px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.25);}
+.lang-toggle{display:flex;gap:8px;align-items:center;}
+.lang-btn{padding:7px 16px;border-radius:999px;border:2px solid var(--line);background:white;font-weight:700;font-size:.9rem;cursor:pointer;transition:.15s;}
+.lang-btn.active{background:var(--primary);color:white;border-color:var(--primary);}
+.qnum-nav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:20px;}
+.qnum-btn{width:34px;height:34px;border-radius:8px;border:1.5px solid var(--line);font-size:12px;cursor:pointer;background:white;color:#6b7280;font-weight:600;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.qnum-btn:hover{border-color:var(--primary);color:var(--primary);}
+.qnum-btn.answered{background:#f0fdfa;border-color:#99f6e4;color:#0f766e;}
+.qnum-btn.correct-q{background:#dcfce7;border-color:#86efac;color:#166534;}
+.qnum-btn.wrong-q{background:#fee2e2;border-color:#fca5a5;color:#991b1b;}
+.progress-bar{height:6px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-top:10px;}
+.progress-fill{height:100%;background:var(--teal);border-radius:999px;transition:width .4s;}
+.domain-pill{font-size:.75rem;padding:3px 9px;border-radius:999px;background:#f0fdfa;color:#0f766e;border:1px solid #99f6e4;display:inline-block;margin-bottom:8px;}
+@media(max-width:900px){.dashboard-grid{grid-template-columns:1fr;}.container{padding:14px;}table{font-size:.8rem;}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HOME -->
+<section id="homeView">
+  <div class="hero">
+    <div class="brand-row">
+      <div class="brand-stack">
+        <div class="brand-chip">
+          <img alt="PMI DRC Chapter" src="logo%20Chapitre%202025.png"/>
+          <div><strong>PMI DRC Chapter</strong><br><span class="small">Examen blanc CAPM</span></div>
+        </div>
+        <div class="brand-chip">
+          <img alt="K Majuscule" src="logo%20kmaj.jpg"/>
+          <div><strong>K Majuscule</strong><br><span class="small">Partenaire pédagogique</span></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <span class="capm-badge">CAPM® Exam Prep</span>
+        <div class="lang-toggle">
+          <button class="lang-btn active" id="langFrBtn" onclick="setLang('fr')">🇫🇷 FR</button>
+          <button class="lang-btn" id="langEnBtn" onclick="setLang('en')">🇬🇧 EN</button>
+        </div>
+      </div>
+    </div>
+    <h1 id="homeTitle">Examen blanc CAPM</h1>
+    <p id="homeSubtitle">Batch 3 — 70 Questions · 80 minutes · Seuil : 65% · 3 essais max</p>
+    <p class="small">PMI DRC Chapter × K Majuscule &nbsp;·&nbsp; v2.0 — Questions verbatim</p>
+  </div>
+  <div class="card" style="max-width:700px;margin:0 auto 24px;">
+    <h2 class="section-title" id="regTitle">Informations du participant</h2>
+    <div class="field">
+      <label>Nom complet <span style="color:#dc2626;">*</span></label>
+      <input id="candidateName" type="text" placeholder="Ex. Jean Kasongo"/>
+    </div>
+    <div class="field">
+      <label>Email (facultatif)</label>
+      <input id="candidateEmail" type="email" placeholder="Ex. jean@email.com"/>
+    </div>
+    <div class="checkbox-row">
+      <input id="sendResultsByEmail" type="checkbox"/>
+      <label for="sendResultsByEmail" style="margin:0;font-weight:600;">Je souhaite recevoir mes résultats par email.</label>
+    </div>
+    <div class="meta-list" style="margin-top:14px;">
+      <div class="meta-item"><strong>📝 Questions</strong>70 questions</div>
+      <div class="meta-item"><strong>⏱ Durée</strong>80 minutes</div>
+      <div class="meta-item"><strong>🎯 Seuil</strong>65%</div>
+      <div class="meta-item"><strong>🔄 Essais</strong>3 maximum</div>
+    </div>
+    <div id="startMessage" class="small" style="margin-top:10px;color:#dc2626;min-height:18px;"></div>
+    <div class="controls">
+      <button class="btn-primary" onclick="startExam()">▶ Commencer l'examen</button>
+      <button class="btn-light" onclick="showTrainerLogin()">🔐 Accès formateur</button>
+    </div>
+  </div>
+</section>
+
+<!-- EXAM -->
+<section id="examView" class="hidden">
+  <div class="exam-header">
+    <div class="exam-topbar container" style="max-width:1180px;margin:0 auto;padding:0 20px;">
+      <div class="stats-inline">
+        <div class="badge">👤 <strong id="candidateDisplay">-</strong></div>
+        <div class="badge" style="background:#f0fdfa;color:#0f766e;font-weight:700;">CAPM® Batch 3</div>
+        <div class="badge">✅ <strong id="answeredCount">0</strong>/70</div>
+        <div class="badge" id="attemptBadge" style="background:#fff7ed;color:#9a3412;font-weight:700;">Essai 1/3</div>
+      </div>
+      <div>
+        <div class="badge">⏱ <strong id="timer" class="timer-text">80:00</strong></div>
+        <div class="timer-track" style="margin-top:6px;"><div id="timerFill" class="timer-fill" style="width:100%"></div></div>
+      </div>
+      <div class="controls" style="margin-top:0;">
+        <button class="btn-danger" onclick="confirmSubmit()">🏁 Terminer</button>
+        <button class="btn-light" onclick="confirmCancel()">✕</button>
+      </div>
+    </div>
+    <div class="container" style="padding-top:8px;padding-bottom:0;">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div class="container">
+    <div id="qnumNav" class="qnum-nav"></div>
+    <div id="questionsContainer"></div>
+    <div class="controls" style="padding-bottom:40px;">
+      <button class="btn-primary" onclick="confirmSubmit()">🏁 Soumettre l'examen</button>
+      <button class="btn-light" onclick="confirmCancel()">✕ Annuler</button>
+    </div>
+  </div>
+</section>
+
+<!-- RESULT -->
+<section id="resultView" class="hidden"><div class="container" id="resultInner"></div></section>
+
+<!-- TRAINER LOGIN -->
+<section id="trainerLoginView" class="hidden">
+  <div class="container">
+    <div class="card" style="max-width:430px;margin:0 auto;">
+      <h2 class="section-title">🔐 Accès formateur</h2>
+      <div class="field">
+        <label>Mot de passe</label>
+        <input id="trainerPassword" type="password" placeholder="••••••"/>
+      </div>
+      <div class="field" style="margin-top:14px;">
+        <label style="font-size:.85rem;color:#6b7280;">🔗 Google Apps Script URL</label>
+        <input id="appScriptUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec"
+               style="font-size:.78rem;" oninput="previewGasUrl(this.value)"/>
+        <div id="gasUrlStatus" style="font-size:.78rem;margin-top:4px;padding:4px 8px;border-radius:4px;"></div>
+      </div>
+      <div class="controls">
+        <button class="btn-primary" onclick="loginTrainer()">Entrer</button>
+        <button class="btn-light" onclick="goHome()">← Retour</button>
+      </div>
+      <div id="trainerLoginMessage" class="small" style="margin-top:12px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINER DASHBOARD -->
+<section id="trainerView" class="hidden"><div class="container" id="trainerInner"></div></section>
+
+<!-- MODAL -->
+<div id="confirmModal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <h3 id="modalTitle" style="margin-top:0;">Confirmer</h3>
+    <p id="modalBody" style="line-height:1.6;"></p>
+    <div class="controls" style="justify-content:flex-end;">
+      <button class="btn-light" onclick="closeModal()">Annuler</button>
+      <button class="btn-danger" id="modalConfirmBtn">Confirmer</button>
+    </div>
+  </div>
+</div>
+</div><!-- /container -->
+
+<script>
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmN6o1I1ZBFn7HI-jpwB1DHS1ZqCW-1FF2KMrVvL6gRoCf8PPGXKpOeAFqJ0hckHOS/exec";
+const TRAINER_PASSWORD = "221008";
+const MAX_ATTEMPTS = 3;
+const EXAM_DURATION = 80 * 60;
+const STORAGE_ATTEMPTS = "capm_attempts_v3";
+const STORAGE_LAST = "capm_last_v3";
+const STORAGE_PART = "capm_part_v3";
+
+const QUESTIONS = [
+  {
+    "id": 1,
+    "q": "Quel processus est inclus dans la gestion du calendrier du projet ?",
+    "opts": [
+      "Estimer la durée des activités",
+      "Créer la structure de répartition du travail (WBS)",
+      "Diriger et gérer le travail du projet",
+      "Estimer les ressources des activités"
+    ],
+    "ans": 0,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Ce processus fait en effet partie de la gestion du calendrier du projet, car il se concentre sur l'estimation du temps nécessaire pour terminer chaque activité dans le calendrier du projet.",
+      "B": "Bien que la création d'une WBS soit essentielle pour la planification de projet et la gestion de la portée, elle n'est pas spécifiquement incluse dans la gestion du calendrier du projet.",
+      "C": "Ce processus concerne l'exécution du plan de gestion de projet. Il fait partie de la gestion de l'intégration du projet plutôt que de la gestion du calendrier du projet.",
+      "D": "L'estimation des ressources des activités relève du domaine de connaissance de la gestion des ressources du projet, différent de l'estimation des durées.",
+      "global": "La réponse correcte est « Estimer la durée des activités » car elle se rapporte spécifiquement aux processus impliqués dans la gestion du calendrier du projet."
+    }
+  },
+  {
+    "id": 2,
+    "q": "Étant donné les informations suivantes :\n• L'activité A prend une semaine.\n• L'activité B prend trois semaines.\n• L'activité C prend deux semaines.\n• L'activité D prend cinq semaines.\n• L'activité A commence en même temps que l'activité B.\n• L'activité C suit l'activité B et l'activité A.\n• L'activité D suit l'activité C.\n\nCombien de temps faudra-t-il pour terminer le projet ?",
+    "opts": [
+      "8 semaines",
+      "9 semaines",
+      "10 semaines",
+      "11 semaines"
+    ],
+    "ans": 2,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Cette réponse est incorrecte.",
+      "B": "Cette réponse est incorrecte.",
+      "C": "C'est la réponse correcte. A et B commencent simultanément (3 semaines). C commence à la semaine 3 et prend 2 semaines (fin semaine 5). D prend 5 semaines (fin semaine 10).",
+      "D": "Incorrecte. A et B commencent simultanément et ne prennent que 3 semaines.",
+      "global": "Pour trouver la durée totale, considérer les dépendances et le chemin le plus long. A et B se chevauchent, mais C ne peut commencer avant que les deux ne soient terminées. Après C, D suit — total 10 semaines."
+    }
+  },
+  {
+    "id": 3,
+    "q": "Après avoir défini les activités dans la gestion du calendrier du projet, quels processus un chef de projet devrait-il suivre ?",
+    "opts": [
+      "Séquencer les activités et estimer la durée des activités",
+      "Estimer la durée des activités et contrôler le calendrier",
+      "Développer le calendrier et contrôler le calendrier",
+      "Examiner les activités et développer le calendrier"
+    ],
+    "ans": 0,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Correcte. Après définition des activités : séquencer puis estimer les durées — séquence logique.",
+      "B": "Incorrecte. Le contrôle du calendrier intervient après que le calendrier a été développé.",
+      "C": "N'inclut pas le séquencement des activités, étape critique avant le contrôle.",
+      "D": "« Examiner les activités » n'est pas un processus défini en gestion de projet.",
+      "global": "Après avoir défini les activités, les étapes logiques sont : séquencer puis estimer les durées."
+    }
+  },
+  {
+    "id": 4,
+    "q": "Un chef de projet a convoqué une réunion d'équipe pour estimer l'effort du projet. Au cours de la session, l'équipe a identifié tous les livrables et analysé le travail connexe. Chacun des livrables analysés a été estimé.\n\nQuelle méthode d'estimation l'équipe a-t-elle utilisée ?",
+    "opts": [
+      "Planification par vagues successives",
+      "Jugement d'expert",
+      "Décomposition",
+      "Analyse de données"
+    ],
+    "ans": 2,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Implique la planification par phases, non l'estimation de livrables identifiés.",
+      "B": "Le jugement d'expert ne désigne pas spécifiquement la décomposition des livrables.",
+      "C": "Correcte. Décomposition des livrables en composants plus petits pour estimer l'effort.",
+      "D": "Terme trop large, ne désigne pas spécifiquement la décomposition des livrables.",
+      "global": "La réponse est C (Décomposition) car l'équipe a analysé les livrables — caractéristique de la décomposition du travail en parties plus petites."
+    }
+  },
+  {
+    "id": 5,
+    "q": "Lors de l'exécution d'un projet, un expert en la matière (SME) récemment embauché qui a examiné la progression de l'exécution a fait remarquer que le calendrier pourrait être compressé et que le calendrier n'a pas été évalué correctement.\n\nQue devrait faire le chef de projet ensuite ?",
+    "opts": [
+      "Mettre à jour la référence de base du calendrier.",
+      "Mettre à jour le registre des risques.",
+      "Examiner la référence de base du calendrier.",
+      "Initier une demande de changement."
+    ],
+    "ans": 2,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Mettre à jour sans d'abord examiner peut conduire à des inexactitudes supplémentaires.",
+      "B": "La mise à jour du registre des risques n'est pas l'action principale ici.",
+      "C": "Correcte. Examiner permet d'évaluer l'état actuel et de déterminer si la compression est viable.",
+      "D": "Initier une demande de changement est prématuré sans d'abord examiner la référence de base.",
+      "global": "Le chef de projet devrait d'abord examiner la référence de base du calendrier pour comprendre les implications des commentaires du SME."
+    }
+  },
+  {
+    "id": 6,
+    "q": "Quels deux processus devraient être utilisés pour influencer les coûts dans les premières étapes d'un projet ?",
+    "opts": [
+      "Estimer les coûts et déterminer le budget",
+      "Planifier la gestion des coûts et estimer la durée des activités",
+      "Contrôler la qualité et contrôler les coûts",
+      "Planifier l'engagement des parties prenantes et planifier la gestion des communications"
+    ],
+    "ans": 0,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Correcte. L'estimation des coûts et la détermination du budget fournissent le cadre financier dès le début.",
+      "B": "L'estimation de la durée des activités ne concerne pas directement les coûts.",
+      "C": "Ces processus sont exécutés plus tard dans le cycle de vie du projet.",
+      "D": "Ces processus se concentrent sur la communication et l'engagement, pas sur les coûts.",
+      "global": "Dans les premières étapes, estimer les coûts et déterminer le budget sont cruciaux pour établir des attentes financières réalistes."
+    }
+  },
+  {
+    "id": 7,
+    "q": "Un projet rapporte une valeur acquise (EV) de 45 $ US pour le travail terminé avec un coût réel (AC) de 40 $ US.\n\nQuel est l'indice de performance des coûts (CPI) ?",
+    "opts": [
+      "0,88",
+      "1,12",
+      "0,58",
+      "1,58"
+    ],
+    "ans": 1,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Incorrecte. Ne reflète pas le calcul correct.",
+      "B": "Correcte. CPI = EV / AC = 45 / 40 = 1,12 — le projet performe bien en termes d'efficacité des coûts.",
+      "C": "Incorrecte. Ne représente pas la relation correcte entre EV et AC.",
+      "D": "Incorrecte. Valeur gonflée ne reflétant pas les chiffres réels.",
+      "global": "CPI = EV / AC = 45 / 40 = 1,12, indiquant que pour chaque dollar dépensé, le projet gagne 1,12 $ en valeur."
+    }
+  },
+  {
+    "id": 8,
+    "q": "Lequel des éléments suivants est un exemple de facteur interne qui influence le résultat du projet ?",
+    "opts": [
+      "Restrictions légales",
+      "Considérations financières",
+      "Base de données commerciale",
+      "Distribution géographique des installations"
+    ],
+    "ans": 3,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Les restrictions légales sont généralement des facteurs externes.",
+      "B": "Les considérations financières concernent l'environnement économique externe.",
+      "C": "Une base de données commerciale est généralement une ressource ou un outil externe.",
+      "D": "Correcte. La distribution géographique est un facteur interne concernant les ressources et la structure opérationnelle de l'organisation.",
+      "global": "La distribution géographique des installations est considérée comme un facteur interne car elle concerne les ressources et la structure opérationnelle au sein de l'organisation."
+    }
+  },
+  {
+    "id": 9,
+    "q": "Quels outils et techniques un chef de projet devrait-il utiliser pour surveiller les risques ?",
+    "opts": [
+      "Jugement d'expert, analyse de données et compétences interpersonnelles et d'équipe",
+      "Analyse de données, audits et réunions",
+      "Jugement d'expert, audits et prise de décision",
+      "Réunions, collecte de données et jugement d'expert"
+    ],
+    "ans": 1,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Les compétences interpersonnelles et d'équipe ne sont pas des outils spécifiques à la surveillance des risques.",
+      "B": "Correcte. Analyse de données pour évaluer les risques, audits pour examiner les processus, réunions pour la communication.",
+      "C": "La prise de décision est trop large et ne se rapporte pas directement aux techniques de surveillance des risques.",
+      "D": "La collecte de données est trop vague et ne précise pas comment les risques sont surveillés.",
+      "global": "L'option B est la plus appropriée : elle combine analyse de données, audits et réunions — outils largement reconnus pour la surveillance des risques."
+    }
+  },
+  {
+    "id": 10,
+    "q": "Lequel est un exemple d'estimation analogique ?",
+    "opts": [
+      "Les estimations sont créées par des individus ou des groupes ayant des connaissances spécialisées.",
+      "Les estimations sont créées en utilisant des informations sur les ressources de projets similaires antérieurs.",
+      "Les estimations sont créées en analysant les données.",
+      "Les estimations sont créées au niveau des tâches et agrégées vers le haut."
+    ],
+    "ans": 1,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Fait référence au jugement d'expert, pas à l'estimation analogique.",
+      "B": "Correcte. L'estimation analogique utilise des données historiques de projets passés similaires.",
+      "C": "Approche générale pouvant s'appliquer à l'estimation paramétrique.",
+      "D": "Décrit l'estimation ascendante, opposé de l'estimation analogique.",
+      "global": "L'estimation analogique utilise des données historiques de projets passés similaires pour informer l'estimation."
+    }
+  },
+  {
+    "id": 11,
+    "q": "Quel outil un chef de projet devrait-il utiliser pour calculer l'écart de coût d'un projet ?",
+    "opts": [
+      "Analyse de contingence",
+      "Jugement d'expert",
+      "Coût réel",
+      "Examiner les leçons apprises de projets similaires"
+    ],
+    "ans": 2,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Principalement utilisé pour la gestion des risques, pas pour calculer l'écart de coût.",
+      "B": "Outil qualitatif, pas quantitatif pour l'écart de coût.",
+      "C": "Correcte. Écart de coût = Coût réel - Valeur planifiée.",
+      "D": "Utile pour la planification future, ne fournit pas les données pour l'écart de coût actuel.",
+      "global": "L'écart de coût est calculé en comparant le coût réel à la valeur planifiée : CV = EV - AC."
+    }
+  },
+  {
+    "id": 12,
+    "q": "Un chef de projet peut choisir parmi plusieurs techniques pour résoudre les conflits entre les membres de l'équipe. Quelle technique peut aboutir à une situation gagnant-gagnant ?",
+    "opts": [
+      "Collaborer/Résoudre les problèmes",
+      "Compromis/Réconcilier",
+      "Apaiser/Accommoder",
+      "Se retirer/Éviter"
+    ],
+    "ans": 0,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Correcte. Se concentre sur la collaboration pour trouver une solution satisfaisant toutes les parties — résultat gagnant-gagnant.",
+      "B": "Aboutit souvent à une situation perdant/perdant où aucune partie n'obtient tout ce qu'elle veut.",
+      "C": "Peut donner la priorité à l'harmonie sans résoudre les problèmes sous-jacents.",
+      "D": "Implique d'ignorer le conflit — option la moins efficace pour la résolution.",
+      "global": "Collaborer/Résoudre les problèmes est la seule technique conçue pour garantir un résultat satisfaisant pour toutes les parties."
+    }
+  },
+  {
+    "id": 13,
+    "q": "Pendant quel processus de gestion de projet le chef de projet investit-il le plus d'efforts dans la création de la structure de répartition du travail (WBS) ?",
+    "opts": [
+      "Initiation",
+      "Planification",
+      "Exécution",
+      "Surveillance et contrôle"
+    ],
+    "ans": 1,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "L'initiation se concentre sur la définition de haut niveau. La WBS n'est pas l'objectif principal.",
+      "B": "Correcte. La planification est où le chef de projet investit un effort significatif dans la création de la WBS.",
+      "C": "L'exécution se concentre sur la réalisation du plan, pas sur la création de la WBS.",
+      "D": "La surveillance consulte la WBS mais ne la crée pas.",
+      "global": "La WBS est créée pendant la phase de planification, décomposant le projet en sections gérables."
+    }
+  },
+  {
+    "id": 14,
+    "q": "Une équipe a été embauchée pour développer un drone de nouvelle génération. L'équipe a créé un prototype et l'a envoyé au client pour des tests. Les retours collectés ont été utilisés pour affiner les exigences.\n\nQuelle technique l'équipe utilise-t-elle ?",
+    "opts": [
+      "Collecte précoce des exigences",
+      "Analyse des retours",
+      "Élaboration progressive",
+      "Documentation des exigences"
+    ],
+    "ans": 2,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Fait référence à la collecte initiale des exigences avant l'exécution, sans affinement itératif.",
+      "B": "L'analyse des retours n'est pas la technique spécifique appliquée ici.",
+      "C": "Correcte. L'élaboration progressive implique l'affinement continu des exigences à mesure que plus d'informations deviennent disponibles.",
+      "D": "Fait référence à l'enregistrement formel des exigences, pas à l'affinement itératif.",
+      "global": "L'élaboration progressive : les exigences initiales sont affinées grâce aux retours des tests du prototype."
+    }
+  },
+  {
+    "id": 15,
+    "q": "Le chef de projet doit gérer un problème critique immédiatement, et cela nécessite une action de la haute direction d'un groupe de parties prenantes spécifique.\n\nQuel plan le chef de projet devrait-il consulter ?",
+    "opts": [
+      "Plan de gestion des risques",
+      "Plan de gestion des communications",
+      "Plan de gestion des changements",
+      "Plan d'engagement des parties prenantes"
+    ],
+    "ans": 1,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "N'aborde pas spécifiquement les besoins de communication immédiats pour escalader les problèmes critiques.",
+      "B": "Correcte. Décrit comment communiquer aux parties prenantes, incluant les procédures d'escalade pour les problèmes critiques.",
+      "C": "Se concentre sur la gestion des changements, pas sur les stratégies de communication urgente.",
+      "D": "Concerne la stratégie globale d'implication, pas les protocoles d'urgence.",
+      "global": "Le plan de gestion des communications décrit les canaux et protocoles appropriés pour une communication rapide en cas d'urgence."
+    }
+  },
+  {
+    "id": 16,
+    "q": "Un projet a une durée estimée de 10 mois avec un budget total de 220 000 $ US. À la fin du cinquième mois, il est estimé qu'à l'achèvement, le projet encoura 250 000 $ US.\n\nSi le coût réel (AC) calculé est de 150 000 $ US, quelle est la valeur acquise (EV) du projet ?",
+    "opts": [
+      "- 30 000 $ US",
+      "120 000 $ US",
+      "370 000 $ US",
+      "400 000 $ US"
+    ],
+    "ans": 1,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Ne reflète pas correctement le calcul de la valeur acquise.",
+      "B": "Correcte. EV = AC + BAC - EAC = 150 000 + 220 000 - 250 000 = 120 000 $ US.",
+      "C": "Non pertinent pour les calculs du projet.",
+      "D": "Ne s'aligne pas avec les calculs établis pour EV.",
+      "global": "EV = AC + BAC - EAC = 150 000 $ + 220 000 $ - 250 000 $ = 120 000 $ US."
+    }
+  },
+  {
+    "id": 17,
+    "q": "Lesquelles des activités suivantes sont incluses dans les responsabilités d'un chef de projet ?",
+    "opts": [
+      "Diriger, contrôler et se concentrer sur la structure.",
+      "Inspirer, engager et établir des relations avec les gens.",
+      "Contrôler, maintenir l'état du projet et développer.",
+      "Résoudre les problèmes, atteindre les résultats et se concentrer sur le succès."
+    ],
+    "ans": 3,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Se concentrer uniquement sur la structure néglige les aspects interpersonnels et motivationnels.",
+      "B": "N'englobe pas toute la gamme des responsabilités, incluant la résolution de problèmes.",
+      "C": "Met en évidence le contrôle mais manque l'accent sur l'atteinte des objectifs.",
+      "D": "Correcte. Reflète avec précision les responsabilités essentielles : résolution de problèmes et succès du projet.",
+      "global": "Le rôle du chef de projet englobe la résolution de problèmes, l'atteinte des objectifs et l'assurance du succès global."
+    }
+  },
+  {
+    "id": 18,
+    "q": "Laquelle des listes suivantes représente les sorties du processus Surveiller les communications ?",
+    "opts": [
+      "Communications du projet, mises à jour du plan de gestion de projet, mises à jour des documents du projet et mises à jour des actifs de processus organisationnels",
+      "Informations sur la performance du travail, demandes de changement, mises à jour du plan de gestion de projet et mises à jour des documents du projet",
+      "Plan de gestion des communications, mises à jour du plan de gestion de projet, rapport de performance du travail et mise à jour des documents du projet",
+      "Plan d'engagement des parties prenantes, demandes de changement, mises à jour du plan de gestion de projet et mises à jour des documents du projet"
+    ],
+    "ans": 1,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Les communications du projet sont des entrées, pas des sorties.",
+      "B": "Correcte. Inclut les informations sur la performance du travail — sortie critique du processus.",
+      "C": "Le plan de gestion des communications est une entrée, pas une sortie.",
+      "D": "Le plan d'engagement des parties prenantes est une entrée, pas une sortie.",
+      "global": "Les sorties de Surveiller les communications incluent : informations sur la performance du travail, demandes de changement, mises à jour du plan de gestion de projet et des documents."
+    }
+  },
+  {
+    "id": 19,
+    "q": "Lesquels des éléments suivants sont des composants de la compétence en gestion technique de projet ?",
+    "opts": [
+      "Capacité à expliquer les aspects commerciaux du projet, la stratégie commerciale, les buts et objectifs, et la valeur commerciale",
+      "Capacité à traiter avec les gens, à être collaboratif et à appliquer la persuasion et la négociation",
+      "Capacité à se concentrer sur les relations avec les gens, à inspirer la confiance et à mettre en œuvre des décisions et des actions qui soutiennent la stratégie commerciale",
+      "Capacité à planifier et prioriser, rassembler les bons artefacts disponibles pour chaque projet et se concentrer sur les facteurs de succès critiques"
+    ],
+    "ans": 3,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Se concentre sur les éléments commerciaux, pas sur la gestion technique de projet.",
+      "B": "Compétences interpersonnelles — classées sous compétences générales.",
+      "C": "Compétences en leadership et relations — pas spécifiquement techniques.",
+      "D": "Correcte. Planification, priorisation, artefacts et facteurs de succès critiques — composants de la gestion technique.",
+      "global": "La compétence en gestion technique de projet inclut : planification, priorisation, artefacts et facteurs de succès critiques."
+    }
+  },
+  {
+    "id": 20,
+    "q": "Deux membres de l'équipe ont un conflit. Le chef de projet décide que, dans ce cas, la meilleure solution est d'apporter un certain degré de satisfaction à toutes les parties afin de résoudre temporairement ou partiellement le problème.\n\nQuelle technique le chef de projet devrait-il utiliser ?",
+    "opts": [
+      "Se retirer/Éviter",
+      "Apaiser/Accommoder",
+      "Compromis/Réconcilier",
+      "Collaborer/Résoudre les problèmes"
+    ],
+    "ans": 2,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "N'aboutit à aucune résolution ni satisfaction.",
+      "B": "Peut conduire à l'harmonie sans garantir la satisfaction de toutes les parties.",
+      "C": "Correcte. Trouve un terrain d'entente apportant une certaine satisfaction à toutes les parties — résolution temporaire ou partielle.",
+      "D": "Vise une solution gagnant-gagnant — plus approprié pour les résolutions à long terme.",
+      "global": "Compromis/Réconcilier permet une résolution temporaire reconnaissant les besoins des deux parties."
+    }
+  },
+  {
+    "id": 21,
+    "q": "Les caractéristiques et fonctions qui caractérisent un produit résultat ou un service peuvent faire référence à :",
+    "opts": [
+      "portée du projet",
+      "portée du produit",
+      "portée du service",
+      "structure de décomposition du produit"
+    ],
+    "ans": 1,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "La portée du projet fait référence au travail effectué pour livrer, pas aux caractéristiques elles-mêmes.",
+      "B": "Correcte. La portée du produit aborde spécifiquement les caractéristiques et fonctions du produit, service ou résultat.",
+      "C": "La portée du service ne définit pas explicitement les caractéristiques du produit ou service livré.",
+      "D": "La structure de décomposition du produit illustre les composants mais ne définit pas directement les caractéristiques.",
+      "global": "La portée du produit se rapporte directement aux caractéristiques et fonctions qui caractérisent un produit, service ou résultat."
+    }
+  },
+  {
+    "id": 22,
+    "q": "Selon le triangle des talents PMI, les compétences en leadership se rapportent à la capacité de :",
+    "opts": [
+      "comprendre la vue d'ensemble de haut niveau de l'organisation",
+      "adapter les outils traditionnels et agiles pour le projet",
+      "travailler avec les parties prenantes pour développer une livraison de projet appropriée",
+      "guider, motiver et diriger une équipe pour atteindre les objectifs du projet"
+    ],
+    "ans": 3,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Lié aux compétences en gestion stratégique et commerciale.",
+      "B": "Concerne les compétences en gestion technique de projet.",
+      "C": "Collaboration avec les parties prenantes — aspect important mais pas l'essence du leadership.",
+      "D": "Correcte. Les compétences en leadership incluent la direction, la motivation et la direction des membres de l'équipe.",
+      "global": "Les compétences en leadership mettent l'accent sur la capacité à guider et motiver les équipes pour atteindre les objectifs."
+    }
+  },
+  {
+    "id": 23,
+    "q": "Laquelle de ces affirmations est vraie concernant la gestion de l'intégration du projet ?",
+    "opts": [
+      "La gestion de l'intégration du projet est obligatoire et plus efficace dans les grands projets",
+      "La gestion de l'intégration du projet et le jugement d'expert sont mutuellement exclusifs",
+      "La gestion de l'intégration du projet est la responsabilité du chef de projet",
+      "La gestion de l'intégration du projet exclut les contraintes triples si l'indice de performance des coûts (CPI) est égal à zéro"
+    ],
+    "ans": 2,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "L'efficacité n'est pas liée à la taille du projet. Les petits projets nécessitent aussi une gestion de l'intégration.",
+      "B": "Incorrecte. Le jugement d'expert est souvent une entrée clé de la gestion de l'intégration.",
+      "C": "Correcte. Le chef de projet est principalement responsable des processus de gestion de l'intégration.",
+      "D": "Inexact. La gestion de l'intégration englobe toutes les contraintes triples.",
+      "global": "La gestion de l'intégration du projet est la responsabilité du chef de projet qui coordonne tous les éléments."
+    }
+  },
+  {
+    "id": 24,
+    "q": "Quelle est une considération d'adaptation dans la gestion de l'intégration du projet ?",
+    "opts": [
+      "Validation et contrôle",
+      "Avantages",
+      "Support technologique",
+      "Emplacement physique"
+    ],
+    "ans": 1,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "N'aborde pas spécifiquement les ajustements uniques nécessaires pour la gestion de l'intégration.",
+      "B": "Correcte. Les avantages guident les chefs de projet dans l'alignement des processus d'intégration avec les résultats souhaités.",
+      "C": "Important mais ne concerne pas directement les considérations fondamentales d'adaptation.",
+      "D": "Peut influencer les décisions mais n'est pas une considération d'adaptation directe.",
+      "global": "L'adaptation dans la gestion de l'intégration se concentre sur l'ajustement des processus pour s'aligner avec les avantages et objectifs du projet."
+    }
+  },
+  {
+    "id": 25,
+    "q": "Quel processus détermine l'exactitude des livrables ?",
+    "opts": [
+      "Vérifier les livrables",
+      "Valider les livrables",
+      "Examiner les livrables",
+      "Analyser les livrables"
+    ],
+    "ans": 0,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Correcte. La vérification implique de contrôler l'exactitude des livrables par rapport aux mesures de contrôle de la qualité.",
+      "B": "La validation se concentre sur l'assurance que les livrables répondent aux besoins des utilisateurs, pas spécifiquement l'exactitude.",
+      "C": "Terme général ne faisant pas référence à un processus spécifique de gestion de projet.",
+      "D": "Terme large manquant de la spécificité requise.",
+      "global": "La vérification des livrables garantit que chaque livrable répond aux normes de qualité et aux exigences spécifiées."
+    }
+  },
+  {
+    "id": 26,
+    "q": "Une équipe de projet soumet un rapport de progression hebdomadaire au chef de projet. Le chef de projet consolide le même rapport et envoie un rapport de progression complet aux parties prenantes.\n\nDe quoi s'agit-il ?",
+    "opts": [
+      "Communication informelle",
+      "Communication interne",
+      "Communication formelle",
+      "Communication horizontale"
+    ],
+    "ans": 2,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "La communication informelle n'utilise pas de canaux structurés et formalisés.",
+      "B": "Ne capture pas la nature structurée du processus de rapport décrit.",
+      "C": "Correcte. Suit des processus établis pour le rapport et le partage d'informations — communication structurée.",
+      "D": "La communication horizontale est entre pairs au même niveau. Ici, le flux est vertical.",
+      "global": "Communication formelle : adhère à des processus et directives structurés, assurant cohérence et exactitude."
+    }
+  },
+  {
+    "id": 27,
+    "q": "Le chef de projet et l'équipe de projet tiennent une réunion dans le but d'identifier les risques.\n\nQuels outils et techniques pourraient aider dans ce processus ?",
+    "opts": [
+      "Listes de contrôle et analyse de données",
+      "Rapports et représentations de l'incertitude",
+      "Analyse de données et audits des risques",
+      "Compétences interpersonnelles et d'équipe et système d'information de gestion de projet"
+    ],
+    "ans": 0,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Correcte. Les listes de contrôle fournissent une approche structurée ; l'analyse de données aide à comprendre les impacts potentiels.",
+      "B": "Se concentrent sur la documentation et la visualisation, pas l'identification active.",
+      "C": "Les audits des risques sont des activités rétrospectives, moins appropriés pour l'identification initiale.",
+      "D": "Le PMIS gère les données du projet, ne les identifie pas directement comme risques.",
+      "global": "Les listes de contrôle et l'analyse de données sont spécifiquement conçues pour aider dans l'identification des risques."
+    }
+  },
+  {
+    "id": 28,
+    "q": "Décider des phases du cycle de vie du projet serait considéré comme faisant partie de laquelle de ces zones de connaissance ?",
+    "opts": [
+      "Gestion du calendrier du projet",
+      "Gestion de la portée du projet",
+      "Gestion des ressources du projet",
+      "Gestion de l'intégration du projet"
+    ],
+    "ans": 3,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Se concentre sur la planification et le contrôle des délais, pas sur les phases du cycle de vie.",
+      "B": "Traite de la définition et du contrôle de ce qui est inclus, pas des phases globales.",
+      "C": "Concerne l'acquisition et la gestion des ressources.",
+      "D": "Correcte. Implique les processus nécessaires pour identifier, définir et coordonner les activités — incluant les phases du cycle de vie.",
+      "global": "La gestion de l'intégration du projet englobe la coordination de divers éléments, y compris les phases du cycle de vie."
+    }
+  },
+  {
+    "id": 29,
+    "q": "En raison de changements organisationnels, un nouveau propriétaire de produit rejoint un projet. Le propriétaire du produit souhaite examiner le processus utilisé pour obtenir les membres de l'équipe, les installations, l'équipement, les matériaux, les fournitures et d'autres ressources nécessaires pour terminer le travail du projet.\n\nQuel processus le chef de projet devrait-il examiner avec le propriétaire du produit ?",
+    "opts": [
+      "Acquérir les ressources",
+      "Planifier la gestion des ressources",
+      "Estimer les ressources des activités",
+      "Contrôler les ressources"
+    ],
+    "ans": 1,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Se concentre sur l'obtention réelle des ressources, pas sur la planification du processus.",
+      "B": "Correcte. Implique de définir comment acquérir et gérer les ressources — ce que le propriétaire du produit souhaite examiner.",
+      "C": "Détermine les types et quantités de ressources, pas le processus global d'obtention.",
+      "D": "Concerne la surveillance des ressources une fois acquises.",
+      "global": "Planifier la gestion des ressources englobe les étapes de planification pour acquérir et gérer les ressources nécessaires."
+    }
+  },
+  {
+    "id": 30,
+    "q": "Les chefs de projet jouent un rôle clé dans l'exécution de l'intégration sur un projet. Quels sont les trois niveaux différents d'intégration ?",
+    "opts": [
+      "Processus, cognitif et contexte",
+      "Complexité, compréhension et changement",
+      "Interaction, perspicacité et leadership",
+      "Communication, connaissance et valeur"
+    ],
+    "ans": 0,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Correcte. Processus (méthodes), cognitif (compréhension et connaissance), contexte (environnement d'exécution).",
+      "B": "Ne représente pas avec précision les trois niveaux d'intégration.",
+      "C": "Introduit des concepts qui ne reflètent pas les trois niveaux.",
+      "D": "Éléments importants mais ne définissent pas spécifiquement les trois niveaux d'intégration.",
+      "global": "Les trois niveaux d'intégration : Processus, Cognitif et Contexte — cadres pour une intégration efficace."
+    }
+  },
+  {
+    "id": 31,
+    "q": "Une équipe de projet examine la performance du projet. Pendant la phase d'exécution, l'équipe de projet découvre qu'il existe un produit prêt à l'emploi (OTS) qui pourrait réduire le calendrier de développement.\n\nQue devrait faire le chef de projet ensuite ?",
+    "opts": [
+      "Ajouter la découverte aux hypothèses.",
+      "Évaluer le risque avec l'équipe de projet.",
+      "Effectuer une analyse d'opportunité avec l'équipe.",
+      "Mettre à jour le plan de gestion de projet."
+    ],
+    "ans": 2,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "N'exploite pas les avantages potentiels du produit OTS.",
+      "B": "Se concentre sur les aspects négatifs plutôt que sur l'opportunité positive.",
+      "C": "Correcte. Évalue en profondeur les avantages, la compatibilité, les coûts et l'impact du produit OTS.",
+      "D": "Prématuré sans d'abord analyser comment le produit OTS affectera le projet.",
+      "global": "La découverte d'un produit OTS est une opportunité. L'analyse d'opportunité permet de comprendre les implications et de décider si l'incorporer."
+    }
+  },
+  {
+    "id": 32,
+    "q": "Quel processus est engagé lorsqu'un membre de l'équipe de projet apporte une modification au budget du projet avec l'approbation du chef de projet ?",
+    "opts": [
+      "Gérer le plan des coûts",
+      "Estimer les coûts",
+      "Déterminer le budget",
+      "Contrôler les coûts"
+    ],
+    "ans": 3,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Implique de définir comment les coûts seront gérés, pas d'apporter des modifications.",
+      "B": "Se concentre sur l'estimation initiale, pas la modification d'un budget approuvé.",
+      "C": "Implique l'agrégation des coûts pour établir la référence de base, pas la mise en œuvre des modifications.",
+      "D": "Correcte. Contrôler les coûts surveille et gère les modifications à la référence de base des coûts.",
+      "global": "Contrôler les coûts est crucial pour suivre et gérer la performance financière, documentant les modifications approuvées."
+    }
+  },
+  {
+    "id": 33,
+    "q": "Lequel des éléments suivants est une sortie du processus Effectuer le contrôle intégré des changements ?",
+    "opts": [
+      "Analyse coûts-avantages",
+      "Charte de projet mise à jour",
+      "Demande de changement approuvée",
+      "Analyse décisionnelle multicritère"
+    ],
+    "ans": 2,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Technique utilisée pour évaluer les changements, pas une sortie du processus.",
+      "B": "Peut résulter de changements approuvés, mais n'est pas une sortie directe du processus lui-même.",
+      "C": "Correcte. La demande de changement approuvée signifie qu'un changement a été autorisé et peut être mis en œuvre.",
+      "D": "Technique d'évaluation utilisée pendant le processus, pas une sortie.",
+      "global": "La sortie principale de ce processus est la demande de changement approuvée, indiquant qu'un changement peut être exécuté."
+    }
+  },
+  {
+    "id": 34,
+    "q": "Quel actif organisationnel peut influencer le processus Planifier la gestion des risques ?",
+    "opts": [
+      "Politiques et procédures d'entreprise pour les médias sociaux, l'éthique et la sécurité",
+      "Politique de risque organisationnelle",
+      "Modèles et instructions du registre des parties prenantes",
+      "Exigences de communication organisationnelle"
+    ],
+    "ans": 1,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Essentielles mais non spécifiquement adaptées aux processus de gestion des risques.",
+      "B": "Correcte. Impacte directement comment les risques sont identifiés, évalués et gérés.",
+      "C": "Se concentrent sur l'engagement des parties prenantes, pas directement sur la planification des risques.",
+      "D": "Vitales pour le succès mais ne dictent pas spécifiquement la gestion des risques.",
+      "global": "La politique de risque organisationnelle fournit le cadre et les directives pour gérer les risques efficacement."
+    }
+  },
+  {
+    "id": 35,
+    "q": "Quel cycle de vie de projet suit un plan examiné et approuvé par les parties prenantes ?",
+    "opts": [
+      "Adaptatif",
+      "Itératif",
+      "Incrémental",
+      "Prédictif"
+    ],
+    "ans": 3,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Se caractérise par la flexibilité, sans plan complet pré-approuvé dès le départ.",
+      "B": "Implique des cycles répétés se concentrant sur l'affinement, pas un plan fixe pré-approuvé.",
+      "C": "Livre en portions plus petites, sans plan détaillé pré-approuvé.",
+      "D": "Correcte. Plan détaillé créé dès le départ, examiné et approuvé par les parties prenantes avant l'exécution.",
+      "global": "Le cycle de vie prédictif nécessite un plan complet et initial approuvé par les parties prenantes avant le début du projet."
+    }
+  },
+  {
+    "id": 36,
+    "q": "Quel est l'un des principaux objectifs de la charte de projet ?",
+    "opts": [
+      "Autorisation formelle de l'existence du projet",
+      "Acceptation formelle du plan de gestion de projet",
+      "Approbation formelle du budget détaillé du projet",
+      "Définition formelle des rôles et responsabilités des parties prenantes"
+    ],
+    "ans": 0,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Correcte. La charte autorise le projet formellement, donnant au chef de projet l'autorité d'utiliser les ressources.",
+      "B": "Le plan de gestion de projet est un document différent de la charte.",
+      "C": "La charte ne contient pas de budget détaillé — aperçu de haut niveau seulement.",
+      "D": "Les rôles et responsabilités détaillés sont définis dans des documents de planification ultérieurs.",
+      "global": "La charte de projet est l'autorisation formelle pour que le projet commence, décrivant les objectifs de haut niveau."
+    }
+  },
+  {
+    "id": 37,
+    "q": "Un chef de projet est en train d'intégrer des ressources pour commencer à travailler sur un projet. Lequel des composants suivants d'un plan de gestion de projet le chef de projet mettra-t-il à jour après avoir terminé cette activité ?",
+    "opts": [
+      "Plan de gestion des ressources et référence de base des coûts",
+      "Plan de gestion des ressources et registre des leçons apprises",
+      "Plan de gestion des ressources et plan de gestion des approvisionnements",
+      "Plan de gestion des ressources et pré-affectation"
+    ],
+    "ans": 0,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Correcte. Le plan de gestion des ressources et la référence de base des coûts sont directement affectés par l'intégration.",
+      "B": "Le registre des leçons apprises est mis à jour à la fin des phases, pas après l'intégration.",
+      "C": "Le plan des approvisionnements est moins pertinent pour cette activité interne.",
+      "D": "La pré-affectation se fait avant l'intégration.",
+      "global": "Après l'intégration : le plan de gestion des ressources et la référence de base des coûts doivent être mis à jour."
+    }
+  },
+  {
+    "id": 38,
+    "q": "Un membre de l'équipe de projet examine la portée d'une tâche avec un utilisateur final et se rend compte que les exigences ont changé.\n\nQuel artefact de projet devrait être utilisé dans cette situation ?",
+    "opts": [
+      "Plan de gestion de la portée",
+      "Plan de gestion des risques",
+      "Plan de gestion de la configuration",
+      "Plan de gestion de projet"
+    ],
+    "ans": 3,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Fournit des directives mais ne documente pas les changements eux-mêmes.",
+      "B": "Se concentre sur les risques, pas sur la gestion des changements aux exigences.",
+      "C": "Spécifique au suivi des artefacts du projet, pas aux changements globaux de portée.",
+      "D": "Correcte. Englobe tous les aspects de la gestion de projet, incluant comment gérer les changements de portée.",
+      "global": "Le plan de gestion de projet fournit le cadre complet, incluant comment aborder les changements de portée."
+    }
+  },
+  {
+    "id": 39,
+    "q": "Un chef de projet est nouvellement affecté à un projet. Quel document peut aider le chef de projet à comprendre la portée du projet ?",
+    "opts": [
+      "Diagramme de contexte",
+      "Diagramme de flux de processus",
+      "Flux d'interface utilisateur",
+      "Diagramme de flux de données"
+    ],
+    "ans": 0,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Correcte. Représentation visuelle de haut niveau montrant le système, ses limites et interactions avec les entités externes.",
+      "B": "Illustre la séquence d'activités mais ne fournit pas une compréhension globale de la portée.",
+      "C": "Se concentre sur les interactions utilisateur, pas la portée globale du projet.",
+      "D": "Décrit le mouvement des données, pas la portée complète du projet.",
+      "global": "Le diagramme de contexte décrit visuellement l'ensemble du projet et ses interactions avec des facteurs externes."
+    }
+  },
+  {
+    "id": 40,
+    "q": "Laquelle des plateformes technologiques suivantes est la plus efficace pour partager des informations lors de la gestion d'équipes de projet virtuelles ?",
+    "opts": [
+      "Vidéoconférence",
+      "Audioconférence",
+      "Portail partagé",
+      "Email/chat"
+    ],
+    "ans": 2,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Bénéfique pour la communication en temps réel mais pas conçue pour stocker des informations de projet.",
+      "B": "Facilite la communication vocale mais manque d'efficacité pour la gestion documentaire.",
+      "C": "Correcte. Conçu pour stocker et partager des documents — emplacement centralisé pour tous les membres de l'équipe.",
+      "D": "Utile pour la communication mais sans l'accès structuré qu'un portail partagé offre.",
+      "global": "Un portail partagé permet un accès organisé aux documents du projet et une collaboration continue."
+    }
+  },
+  {
+    "id": 41,
+    "q": "Un projet est en cours et sur le point de passer à une phase différente, selon le plan. Ce sera une bonne opportunité pour le chef de projet de :",
+    "opts": [
+      "créer le plan de gestion de projet.",
+      "identifier les objectifs du projet.",
+      "examiner et mettre à jour l'engagement des parties prenantes.",
+      "créer la référence de base du calendrier."
+    ],
+    "ans": 2,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "La création du plan de gestion est effectuée au début du projet, pas lors d'une transition de phase.",
+      "B": "L'identification des objectifs devrait se produire tôt dans le cycle de vie.",
+      "C": "Correcte. L'examen et la mise à jour de l'engagement des parties prenantes sont critiques lors des transitions de phase.",
+      "D": "La création de la référence de base du calendrier se fait pendant la planification.",
+      "global": "Lors des transitions de phase, l'engagement des parties prenantes doit être examiné et mis à jour."
+    }
+  },
+  {
+    "id": 42,
+    "q": "Dans quel processus de gestion des coûts du projet les données de performance du travail sont-elles incluses ?",
+    "opts": [
+      "Planifier la gestion des coûts",
+      "Estimer les coûts",
+      "Déterminer le budget",
+      "Contrôler les coûts"
+    ],
+    "ans": 3,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Se concentre sur la définition de comment les coûts seront gérés — pas les données de performance du travail.",
+      "B": "Implique la projection des dépenses, pas les données de performance.",
+      "C": "Agrège les coûts estimés — pas les données de performance du travail.",
+      "D": "Correcte. Utilise les données de performance du travail pour évaluer la performance financière et suivre les écarts.",
+      "global": "Les données de performance du travail sont critiques dans Contrôler les coûts pour surveiller si le projet reste dans son budget."
+    }
+  },
+  {
+    "id": 43,
+    "q": "Lequel des éléments suivants est utilisé pour classer les parties prenantes en fonction de leurs évaluations du pouvoir, de l'urgence et de la légitimité ?",
+    "opts": [
+      "Grille pouvoir-intérêt",
+      "Cube des parties prenantes",
+      "Modèle de saillance",
+      "Directions d'influence"
+    ],
+    "ans": 2,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Catégorise par niveau d'intérêt et pouvoir, mais n'aborde pas spécifiquement l'urgence et la légitimité.",
+      "B": "Vue tridimensionnelle mais n'évalue pas spécifiquement pouvoir, urgence et légitimité.",
+      "C": "Correcte. Conçu pour classer les parties prenantes par pouvoir, urgence et légitimité.",
+      "D": "Fait référence à la direction de l'influence, pas à une classification structurée.",
+      "global": "Le modèle de saillance aide à identifier et prioriser les parties prenantes en évaluant pouvoir, urgence et légitimité."
+    }
+  },
+  {
+    "id": 44,
+    "q": "Une équipe de projet a terminé la première itération et le responsable des tests a approuvé le rapport de test, indiquant que les critères d'acceptation ont été respectés. Le responsable de l'unité commerciale qui utilisera le nouveau produit demande des fonctionnalités supplémentaires avant d'approuver le déploiement pour son équipe.\n\nQue devrait faire le chef de projet ensuite ?",
+    "opts": [
+      "Escalader ce problème au bureau de gestion de projet (PMO).",
+      "Reprogrammer le déploiement pour inclure les nouvelles exigences.",
+      "Escalader ce problème au commanditaire du projet.",
+      "Reprogrammer le déploiement pour commencer avec une autre unité commerciale."
+    ],
+    "ans": 2,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Le PMO peut être utile, mais la décision de portée doit venir du commanditaire.",
+      "B": "Sans approbation appropriée du commanditaire, cela peut conduire à une dérive de portée.",
+      "C": "Correcte. Le commanditaire a l'autorité de décider si la nouvelle fonctionnalité est réalisable dans le calendrier actuel.",
+      "D": "N'aborde pas la demande du responsable de l'unité commerciale.",
+      "global": "Le commanditaire du projet a l'autorité d'approuver ou refuser les changements de portée et peut guider la décision."
+    }
+  },
+  {
+    "id": 45,
+    "q": "Quel est le principal avantage de la gestion et de l'adaptation des stratégies dans le processus d'engagement des parties prenantes ?",
+    "opts": [
+      "Soutien accru et résistance minimisée des parties prenantes",
+      "Performance accrue de l'équipe de projet",
+      "Maintien de la satisfaction des parties prenantes car les coûts et la portée sont sous contrôle",
+      "Documents de projet mis à jour, comme demandé par les parties prenantes"
+    ],
+    "ans": 0,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Correcte. L'adaptation des stratégies aborde efficacement les préoccupations — soutien accru et résistance réduite.",
+      "B": "L'engagement peut indirectement améliorer la performance, mais ce n'est pas l'avantage principal.",
+      "C": "Confond la satisfaction avec les aspects de contrôle du projet.",
+      "D": "La mise à jour des documents est une action procédurale, pas l'avantage principal.",
+      "global": "Des stratégies efficaces d'engagement conduisent à un soutien plus fort et moins de résistance — vital pour la progression du projet."
+    }
+  },
+  {
+    "id": 46,
+    "q": "Quelle méthode de catégorisation des parties prenantes convient aux petits projets avec des relations simples entre les parties prenantes ?",
+    "opts": [
+      "Priorisation",
+      "Directions d'influence",
+      "Modèle de saillance",
+      "Grille pouvoir/influence"
+    ],
+    "ans": 3,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Ne capture pas la complexité de l'influence aussi efficacement que la grille pouvoir/influence.",
+      "B": "Catégorise par soutien/opposition mais peut négliger les nuances du pouvoir.",
+      "C": "Plus complexe, généralement utilisé pour les grands projets.",
+      "D": "Correcte. Efficace pour les petits projets — identifie rapidement l'influence et guide les stratégies d'engagement.",
+      "global": "La grille pouvoir/influence est la plus appropriée pour les petits projets en raison de son approche simple."
+    }
+  },
+  {
+    "id": 47,
+    "q": "Lors de la présentation d'une feuille de route de produit à une équipe adaptative, quelle forme de communication est la plus appropriée ?",
+    "opts": [
+      "Diapositives de présentation",
+      "Matrice des exigences",
+      "Carte des user stories",
+      "Plan de gestion de projet"
+    ],
+    "ans": 2,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Trop formelles, peuvent ne pas faciliter les discussions interactives essentielles dans un environnement adaptatif.",
+      "B": "Utile pour le suivi mais manque d'éléments visuels et engageants.",
+      "C": "Correcte. Fournit un aperçu visuel des fonctionnalités, permet la priorisation, la flexibilité et la collaboration.",
+      "D": "Trop détaillé et formel pour une présentation de feuille de route.",
+      "global": "La carte des user stories est l'outil le plus efficace : visuelle, flexible, favorise la collaboration."
+    }
+  },
+  {
+    "id": 48,
+    "q": "Au début d'une itération, l'équipe travaillera à déterminer combien d'éléments de la plus haute priorité sur la liste du backlog peuvent être livrés dans la prochaine itération.\n\nLaquelle des activités suivantes est effectuée en premier ?",
+    "opts": [
+      "Créer la structure de répartition du travail (WBS)",
+      "Créer la référence de base de la portée",
+      "Collecter les exigences",
+      "Définir la portée"
+    ],
+    "ans": 2,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "La WBS se produit après la collecte des exigences et la définition de la portée.",
+      "B": "La référence de base est créée après les exigences et la portée.",
+      "C": "Correcte. La collecte des exigences est essentielle au début de chaque itération agile.",
+      "D": "Suit généralement la collecte des exigences.",
+      "global": "En agile, la collecte des exigences est priorisée en premier pour identifier les items les plus précieux à livrer."
+    }
+  },
+  {
+    "id": 49,
+    "q": "Les exigences du produit spécifient une fonctionnalité qui dépend d'une expertise qui n'est pas disponible en interne. Quel processus devrait être mis en œuvre pour générer une décision de faire ou d'acheter ?",
+    "opts": [
+      "Conduire les approvisionnements",
+      "Planifier la gestion des approvisionnements",
+      "Planifier les réponses aux risques",
+      "Planifier la gestion des risques"
+    ],
+    "ans": 1,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Fait référence à l'obtention de réponses de vendeurs, pas à la décision de faire ou acheter.",
+      "B": "Correcte. Évalue les options d'approvisionnement, incluant faire ou acheter l'expertise requise.",
+      "C": "Se concentre sur les réponses aux risques, pas sur les décisions d'approvisionnement.",
+      "D": "Définit comment mener les activités de gestion des risques — pas la décision faire/acheter.",
+      "global": "Planifier la gestion des approvisionnements est le processus correct pour déterminer s'il faut fabriquer en interne ou acheter."
+    }
+  },
+  {
+    "id": 50,
+    "q": "Un nouveau chef de projet est affecté à un projet très visible. Le chef de projet commence par le processus d'analyse des exigences.\n\nQui le chef de projet devrait-il intégrer pour aider avec la matrice de traçabilité des exigences ou l'analyse ?",
+    "opts": [
+      "Consultant technique",
+      "Commanditaire du projet",
+      "Analyste d'affaires",
+      "Analyste de systèmes"
+    ],
+    "ans": 2,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Se concentre généralement sur les solutions techniques plutôt que sur la traçabilité des exigences.",
+      "B": "Fournit soutien et ressources mais n'est pas impliqué dans l'analyse détaillée des exigences.",
+      "C": "Correcte. Spécialiste en collecte et gestion des exigences — rôle clé dans la matrice de traçabilité.",
+      "D": "Se concentre sur les aspects techniques, peut ne pas avoir une vue complète des besoins commerciaux.",
+      "global": "L'analyste d'affaires est le choix idéal pour la matrice de traçabilité des exigences."
+    }
+  },
+  {
+    "id": 51,
+    "q": "Quel actif de processus organisationnel (OPA) peut impacter un projet ?",
+    "opts": [
+      "Conditions du marché",
+      "Listes de fournisseurs pré-approuvés",
+      "Éléments environnementaux physiques",
+      "Restrictions légales"
+    ],
+    "ans": 1,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Facteurs externes, pas des actifs de processus organisationnels.",
+      "B": "Correcte. Référentiel de fournisseurs vérifiés — OPA facilitant un approvisionnement efficace.",
+      "C": "Facteurs environnementaux externes, pas des OPA.",
+      "D": "Contraintes externes, pas catégorisées comme OPA.",
+      "global": "Les listes de fournisseurs pré-approuvés sont un OPA influençant directement les décisions et résultats du projet."
+    }
+  },
+  {
+    "id": 52,
+    "q": "Quelle est la meilleure façon pour un chef de projet d'assurer une communication efficace et fréquente avec la direction et les parties prenantes dans un environnement agile/adaptatif ?",
+    "opts": [
+      "Publier les artefacts du projet de manière transparente et engager les parties prenantes régulièrement.",
+      "Faire des sondages auprès des parties prenantes et rencontrer l'équipe une fois par mois.",
+      "Créer un réseau social et y publier des nouvelles.",
+      "Créer des emails personnalisés pour chaque partie prenante, demandant des demandes et examinant les objectifs avec eux périodiquement."
+    ],
+    "ans": 0,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Correcte. Favorise la transparence et encourage l'interaction régulière — principes fondamentaux agiles.",
+      "B": "Les sondages peuvent ne pas fournir de retours opportuns. Réunions mensuelles insuffisantes en agile.",
+      "C": "Manque les mécanismes d'interaction directe et de retour nécessaires.",
+      "D": "Les emails personnalisés peuvent entraîner des retards et sont moins interactifs.",
+      "global": "En agile, la transparence et l'engagement régulier sont fondamentaux. L'option A s'aligne avec ces principes."
+    }
+  },
+  {
+    "id": 53,
+    "q": "Un chef de projet adaptatif gère un cycle de cinq sprints pour livrer un produit minimum viable (MVP). Après le troisième sprint, la productivité de l'équipe chute à 30 % en raison d'un changement dans la façon dont l'équipe opère.\n\nLequel des changements suivants a causé cette perte de productivité ?",
+    "opts": [
+      "L'équipe a pris en charge des éléments de dette technique dans le troisième sprint car la dette technique ne peut être prise en charge qu'après avoir terminé deux sprints.",
+      "Deux des membres de l'équipe ont travaillé en silos en utilisant différentes méthodes pour valider leur performance.",
+      "Deux des membres de l'équipe ont été invités à faire du multitâche, ce qu'ils n'ont pas fait dans les deux sprints précédents.",
+      "La vélocité de l'équipe a été mesurée dans le troisième sprint car l'outil pour mesurer la vélocité n'a été introduit que dans le troisième sprint."
+    ],
+    "ans": 1,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Aborde la dette technique mais pas la collaboration de l'équipe qui est au cœur du problème.",
+      "B": "Correcte. Travailler en silos entrave la communication et les inefficacités — cause directe de la baisse de productivité.",
+      "C": "Le multitâche peut contribuer, mais n'englobe pas le problème plus large de la collaboration.",
+      "D": "L'introduction d'un outil de mesure ne cause pas directement la perte de productivité.",
+      "global": "Travailler en silos dans un environnement agile entrave la communication et le travail d'équipe — cause principale de la baisse."
+    }
+  },
+  {
+    "id": 54,
+    "q": "Quelle affirmation concernant l'identification et l'engagement des parties prenantes pendant un projet est correcte ?",
+    "opts": [
+      "Les parties prenantes du projet devraient être identifiées et engagées dans chaque phase du projet pour influencer directement le succès du projet.",
+      "Les parties prenantes du projet devraient être identifiées et engagées une fois le prototype terminé pour fournir leurs retours mais s'abstenir de faire des contributions pendant le projet.",
+      "Les parties prenantes du projet devraient être identifiées lorsque la charte du projet est en cours d'achèvement et engagées pendant la collecte des exigences.",
+      "Les parties prenantes du projet devraient être identifiées et engagées pendant l'élicitation des exigences mais pas pendant le processus de définition de la portée."
+    ],
+    "ans": 0,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Correcte. L'engagement continu dans toutes les phases garantit que les besoins et attentes sont gérés.",
+      "B": "L'engagement ne devrait pas se limiter à après le prototype — processus continu.",
+      "C": "Limite l'engagement à la seule phase de collecte des exigences — insuffisant.",
+      "D": "L'engagement s'arrêtant à un point spécifique est incorrecte — doit être continu.",
+      "global": "L'identification et l'engagement continus des parties prenantes dans toutes les phases est vital pour le succès du projet."
+    }
+  },
+  {
+    "id": 55,
+    "q": "Un chef de projet examine certaines techniques qui peuvent être utilisées pour évaluer les résultats de la solution. L'intention est d'évaluer la solution dans le contexte plus large pour s'assurer qu'elle ne se comporte pas de manière inacceptable lorsqu'elle est déployée en production.\n\nQuelle technique d'évaluation devrait être utilisée ici ?",
+    "opts": [
+      "Tests exploratoires",
+      "Tests d'une journée dans la vie",
+      "Tests d'intégration",
+      "Tests de performance"
+    ],
+    "ans": 2,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Se concentre sur la découverte de défauts, pas l'évaluation dans l'environnement de production.",
+      "B": "Simule l'expérience utilisateur mais n'aborde pas spécifiquement l'intégration des composants.",
+      "C": "Correcte. Vérifient que différentes parties d'une solution fonctionnent ensemble — cruciaux pour l'évaluation en production.",
+      "D": "Évalue la performance sous charge, pas les interactions des composants intégrés.",
+      "global": "Les tests d'intégration évaluent la solution dans son environnement réel, identifiant les comportements inacceptables avant déploiement."
+    }
+  },
+  {
+    "id": 56,
+    "q": "Lors de la gestion des coûts dans un environnement agile, que devrait considérer un chef de projet ?",
+    "opts": [
+      "Des méthodes d'estimation légères peuvent être utilisées à mesure que des changements surviennent",
+      "Les environnements agiles rendent l'agrégation des coûts plus difficile",
+      "Les environnements agiles rendent les projets plus coûteux et incertains",
+      "Les calculs de coûts détaillés bénéficient de changements fréquents"
+    ],
+    "ans": 0,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Correcte. Méthodes légères (estimation analogique, affinité, trois points) adaptées aux changements fréquents.",
+      "B": "Ne met pas en évidence la gestion proactive des coûts par des techniques d'estimation.",
+      "C": "Trompeuse. L'agile peut en réalité aider à contrôler les coûts.",
+      "D": "Les changements fréquents compliquent les calculs détaillés — incorrecte.",
+      "global": "En agile, les méthodes d'estimation légères permettent la flexibilité dans un cadre adaptatif."
+    }
+  },
+  {
+    "id": 57,
+    "q": "Un chef de projet travaille dans un environnement où les exigences ne sont pas très claires et peuvent changer pendant le projet. De plus, le projet a plusieurs parties prenantes et est techniquement complexe.\n\nQuelles stratégies le chef de projet devrait-il prendre en compte pour la gestion des risques dans cet environnement ?",
+    "opts": [
+      "Identifier, évaluer et classer les risques occasionnellement",
+      "Examiner les exigences et les équipes de projet interfonctionnelles",
+      "Inclure des réserves de contingence et mettre à jour fréquemment le plan de gestion de projet",
+      "Examiner fréquemment les produits de travail incrémentaux et mettre à jour les exigences pour une priorisation appropriée"
+    ],
+    "ans": 3,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Trop peu fréquente pour un environnement avec des exigences peu claires et changeantes.",
+      "B": "Bénéfique mais n'aborde pas adéquatement la nature dynamique des risques.",
+      "C": "Bonne pratique, mais les mises à jour fréquentes du plan seules insuffisantes.",
+      "D": "Correcte. S'aligne avec les méthodologies agiles — livraison incrémentale et réévaluation fréquente des exigences.",
+      "global": "La réponse D s'aligne avec l'agile — livraison incrémentale et réévaluation fréquente dans des environnements complexes."
+    }
+  },
+  {
+    "id": 58,
+    "q": "Dans un environnement agile ou adaptatif, quand le risque devrait-il être surveillé et priorisé ?",
+    "opts": [
+      "Uniquement pendant les phases d'initiation et de clôture",
+      "Pendant les phases d'initiation et de planification",
+      "Pendant chaque itération à mesure que le projet progresse",
+      "Tout au long du groupe de processus de planification et de la réunion rétrospective"
+    ],
+    "ans": 2,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Les risques ne devraient pas être confinés aux phases d'initiation et de clôture.",
+      "B": "Incomplète — ne reconnaît pas la nature continue de la gestion des risques en agile.",
+      "C": "Correcte. Les risques sont surveillés et priorisés en continu pendant chaque itération.",
+      "D": "Partiellement correcte mais trop étroite — la gestion des risques ne se limite pas aux rétrospectives.",
+      "global": "En agile, les risques sont évalués et priorisés dans chaque itération pour permettre des ajustements opportuns."
+    }
+  },
+  {
+    "id": 59,
+    "q": "Un chef de projet a rejoint une entreprise pour remplacer quelqu'un qui a quitté le projet. Il n'y a pas eu de passation, mais le chef de projet précédent a développé un calendrier détaillé et l'équipe de projet a terminé certains livrables du projet. L'équipe n'est pas colocalisée et certains des membres de l'équipe sont d'anciens stagiaires qui ont été récemment employés à temps plein.\n\nQuelle est la méthode de livraison de projet la plus appropriée ?",
+    "opts": [
+      "Gestion de projet adaptative",
+      "Gestion de projet linéaire",
+      "Gestion de projet extrême",
+      "Gestion de projet intégrée"
+    ],
+    "ans": 0,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Correcte. Permet la flexibilité et la réactivité, soutient l'apprentissage des nouveaux membres, bénéfique pour une équipe non colocalisée.",
+      "B": "La rigidité du linéaire ne s'adapte pas à la nature dynamique et à l'inexpérience de l'équipe.",
+      "C": "Utilisé pour des projets très incertains et complexes — pas le cas ici avec un calendrier détaillé existant.",
+      "D": "Se concentre sur l'alignement stratégique mais n'aborde pas le besoin immédiat de flexibilité.",
+      "global": "La gestion adaptative est appropriée pour sa flexibilité avec une équipe non colocalisée et de nouveaux membres."
+    }
+  },
+  {
+    "id": 60,
+    "q": "Quel est l'objectif principal d'une feuille de route de produit ?",
+    "opts": [
+      "Éduquer les clients sur les changements à attendre afin qu'ils soient préparés avant leur publication.",
+      "Fournir une vue des nouvelles fonctionnalités du produit et la séquence de livraison attendue par version.",
+      "Clarifier la valeur commerciale de chaque nouvelle fonctionnalité et sa pertinence.",
+      "Limiter la portée du produit et réduire la probabilité de changements à l'avenir."
+    ],
+    "ans": 1,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Éduquer les clients est important mais pas l'objectif principal.",
+      "B": "Correcte. Aperçu stratégique des fonctionnalités à construire, leur objectif et l'ordre de livraison.",
+      "C": "La valeur commerciale est importante mais n'est pas la fonction principale de la feuille de route.",
+      "D": "La feuille de route fournit une direction, pas des restrictions.",
+      "global": "Une feuille de route de produit fournit un aperçu stratégique des nouvelles fonctionnalités et leur séquence de livraison."
+    }
+  },
+  {
+    "id": 61,
+    "q": "Un chef de projet aborde les risques et les préoccupations potentielles liées à la gestion des parties prenantes, et clarifie et résout les problèmes précédemment identifiés.\n\nDans quel processus le chef de projet est-il engagé ?",
+    "opts": [
+      "Identifier les parties prenantes",
+      "Planifier l'engagement des parties prenantes",
+      "Gérer l'engagement des parties prenantes",
+      "Surveiller l'engagement des parties prenantes"
+    ],
+    "ans": 2,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Se concentre sur l'identification initiale des parties prenantes, pas l'abord des risques.",
+      "B": "Développe des stratégies d'engagement mais n'inclut pas la gestion active des problèmes.",
+      "C": "Correcte. Le chef de projet aborde activement les préoccupations, gère les attentes et résout les problèmes.",
+      "D": "Implique le suivi des relations, pas directement la résolution de problèmes.",
+      "global": "Gérer l'engagement des parties prenantes : aborder les préoccupations et résoudre les problèmes pour maintenir une relation positive."
+    }
+  },
+  {
+    "id": 62,
+    "q": "Dans l'aspect d'analyse commerciale d'un projet de construction, quel est l'objectif du processus de validation des exigences ?",
+    "opts": [
+      "Assure une couverture complète des cas de test unitaires",
+      "Assure la livraison réussie de la valeur commerciale",
+      "Assure que le problème commercial est résolu",
+      "Assure un reflet précis des intentions des parties prenantes"
+    ],
+    "ans": 3,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Plus pertinent pour le développement logiciel, pas l'objectif principal de la validation des exigences.",
+      "B": "Objectif du projet global, pas spécifiquement de la validation des exigences.",
+      "C": "Résultat plus large pouvant résulter d'une validation efficace, pas l'objectif immédiat.",
+      "D": "Correcte. Vérifier que les exigences documentées reflètent précisément les besoins et intentions des parties prenantes.",
+      "global": "La validation des exigences vérifie l'exhaustivité, cohérence et faisabilité pour aligner le projet avec les attentes."
+    }
+  },
+  {
+    "id": 63,
+    "q": "Lors d'une rétrospective, l'équipe constate que toutes les user stories ne sont pas complètes. Que devrait-on faire avec les user stories incomplètes ?",
+    "opts": [
+      "Faire avancer ces user stories en haut du backlog du prochain sprint.",
+      "Supprimer ces user stories car elles ne sont pas importantes.",
+      "Déplacer ces user stories vers le backlog de produit pour repriorisation.",
+      "Terminer ces user stories dans le sprint actuel et prolonger la durée du sprint."
+    ],
+    "ans": 2,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Sans réévaluation n'est pas conforme aux pratiques agiles.",
+      "B": "Supprimer peut négliger leur valeur potentielle.",
+      "C": "Correcte. Déplacer vers le backlog de produit permet la réévaluation et la priorisation appropriée.",
+      "D": "Prolonger le sprint perturbe le concept de timebox fixe en agile.",
+      "global": "Les user stories incomplètes devraient être déplacées vers le backlog de produit pour repriorisation lors du prochain sprint."
+    }
+  },
+  {
+    "id": 64,
+    "q": "Quel type de cycle de vie de projet utilise un plan d'itération ?",
+    "opts": [
+      "Agile",
+      "Prédictif",
+      "Cascade",
+      "Produit"
+    ],
+    "ans": 0,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Correcte. Les méthodologies agiles reposent sur des approches itératives et incrémentales — les plans d'itération en sont fondamentaux.",
+      "B": "Les cycles de vie prédictifs sont linéaires et séquentiels, sans plans d'itération.",
+      "C": "Le modèle en cascade est linéaire et n'incorpore pas d'itérations.",
+      "D": "Le terme « produit » ne fait pas référence à un cycle de vie spécifique.",
+      "global": "L'Agile se distingue par ses plans d'itération — permettant flexibilité et amélioration continue."
+    }
+  },
+  {
+    "id": 65,
+    "q": "Un chef de projet recherche l'assistance de l'analyste d'affaires pour un projet informatique. Quelle assistance l'analyste d'affaires peut-il fournir ?",
+    "opts": [
+      "Éliciter les exigences du produit.",
+      "Gérer le calendrier du projet.",
+      "Allouer les ressources du projet.",
+      "Vérifier la fonctionnalité du produit."
+    ],
+    "ans": 0,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Correcte. L'analyste d'affaires est principalement responsable de la collecte et documentation des exigences.",
+      "B": "Responsabilité du chef de projet, pas de l'analyste d'affaires.",
+      "C": "Tâche généralement gérée par le chef de projet ou coordinateur.",
+      "D": "Généralement le rôle des équipes d'assurance qualité.",
+      "global": "L'analyste d'affaires joue un rôle crucial dans l'élicitation et la documentation des exigences du produit."
+    }
+  },
+  {
+    "id": 66,
+    "q": "Quelles sont les contraintes concurrentes qu'un chef de projet devrait aborder lors de l'adaptation d'un projet ?",
+    "opts": [
+      "Coût, portée, calendrier",
+      "Parrainage, risque, qualité",
+      "Calendrier, parrainage, portée",
+      "Ressources, qualité, communication"
+    ],
+    "ans": 0,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Correcte. La triple contrainte de la gestion de projet — interdépendants, tout changement dans l'un affecte les autres.",
+      "B": "Aspects importants mais pas les principales contraintes concurrentes.",
+      "C": "Le parrainage n'est pas une contrainte concurrente au sens du triangle.",
+      "D": "La communication est un facilitateur, pas une contrainte concurrente.",
+      "global": "Coût, portée et calendrier sont les contraintes concurrentes fondamentales — les équilibrer est crucial."
+    }
+  },
+  {
+    "id": 67,
+    "q": "Quels sont les principaux objectifs de la gestion des risques du projet ?",
+    "opts": [
+      "Augmenter la probabilité des risques positifs et diminuer la probabilité des risques négatifs.",
+      "Éviter tous les types de risques.",
+      "Augmenter la probabilité des risques positifs et éliminer tous les risques négatifs.",
+      "Identifier les risques positifs et négatifs."
+    ],
+    "ans": 0,
+    "domain": "Domaine I : Fondamentaux et concepts de base",
+    "expl": {
+      "A": "Correcte. Améliorer la probabilité des risques positifs tout en minimisant les risques négatifs.",
+      "B": "Éviter tous les risques n'est pas pratique ou possible.",
+      "C": "Éliminer complètement les risques négatifs n'est pas réalisable.",
+      "D": "L'identification est un composant, pas l'objectif principal.",
+      "global": "La gestion des risques vise à augmenter les risques positifs et diminuer les risques négatifs."
+    }
+  },
+  {
+    "id": 68,
+    "q": "Pour un projet de 10 jours, la durée de l'activité B est de trois jours, et la durée de l'activité C est de deux jours.\n\nQuelle est la durée de l'activité A si les activités B et C sont effectuées en parallèle ?",
+    "opts": [
+      "3 jours",
+      "5 jours",
+      "7 jours",
+      "10 jours"
+    ],
+    "ans": 2,
+    "domain": "Domaine II : Méthodologies prédictives",
+    "expl": {
+      "A": "Ne tient pas compte de la durée totale de B et C pour que A commence.",
+      "B": "Durée arbitraire ne correspondant pas à la relation entre les activités.",
+      "C": "Correcte. B et C en parallèle (3 et 2 jours). A = 10 - 3 (durée la plus longue de B et C) = 7 jours.",
+      "D": "A ne doit pas prendre toute la durée du projet.",
+      "global": "Quand B et C sont en parallèle, la durée globale dépend de la plus longue (3 jours). A = 10 - 3 = 7 jours."
+    }
+  },
+  {
+    "id": 69,
+    "q": "Un commanditaire de projet a demandé une feuille de route de livraison claire pour la mise en œuvre d'un système complexe qui n'a pas d'exigences claires et stables.\n\nComment l'équipe devrait-elle aborder la demande du commanditaire du projet ?",
+    "opts": [
+      "Développer un backlog de produit avec toutes les user stories requises.",
+      "Développer un calendrier de projet avec un décalage suffisant entre les tâches.",
+      "Développer un plan de version avec des jalons pour les fonctionnalités majeures.",
+      "Développer un prototype pour déterminer le temps de livraison requis."
+    ],
+    "ans": 2,
+    "domain": "Domaine III : Cadres/Méthodologies agiles",
+    "expl": {
+      "A": "Un backlog ne fournit pas en soi une feuille de route de livraison de haut niveau avec des jalons.",
+      "B": "Un calendrier détaillé avec séquencement fixe est moins approprié pour des exigences incertaines.",
+      "C": "Correcte. Un plan de version fournit une feuille de route de haut niveau segmentant la livraison en fonctionnalités majeures avec flexibilité.",
+      "D": "Le prototypage informe les estimations mais ne constitue pas une feuille de route structurée.",
+      "global": "Un plan de version avec jalons permet une livraison incrémentale et la flexibilité de s'adapter aux exigences évolutives."
+    }
+  },
+  {
+    "id": 70,
+    "q": "Un chef de projet doit adapter le processus de gestion des coûts du projet. Quelles considérations le chef de projet devrait-il appliquer ?",
+    "opts": [
+      "Contexte de diversité",
+      "Relations des parties prenantes",
+      "Expertise technique",
+      "Gestion des connaissances"
+    ],
+    "ans": 3,
+    "domain": "Domaine IV : Cadres d'analyse commerciale",
+    "expl": {
+      "A": "Pas une considération directe dans l'adaptation des processus de gestion des coûts.",
+      "B": "Importante pour le succès global mais pas directement pour l'adaptation des processus de coûts.",
+      "C": "Précieuse mais n'aborde pas spécifiquement l'adaptation des processus de gestion des coûts.",
+      "D": "Correcte. Implique les leçons apprises et référentiels d'informations qui influencent l'adaptation des processus de gestion des coûts.",
+      "global": "La gestion des connaissances permet de tirer parti des données historiques pour adapter la gestion des coûts efficacement."
+    }
+  }
+];
+
+const OPTS_LETTERS = ["A","B","C","D"];
+let currentLang = "fr";
+let timerInterval = null;
+let remainingSeconds = EXAM_DURATION;
+let participant = {name:"", email:"", wantsEmail:false};
+let lastRemote = {attempted:false, success:false, message:""};
+let storedTrainerPwd = "";
+let currentAttemptNum = 1;
+// L'URL Apps Script est lue depuis localStorage (panneau Formateur) ou la constante si définie
+let googleScriptUrl = "";
+(function initGasUrl() {
+  try {
+    const saved = localStorage.getItem("capm_gscript_url");
+    if (saved && saved.startsWith("https://script.google.com")) {
+      googleScriptUrl = saved;
+      return;
+    }
+  } catch(e) {}
+  if (typeof GOOGLE_APPS_SCRIPT_URL !== "undefined"
+      && GOOGLE_APPS_SCRIPT_URL
+      && !GOOGLE_APPS_SCRIPT_URL.includes("PASTE")
+      && GOOGLE_APPS_SCRIPT_URL.startsWith("https://")) {
+    googleScriptUrl = GOOGLE_APPS_SCRIPT_URL;
+  }
+})();
+
+function setLang(lang) {
+  currentLang = lang;
+  document.getElementById("langFrBtn").classList.toggle("active", lang==="fr");
+  document.getElementById("langEnBtn").classList.toggle("active", lang==="en");
+  const isFr = lang==="fr";
+  document.getElementById("homeTitle").textContent = isFr?"Examen blanc CAPM":"CAPM Mock Exam";
+  document.getElementById("homeSubtitle").textContent = isFr?"Batch 3 — 70 Questions · 80 minutes · Seuil : 65% · 3 essais max":"Batch 3 — 70 Questions · 80 minutes · Pass: 65% · 3 max attempts";
+  document.getElementById("regTitle").textContent = isFr?"Informations du participant":"Participant Information";
+}
+
+function showOnly(id) {
+  ["homeView","examView","resultView","trainerLoginView","trainerView"].forEach(v=>{
+    document.getElementById(v).classList.add("hidden");
+  });
+  document.getElementById(id).classList.remove("hidden");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function goHome() {
+  clearInterval(timerInterval);
+  showOnly("homeView");
+}
+
+function getAttempts(name) {
+  try { return JSON.parse(localStorage.getItem(STORAGE_PART)||"{}")[name]||0; } catch(e) { return 0; }
+}
+function incAttempts(name) {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORAGE_PART)||"{}");
+    s[name] = (s[name]||0) + 1;
+    localStorage.setItem(STORAGE_PART, JSON.stringify(s));
+    return s[name];
+  } catch(e) { return 1; }
+}
+function resetAttempts(name) {
+  try {
+    const s = JSON.parse(localStorage.getItem(STORAGE_PART)||"{}");
+    s[name] = 0;
+    localStorage.setItem(STORAGE_PART, JSON.stringify(s));
+  } catch(e) {}
+}
+
+function startExam() {
+  const name = document.getElementById("candidateName").value.trim();
+  const email = document.getElementById("candidateEmail").value.trim();
+  const wantsEmail = document.getElementById("sendResultsByEmail").checked;
+  const msg = document.getElementById("startMessage");
+  msg.textContent = "";
+  const isFr = currentLang==="fr";
+  if (!name) { msg.textContent = isFr?"Le nom est obligatoire.":"Name is required."; return; }
+  const used = getAttempts(name);
+  if (used >= MAX_ATTEMPTS) {
+    msg.textContent = isFr?`Maximum de ${MAX_ATTEMPTS} essais atteint pour ce participant.`:`Maximum of ${MAX_ATTEMPTS} attempts reached.`;
+    return;
+  }
+  participant = {name, email, wantsEmail};
+  remainingSeconds = EXAM_DURATION;
+  document.getElementById("candidateDisplay").textContent = name;
+  document.getElementById("attemptBadge").textContent = isFr?`Essai ${used+1}/${MAX_ATTEMPTS}`:`Attempt ${used+1}/${MAX_ATTEMPTS}`;
+  renderQuestions();
+  renderQnumNav(false);
+  startTimer();
+  showOnly("examView");
+}
+
+function fmt(s) { return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+function startTimer() {
+  clearInterval(timerInterval);
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    remainingSeconds--;
+    updateTimerDisplay();
+    if (remainingSeconds <= 0) { clearInterval(timerInterval); submitExam(false); }
+  }, 1000);
+}
+function updateTimerDisplay() {
+  const el = document.getElementById("timer");
+  const fill = document.getElementById("timerFill");
+  el.textContent = fmt(remainingSeconds);
+  fill.style.width = (remainingSeconds/EXAM_DURATION*100)+"%";
+  const danger = remainingSeconds < 120;
+  el.classList.toggle("danger", danger);
+  fill.classList.toggle("danger", danger);
+}
+
+// RENDER QUESTIONS — domain masqué en mode quiz
+function renderQuestions() {
+  const c = document.getElementById("questionsContainer");
+  c.innerHTML = QUESTIONS.map((q, idx) => `
+    <div class="question-card" id="qcard-${q.id}">
+      <div style="margin-bottom:10px;">
+        <span class="pill" style="font-size:.8rem;font-weight:700;background:#f0fdfa;border-color:#99f6e4;color:#0f766e;">
+          Question ${idx+1} / 70
+        </span>
+      </div>
+      <h3>${q.q}</h3>
+      ${q.opts.map((opt,i) => `
+        <label class="option" id="opt-${q.id}-${i}">
+          <input type="radio" name="q${q.id}" value="${i}" onchange="onAnswer(${q.id})"/>
+          <span class="opt-letter">${OPTS_LETTERS[i]}.</span>
+          <span>${opt}</span>
+        </label>`).join("")}
+      <div id="exp-${q.id}" style="display:none;"></div>
+    </div>`).join("");
+}
+
+function renderQnumNav(reviewed) {
+  const nav = document.getElementById("qnumNav");
+  nav.innerHTML = QUESTIONS.map((q, i) => {
+    let cls = "qnum-btn";
+    if (reviewed) {
+      const a = collectAnswers().find(x => x.id===q.id);
+      if (a) cls += a.correct ? " correct-q" : " wrong-q";
+    } else {
+      if (document.querySelector(`input[name="q${q.id}"]:checked`)) cls += " answered";
+    }
+    return `<button class="${cls}" onclick="scrollToQ(${q.id})">${i+1}</button>`;
+  }).join("");
+}
+
+function scrollToQ(id) {
+  const el = document.getElementById("qcard-"+id);
+  if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function onAnswer(qid) {
+  const answered = QUESTIONS.filter(q => document.querySelector(`input[name="q${q.id}"]:checked`) !== null).length;
+  document.getElementById("answeredCount").textContent = answered;
+  document.getElementById("progressFill").style.width = (answered/QUESTIONS.length*100)+"%";
+  renderQnumNav(false);
+}
+
+function collectAnswers() {
+  return QUESTIONS.map(q => {
+    const sel = document.querySelector(`input[name="q${q.id}"]:checked`);
+    const selected = sel ? parseInt(sel.value) : null;
+    return {id: q.id, selected, correct: q.ans, isCorrect: selected===q.ans};
+  });
+}
+
+function showModal(title, body, onConfirm) {
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalBody").textContent = body;
+  document.getElementById("confirmModal").classList.remove("hidden");
+  document.getElementById("modalConfirmBtn").onclick = () => { closeModal(); onConfirm(); };
+}
+function closeModal() { document.getElementById("confirmModal").classList.add("hidden"); }
+
+function confirmSubmit() {
+  const answered = QUESTIONS.filter(q => document.querySelector(`input[name="q${q.id}"]:checked`) !== null).length;
+  const unanswered = QUESTIONS.length - answered;
+  const isFr = currentLang==="fr";
+  showModal(
+    isFr?"Soumettre l'examen":"Submit Exam",
+    unanswered > 0
+      ? (isFr?`${unanswered} question(s) sans réponse. Soumettre ?`:`${unanswered} unanswered. Submit?`)
+      : (isFr?"Soumettre l'examen maintenant ?":"Submit now?"),
+    () => submitExam(true)
+  );
+}
+
+function confirmCancel() {
+  showModal(
+    currentLang==="fr"?"Annuler l'examen":"Cancel",
+    currentLang==="fr"?"Êtes-vous sûr ? La progression sera perdue.":"Sure? Progress will be lost.",
+    () => { clearInterval(timerInterval); goHome(); }
+  );
+}
+
+function pct(c, t) { return t ? Math.round(c/t*100) : 0; }
+function classifyGlobal(p) {
+  return p >= 65
+    ? {label: currentLang==="fr"?"✅ Réussi":"✅ Passed", cls:"global-pass"}
+    : {label: currentLang==="fr"?"❌ Insuffisant":"❌ Insufficient", cls:"global-fail"};
+}
+
+// Déduit la catégorie ECO depuis le nom du domaine
+function domainToEco(domain) {
+  const d = (domain || "").toLowerCase();
+  if (d.includes("people") || d.includes("équipe") || d.includes("leadership")) return "People";
+  if (d.includes("fondament") || d.includes("business") || d.includes("environnement")) return "Business Environment";
+  return "Process"; // Prédictif, Agile, Hybride → Process par défaut
+}
+
+function computeResults() {
+  const answers = collectAnswers();
+  let score = 0;
+  const byDomain = {};
+  const byEco    = {};
+  answers.forEach(a => {
+    const q = QUESTIONS.find(x => x.id===a.id);
+    const ok = a.selected === a.correct;
+    if (ok) score++;
+    const d = q.domain;
+    const eco = q.eco || domainToEco(d);
+    a.eco = eco; // stocké sur l'objet pour le payload
+    if (!byDomain[d]) byDomain[d] = {correct:0, total:0};
+    byDomain[d].total++;
+    if (ok) byDomain[d].correct++;
+    if (!byEco[eco]) byEco[eco] = {correct:0, total:0};
+    byEco[eco].total++;
+    if (ok) byEco[eco].correct++;
+  });
+  Object.keys(byDomain).forEach(k => { byDomain[k].percent = pct(byDomain[k].correct, byDomain[k].total); });
+  Object.keys(byEco).forEach(k   => { byEco[k].percent    = pct(byEco[k].correct,    byEco[k].total);    });
+  const globalPercent = pct(score, QUESTIONS.length);
+  return {score, total:QUESTIONS.length, globalPercent, globalStatus:classifyGlobal(globalPercent), byDomain, byEco, answers};
+}
+
+// Corrections — domaine révélé après soumission
+function renderCorrections(answers) {
+  answers.forEach(a => {
+    const q = QUESTIONS.find(x => x.id===a.id);
+    if (!q) return;
+    q.opts.forEach((_, i) => {
+      const el = document.getElementById(`opt-${q.id}-${i}`);
+      if (!el) return;
+      if (i === a.correct) el.classList.add("correct");
+      if (a.selected === i && i !== a.correct) el.classList.add("incorrect");
+    });
+    document.querySelectorAll(`input[name="q${q.id}"]`).forEach(r => r.disabled = true);
+    const expEl = document.getElementById(`exp-${q.id}`);
+    if (expEl) {
+      const ok = a.selected === a.correct;
+      const keys = ["A","B","C","D"];
+      const explItems = keys.map((k,i) => {
+        const txt = q.expl[k];
+        if (!txt) return "";
+        const isc = i === q.ans;
+        const iss = a.selected === i && !isc;
+        const icon = isc?"✅ ":iss?"❌ ":"";
+        return `<div class="expl-item"><div class="expl-label">${icon}${OPTS_LETTERS[i]}. ${q.opts[i]}</div><div>${txt}</div></div>`;
+      }).join("");
+      expEl.style.display = "block";
+      // Domaine révélé ici dans le corrigé
+      expEl.innerHTML = `<div class="explanation-block ${ok?"ok":"bad"}">
+        <div class="domain-pill">📁 ${q.domain}</div>
+        ${explItems}
+        <div class="expl-global"><strong>Explication globale :</strong> ${q.expl.global}</div>
+      </div>`;
+    }
+  });
+  renderQnumNav(true);
+}
+
+function renderDetailedReview(answers) {
+  return answers.map((a, idx) => {
+    const q = QUESTIONS.find(x => x.id===a.id);
+    const ok = a.selected === a.correct;
+    const selLabel = a.selected !== null ? OPTS_LETTERS[a.selected] : (currentLang==="fr"?"Non répondu":"Not answered");
+    const corLabel = OPTS_LETTERS[a.correct];
+    const keys = ["A","B","C","D"];
+    return `<div class="question-card">
+      <div style="margin-bottom:10px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+        <span class="pill">#${idx+1}</span>
+        <span class="domain-pill">📁 ${q.domain}</span>
+        <span style="font-size:.8rem;padding:3px 10px;border-radius:999px;background:${ok?"#dcfce7":"#fee2e2"};color:${ok?"#166534":"#991b1b"};border:1px solid ${ok?"#86efac":"#fca5a5"};">${ok?"✅":"❌"}</span>
+      </div>
+      <h3>${q.q}</h3>
+      ${q.opts.map((opt,i) => {
+        const isc = i===a.correct;
+        const iss = a.selected===i && !isc;
+        return `<div class="option${isc?" correct":iss?" incorrect":""}">
+          <span class="opt-letter">${OPTS_LETTERS[i]}.</span>
+          <span>${opt}${isc?" ✓":""}${iss?" ✗":""}</span>
+        </div>`;
+      }).join("")}
+      <div class="explanation-block ${ok?"ok":"bad"}" style="margin-top:12px;">
+        <div style="margin-bottom:10px;">
+          <strong>${currentLang==="fr"?"Votre réponse":"Your answer"}:</strong> ${selLabel} &nbsp;&nbsp;
+          <strong>${currentLang==="fr"?"Bonne réponse":"Correct"}:</strong> ${corLabel}
+        </div>
+        ${keys.map((k,i) => {
+          const txt = q.expl[k];
+          if (!txt) return "";
+          const isc = i===q.ans;
+          const iss = a.selected===i && !isc;
+          const icon = isc?"✅ ":iss?"❌ ":"";
+          return `<div class="expl-item"><div class="expl-label">${icon}${OPTS_LETTERS[i]}. ${q.opts[i]}</div><div>${txt}</div></div>`;
+        }).join("")}
+        <div class="expl-global"><strong>Explication globale :</strong> ${q.expl.global}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function saveAttemptLocal(results) {
+  const name = participant.name;
+  const num = incAttempts(name);
+  currentAttemptNum = num;
+  const att = {
+    attemptId: "CAPM-"+Date.now(),
+    date: new Date().toLocaleString("fr-FR"),
+    participantName: name,
+    participantEmail: participant.email||"",
+    testType: "Batch 3 — 70 Questions",
+    attemptNumber: num,
+    score: results.score,
+    total: results.total,
+    percent: results.globalPercent,
+    globalLabel: results.globalStatus.label,
+    byDomain: results.byDomain,
+    byEco: results.byEco || {}
+  };
+  try {
+    const ex = JSON.parse(localStorage.getItem(STORAGE_ATTEMPTS)||"[]");
+    ex.push(att);
+    localStorage.setItem(STORAGE_ATTEMPTS, JSON.stringify(ex.slice(-300)));
+    localStorage.setItem(STORAGE_LAST, JSON.stringify(att));
+  } catch(e) {}
+  return att;
+}
+
+async function submitRemote(results, attemptNum) {
+  lastRemote = {attempted: false, success: false, message: ""};
+  const url = googleScriptUrl;
+  if (!url || url.includes("PASTE")) {
+    lastRemote.message = "⚠️ URL Google Apps Script non configurée.";
+    return;
+  }
+
+  const payload = {
+    appTitle:         "Examen blanc CAPM - Batch 3",
+    submittedAt:      new Date().toISOString(),
+    attemptId:        "CAPM-" + Date.now(),
+    participantName:  participant.name,
+    participantEmail: participant.email || "",
+    wantsEmail:       participant.wantsEmail,
+    testType:         "Batch 3 — 70 Questions",
+    attemptNumber:    attemptNum,
+    score:            results.score,
+    total:            results.total,
+    percent:          results.globalPercent,
+    globalLabel:      results.globalStatus.label,
+    byDomain:         results.byDomain,
+    byEco:            results.byEco || {},
+    answers:          results.answers.map(a => {
+      const q = QUESTIONS.find(x => x.id === a.id);
+      return {
+        questionId:    a.id,
+        domain:        q.domain,
+        eco:           a.eco || q.eco || "",
+        question:      q.q.replace(/\n/g, " ").substring(0, 120),
+        selected:      a.selected,
+        correct:       a.correct,
+        selectedLabel: a.selected !== null ? OPTS_LETTERS[a.selected] : "NR",
+        correctLabel:  OPTS_LETTERS[a.correct]
+      };
+    })
+  };
+
+  // Google Apps Script ne peut pas envoyer Access-Control-Allow-Origin.
+  // Solution : no-cors pour le POST (les données arrivent côté serveur,
+  // on ne peut juste pas lire la réponse — ce qui est acceptable pour une sauvegarde).
+  try {
+    await fetch(url, {
+      method:  "POST",
+      mode:    "no-cors",
+      body:    JSON.stringify(payload),
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+    // no-cors ne lève jamais d'exception — supposer succès
+    lastRemote = {
+      attempted: true,
+      success:   true,
+      message:   "☁️ Résultats envoyés à Google Sheets."
+    };
+  } catch(err) {
+    lastRemote = {
+      attempted: true,
+      success:   false,
+      message:   "❌ Erreur : " + err.message
+    };
+  }
+}
+
+function renderResultPage(results, manual, attemptNum) {
+  const attLeft = MAX_ATTEMPTS - attemptNum;
+  const isFr = currentLang==="fr";
+  document.getElementById("resultInner").innerHTML = `
+    <div class="result-box">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px;">
+        <h2 class="section-title" style="margin:0;">Résultats CAPM — Batch 3</h2>
+        <span class="capm-badge">CAPM® Exam Prep</span>
+      </div>
+      <div class="result-score">${results.score}/${results.total} — ${results.globalPercent}%</div>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px;">
+        <p style="margin:0;"><strong>👤</strong> ${participant.name}</p>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="small">Essais :</span>
+          <div class="attempt-dots">
+            ${Array.from({length:MAX_ATTEMPTS},(_,i)=>`<div class="attempt-dot ${i<attemptNum?"dot-used":"dot-avail"}"></div>`).join("")}
+          </div>
+        </div>
+      </div>
+      <p style="margin:4px 0;"><span class="status-chip ${results.globalStatus.cls}">${results.globalStatus.label}</span>
+        &nbsp;<span class="small">Seuil : 65% &nbsp;·&nbsp; ${attLeft>0?`${attLeft} essai(s) restant(s)`:"Aucun essai restant"}</span>
+      </p>
+      ${lastRemote.attempted
+        ? `<p class="small" style="color:${lastRemote.success?"#166534":"#dc2626"};font-weight:700;margin-top:8px;">${lastRemote.message}</p>`
+        : `<p class="small" style="color:#92400e;background:#fef3c7;border-radius:6px;padding:6px 10px;margin-top:8px;">
+            ⚠️ Résultats <strong>non envoyés</strong> à Google Sheets — URL non configurée.
+            Configurez-la via le panneau 🔐 Formateur pour activer l'enregistrement.
+           </p>`}
+      <p class="small" style="margin-top:6px;">${manual?"Examen soumis manuellement.":"⏰ Temps écoulé — soumis automatiquement."}</p>
+      <div style="margin-top:20px;">
+        <h3 style="margin-top:0;">Performance par domaine</h3>
+        <div class="bars">${Object.entries(results.byDomain).map(([label,data])=>`
+          <div class="bar-row">
+            <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+              <strong style="font-size:.88rem;">${label}</strong><span>${data.correct}/${data.total} (${data.percent}%)</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:${data.percent}%"></div></div>
+          </div>`).join("")}</div>
+      </div>
+      <div class="controls" style="margin-top:20px;">
+        <button class="btn-light" onclick="downloadResultCSV()">⬇️ Export CSV</button>
+        ${attLeft>0?`<button class="btn-primary" style="background:#0f766e;" onclick="retakeExam()">🔄 Nouvel essai (${attLeft} restant)</button>`:""}
+        <button class="btn-light" onclick="showTrainerLogin()">🔐 Formateur</button>
+        <button class="btn-light" onclick="goHome()">🏠 Accueil</button>
+      </div>
+    </div>
+    <div>
+      <h2 class="section-title" style="margin-top:24px;">📋 Corrigé détaillé</h2>
+      <p class="small" style="margin-bottom:16px;color:#0f766e;font-weight:600;">✅ Les domaines sont maintenant révélés dans le corrigé.</p>
+      ${renderDetailedReview(results.answers)}
+    </div>`;
+}
+
+async function submitExam(manual) {
+  clearInterval(timerInterval);
+  const results = computeResults();
+  renderCorrections(results.answers);
+  const savedAtt = saveAttemptLocal(results);
+  await submitRemote(results, savedAtt.attemptNumber);
+  renderResultPage(results, manual, savedAtt.attemptNumber);
+  showOnly("resultView");
+}
+
+function retakeExam() {
+  const used = getAttempts(participant.name);
+  if (used >= MAX_ATTEMPTS) {
+    alert(currentLang==="fr"?`Maximum de ${MAX_ATTEMPTS} essais atteint.`:`Maximum of ${MAX_ATTEMPTS} attempts reached.`);
+    return;
+  }
+  remainingSeconds = EXAM_DURATION;
+  renderQuestions();
+  renderQnumNav(false);
+  document.getElementById("answeredCount").textContent = "0";
+  document.getElementById("progressFill").style.width = "0%";
+  document.getElementById("attemptBadge").textContent = currentLang==="fr"?`Essai ${used+1}/${MAX_ATTEMPTS}`:`Attempt ${used+1}/${MAX_ATTEMPTS}`;
+  startTimer();
+  showOnly("examView");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function downloadResultCSV() {
+  try {
+    const raw = localStorage.getItem(STORAGE_LAST);
+    if (!raw) { alert("Aucun résultat récent."); return; }
+    const att = JSON.parse(raw);
+    const rows = [["Date","Participant","Test","Essai N°","Score","Pourcentage","Résultat"]];
+    rows.push([att.date, att.participantName, att.testType||"", att.attemptNumber||1, `${att.score}/${att.total}`, `${att.percent}%`, att.globalLabel||""]);
+    rows.push([]);
+    rows.push(["Domaine","Correct","Total","%"]);
+    Object.entries(att.byDomain||{}).forEach(([k,v]) => rows.push([k, v.correct, v.total, `${v.percent}%`]));
+    const csv = rows.map(r => r.map(v=>`"${String(v||"").replace(/"/g,'""')}"`).join(",")).join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], {type:"text/csv;charset=utf-8;"}));
+    a.download = `resultat-capm-batch3-${att.participantName}-${Date.now()}.csv`;
+    a.click();
+  } catch(e) { alert("Export error: "+e.message); }
+}
+
+// TRAINER
+async function loginTrainer() {
+  const pwd = document.getElementById("trainerPassword").value.trim();
+  const msg = document.getElementById("trainerLoginMessage");
+  if (pwd !== TRAINER_PASSWORD) { msg.textContent = "Mot de passe incorrect."; return; }
+  storedTrainerPwd = pwd;
+  const urlInput = document.getElementById("appScriptUrlInput");
+  if (urlInput && urlInput.value.trim()) {
+    googleScriptUrl = urlInput.value.trim();
+    try { localStorage.setItem("capm_gscript_url", googleScriptUrl); } catch(e) {}
+  }
+  msg.textContent = "Chargement...";
+  await renderTrainerDashboard();
+  msg.textContent = "";
+  showOnly("trainerView");
+}
+
+function previewGasUrl(val) {
+  const el = document.getElementById("gasUrlStatus");
+  if (!el) return;
+  if (!val) { el.textContent = ""; el.style.background = ""; return; }
+  if (val.startsWith("https://script.google.com/macros/s/") && val.endsWith("/exec")) {
+    el.textContent = "✅ Format valide";
+    el.style.cssText = "font-size:.78rem;margin-top:4px;padding:4px 8px;border-radius:4px;background:#dcfce7;color:#166534;";
+  } else {
+    el.textContent = "⚠️ L'URL doit commencer par https://script.google.com/macros/s/ et finir par /exec";
+    el.style.cssText = "font-size:.78rem;margin-top:4px;padding:4px 8px;border-radius:4px;background:#fef3c7;color:#92400e;";
+  }
+}
+
+function showTrainerLogin() {
+  document.getElementById("trainerPassword").value = "";
+  document.getElementById("trainerLoginMessage").textContent = "";
+  const urlInput = document.getElementById("appScriptUrlInput");
+  if (urlInput) {
+    try { urlInput.value = localStorage.getItem("capm_gscript_url") || ""; } catch(e) {}
+  }
+  showOnly("trainerLoginView");
+}
+
+async function renderTrainerDashboard() {
+  const inner = document.getElementById("trainerInner");
+  let attempts = [], sourceText = "💾 Local Storage", remoteError = "";
+  if (googleScriptUrl && !googleScriptUrl.includes("PASTE")) {
+    // GET cross-origin : utiliser JSONP (balise <script>) car fetch bloque à cause du CORS
+    const remoteData = await new Promise((resolve) => {
+      const cbName = "capmCb_" + Date.now();
+      const tag    = document.createElement("script");
+      const timer  = setTimeout(() => {
+        delete window[cbName];
+        tag.remove();
+        resolve(null);
+      }, 10000);
+      window[cbName] = (data) => {
+        clearTimeout(timer);
+        delete window[cbName];
+        tag.remove();
+        resolve(data);
+      };
+      tag.onerror = () => { clearTimeout(timer); delete window[cbName]; resolve(null); };
+      tag.src = googleScriptUrl
+        + "?action=dashboard"
+        + "&password=" + encodeURIComponent(storedTrainerPwd)
+        + "&limit=500"
+        + "&callback=" + cbName;
+      document.head.appendChild(tag);
+    });
+    if (remoteData && remoteData.status === "ok") {
+      attempts   = remoteData.attempts || [];
+      sourceText = attempts.length
+        ? "☁️ Google Sheets (" + attempts.length + " tentative(s))"
+        : "☁️ Google Sheets — aucune tentative enregistrée";
+    } else {
+      remoteError = remoteData ? (remoteData.message || "Erreur Apps Script.") : "Timeout.";
+    }
+    if (remoteError) {
+      try { attempts = JSON.parse(localStorage.getItem(STORAGE_ATTEMPTS)||"[]"); } catch(e) {}
+      sourceText = attempts.length
+        ? "💾 Local Storage (fallback — Sheets: " + remoteError + ")"
+        : "💾 Local Storage (Sheets inaccessible : " + remoteError + ")";
+    }
+  } else {
+    try { attempts = JSON.parse(localStorage.getItem(STORAGE_ATTEMPTS)||"[]"); } catch(e) {}
+    sourceText = "💾 Local Storage (URL Google Sheets non configurée)";
+  }
+  const avg = attempts.length ? Math.round(attempts.reduce((s,a) => s+Number(a.percent||0),0)/attempts.length) : 0;
+  const gStatus = classifyGlobal(avg);
+  const domAgg = {};
+  attempts.forEach(a => {
+    Object.entries(a.byDomain||{}).forEach(([k,v]) => {
+      if (!domAgg[k]) domAgg[k] = {correct:0, total:0};
+      domAgg[k].correct += Number(v.correct||0);
+      domAgg[k].total += Number(v.total||0);
+    });
+  });
+  Object.keys(domAgg).forEach(k => { domAgg[k].percent = pct(domAgg[k].correct, domAgg[k].total); });
+  inner.innerHTML = `
+    <div class="hero">
+      <div class="brand-row">
+        <div class="brand-stack">
+          <div class="brand-chip"><img alt="PMI DRC" src="logo%20Chapitre%202025.png"/><div><strong>PMI DRC Chapter</strong><br><span class="small">Dashboard formateur CAPM</span></div></div>
+        </div>
+        <span class="capm-badge">CAPM® Formateur</span>
+      </div>
+      <h1>📊 Dashboard formateur</h1>
+      <p>Source : <strong>${sourceText}</strong></p>
+    </div>
+    <div class="dashboard-grid">
+      <div class="card">
+        <h2 class="section-title">Indicateurs globaux</h2>
+        <div class="meta-list">
+          <div class="meta-item"><strong>Tentatives</strong>${attempts.length}</div>
+          <div class="meta-item"><strong>Moyenne</strong>${avg}%</div>
+          <div class="meta-item"><strong>Statut moyen</strong><span class="status-chip ${gStatus.cls}">${gStatus.label}</span></div>
+          <div class="meta-item"><strong>Seuil CAPM</strong>65%</div>
+        </div>
+        <div class="controls">
+          <button class="btn-light" onclick="renderTrainerDashboard()">🔄 Actualiser</button>
+          <button class="btn-light" onclick="downloadDashboardCSV()">⬇️ Export CSV</button>
+          <button class="btn-light" onclick="resetParticipantAttemptsUI()">🔓 Réinitialiser essais</button>
+          <button class="btn-light" onclick="goHome()">🏠 Accueil</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2 class="section-title">Performance par domaine (cumulée)</h2>
+        <div class="bars">${Object.entries(domAgg).map(([label,data])=>`
+          <div class="bar-row">
+            <div style="display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;">
+              <strong style="font-size:.82rem;">${label}</strong><span>${data.correct}/${data.total} (${data.percent}%)</span>
+            </div>
+            <div class="bar-track"><div class="bar-fill" style="width:${data.percent}%"></div></div>
+          </div>`).join("")}</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px;">
+      <h2 class="section-title">Historique des tentatives (${attempts.length})</h2>
+      ${attempts.length ? `<div style="overflow-x:auto;"><table>
+        <thead><tr><th>Date</th><th>Participant</th><th>Email</th><th>Essai</th><th>Score</th><th>%</th><th>Résultat</th></tr></thead>
+        <tbody>${attempts.map(a=>`<tr>
+          <td style="white-space:nowrap;font-size:.82rem;">${String(a.date||"").substring(0,16)}</td>
+          <td><strong>${a.participantName||"-"}</strong></td>
+          <td style="font-size:.8rem;">${a.participantEmail||""}</td>
+          <td style="text-align:center;">${a.attemptNumber||"-"}/${MAX_ATTEMPTS}</td>
+          <td>${a.score}/${a.total}</td>
+          <td><strong>${a.percent}%</strong></td>
+          <td><span class="status-chip ${classifyGlobal(Number(a.percent||0)).cls}">${a.globalLabel||classifyGlobal(Number(a.percent||0)).label}</span></td>
+        </tr>`).join("")}</tbody>
+      </table></div>` : `<p class="small">Aucune tentative enregistrée.</p>`}
+    </div>`;
+}
+
+function resetParticipantAttemptsUI() {
+  const name = prompt("Nom exact du participant à réinitialiser :");
+  if (!name) return;
+  resetAttempts(name);
+  alert(`Essais de "${name}" réinitialisés (0/${MAX_ATTEMPTS}).`);
+}
+
+function downloadDashboardCSV() {
+  try {
+    const attempts = JSON.parse(localStorage.getItem(STORAGE_ATTEMPTS)||"[]");
+    const rows = [["Date","Participant","Email","Test","Essai N°","Score","Total","%","Résultat"]];
+    attempts.forEach(a => rows.push([a.date||"",a.participantName||"",a.participantEmail||"",a.testType||"",a.attemptNumber||1,a.score||0,a.total||0,`${a.percent||0}%`,a.globalLabel||""]));
+    const csv = rows.map(r => r.map(v=>`"${String(v||"").replace(/"/g,'""')}"`).join(",")).join("\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob(["\uFEFF"+csv], {type:"text/csv;charset=utf-8;"}));
+    a.download = `dashboard-capm-batch3-${Date.now()}.csv`;
+    a.click();
+  } catch(e) { alert("Export error: "+e.message); }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  try {
+    const saved = localStorage.getItem("capm_gscript_url");
+    if (saved && saved.startsWith("https://")) googleScriptUrl = saved;
+  } catch(e) {}
+});
+</script>
+</body>
+</html>
