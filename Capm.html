@@ -201,7 +201,9 @@ th{background:#f8fafc;font-weight:700;font-size:.85rem;color:#374151;}
       </div>
       <div class="field" style="margin-top:14px;">
         <label style="font-size:.85rem;color:#6b7280;">🔗 Google Apps Script URL</label>
-        <input id="appScriptUrlInput" type="url" placeholder="https://script.google.com/macros/s/..."/>
+        <input id="appScriptUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec"
+               style="font-size:.78rem;" oninput="previewGasUrl(this.value)"/>
+        <div id="gasUrlStatus" style="font-size:.78rem;margin-top:4px;padding:4px 8px;border-radius:4px;"></div>
       </div>
       <div class="controls">
         <button class="btn-primary" onclick="loginTrainer()">Entrer</button>
@@ -229,7 +231,7 @@ th{background:#f8fafc;font-weight:700;font-size:.85rem;color:#374151;}
 </div><!-- /container -->
 
 <script>
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqEEJPWkuEOAyDGB2SXiDsLtehZmeuiHb5j3TrdSgeUBjN4clqrQsZw8kPyk3saQY2/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmN6o1I1ZBFn7HI-jpwB1DHS1ZqCW-1FF2KMrVvL6gRoCf8PPGXKpOeAFqJ0hckHOS/exec";
 const TRAINER_PASSWORD = "221008";
 const MAX_ATTEMPTS = 3;
 const EXAM_DURATION = 80 * 60;
@@ -1578,9 +1580,23 @@ let participant = {name:"", email:"", wantsEmail:false};
 let lastRemote = {attempted:false, success:false, message:""};
 let storedTrainerPwd = "";
 let currentAttemptNum = 1;
-let googleScriptUrl = (typeof GOOGLE_APPS_SCRIPT_URL !== "undefined" && !GOOGLE_APPS_SCRIPT_URL.includes("PASTE"))
-  ? GOOGLE_APPS_SCRIPT_URL
-  : "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+// L'URL Apps Script est lue depuis localStorage (panneau Formateur) ou la constante si définie
+let googleScriptUrl = "";
+(function initGasUrl() {
+  try {
+    const saved = localStorage.getItem("capm_gscript_url");
+    if (saved && saved.startsWith("https://script.google.com")) {
+      googleScriptUrl = saved;
+      return;
+    }
+  } catch(e) {}
+  if (typeof GOOGLE_APPS_SCRIPT_URL !== "undefined"
+      && GOOGLE_APPS_SCRIPT_URL
+      && !GOOGLE_APPS_SCRIPT_URL.includes("PASTE")
+      && GOOGLE_APPS_SCRIPT_URL.startsWith("https://")) {
+    googleScriptUrl = GOOGLE_APPS_SCRIPT_URL;
+  }
+})();
 
 function setLang(lang) {
   currentLang = lang;
@@ -2102,6 +2118,19 @@ async function loginTrainer() {
   await renderTrainerDashboard();
   msg.textContent = "";
   showOnly("trainerView");
+}
+
+function previewGasUrl(val) {
+  const el = document.getElementById("gasUrlStatus");
+  if (!el) return;
+  if (!val) { el.textContent = ""; el.style.background = ""; return; }
+  if (val.startsWith("https://script.google.com/macros/s/") && val.endsWith("/exec")) {
+    el.textContent = "✅ Format valide";
+    el.style.cssText = "font-size:.78rem;margin-top:4px;padding:4px 8px;border-radius:4px;background:#dcfce7;color:#166534;";
+  } else {
+    el.textContent = "⚠️ L'URL doit commencer par https://script.google.com/macros/s/ et finir par /exec";
+    el.style.cssText = "font-size:.78rem;margin-top:4px;padding:4px 8px;border-radius:4px;background:#fef3c7;color:#92400e;";
+  }
 }
 
 function showTrainerLogin() {
