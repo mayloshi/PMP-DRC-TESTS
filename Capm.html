@@ -229,7 +229,7 @@ th{background:#f8fafc;font-weight:700;font-size:.85rem;color:#374151;}
 </div><!-- /container -->
 
 <script>
-const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx6TUc6EmToAzS0CP-kLE27jWb4zDvwCifIsvM3rGzUEgxYeH30BXiVyiOQaE-cpJFC/exec";
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqEEJPWkuEOAyDGB2SXiDsLtehZmeuiHb5j3TrdSgeUBjN4clqrQsZw8kPyk3saQY2/exec";
 const TRAINER_PASSWORD = "221008";
 const MAX_ATTEMPTS = 3;
 const EXAM_DURATION = 80 * 60;
@@ -1935,61 +1935,47 @@ async function submitRemote(results, attemptNum) {
     })
   };
 
-  // ── Stratégie 1 : fetch avec no-cors (pas de preflight, pas de réponse lisible)
-  // C'est la méthode la plus fiable pour Google Apps Script depuis un fichier local
-  // ou un domaine non-whitelisté. Les données arrivent bien côté serveur.
-  try {
-    await fetch(url, {
-      method: "POST",
-      mode: "no-cors",
-      headers: {"Content-Type": "text/plain;charset=utf-8"},
-      body: JSON.stringify(payload)
-    });
-    // no-cors réussit toujours sans lever d'exception (même si le serveur répond 4xx)
-    // On suppose succès et on vérifie via le dashboard formateur
-    lastRemote = {
-      attempted: true,
-      success: true,
-      message: currentLang==="fr"
-        ? "☁️ Envoyé à Google Sheets. Vérifiez dans le dashboard formateur."
-        : "☁️ Sent to Google Sheets. Check in trainer dashboard."
-    };
-    return;
-  } catch(err) {
-    // no-cors ne devrait jamais échouer — si c'est le cas, on tente le formulaire
-  }
-
-  // ── Stratégie 2 (fallback) : soumission via formulaire caché dans iframe
-  // Contourne complètement le CORS — technique officielle pour Apps Script
+  // ── Stratégie unique : formulaire caché dans iframe
+  // C'est la SEULE méthode qui fonctionne depuis GitHub Pages / fichier local
+  // sans déclencher de preflight CORS. fetch() avec no-cors échoue aussi depuis
+  // des origines HTTPS tierces car Apps Script ne renvoie pas Access-Control-Allow-Origin.
   await new Promise((resolve) => {
-    const iframeName = "gasTarget_"+Date.now();
+    const iframeName = "gasTarget_" + Date.now();
     const iframe = document.createElement("iframe");
     iframe.name = iframeName;
-    iframe.style.display = "none";
+    iframe.style.cssText = "display:none;position:absolute;width:0;height:0;";
     document.body.appendChild(iframe);
 
     const form = document.createElement("form");
     form.method = "POST";
     form.action = url;
     form.target = iframeName;
+    form.style.display = "none";
 
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = "payload";
-    input.value = JSON.stringify(payload);
-    form.appendChild(input);
+    // Champ 1 : payload JSON complet
+    const inputPayload = document.createElement("input");
+    inputPayload.type = "hidden";
+    inputPayload.name = "payload";
+    inputPayload.value = JSON.stringify(payload);
+    form.appendChild(inputPayload);
+
+    // Champ 2 : action explicite
+    const inputAction = document.createElement("input");
+    inputAction.type = "hidden";
+    inputAction.name = "action";
+    inputAction.value = "save";
+    form.appendChild(inputAction);
+
     document.body.appendChild(form);
 
-    iframe.onload = () => {
-      document.body.removeChild(form);
-      document.body.removeChild(iframe);
-      resolve();
-    };
-    setTimeout(() => {
-      document.body.removeChild(form);
+    const cleanup = () => {
+      try { document.body.removeChild(form); } catch(e) {}
       try { document.body.removeChild(iframe); } catch(e) {}
-      resolve();
-    }, 8000);
+    };
+
+    iframe.onload = () => { cleanup(); resolve(); };
+    // Timeout 10s au cas où onload ne se déclenche pas (cross-origin iframe)
+    setTimeout(() => { cleanup(); resolve(); }, 10000);
 
     form.submit();
   });
@@ -1998,8 +1984,8 @@ async function submitRemote(results, attemptNum) {
     attempted: true,
     success: true,
     message: currentLang==="fr"
-      ? "☁️ Envoyé via formulaire. Vérifiez dans le dashboard formateur."
-      : "☁️ Sent via form. Check in trainer dashboard."
+      ? "☁️ Résultats envoyés à Google Sheets."
+      : "☁️ Results sent to Google Sheets."
   };
 }
 
@@ -2132,34 +2118,47 @@ async function renderTrainerDashboard() {
   const inner = document.getElementById("trainerInner");
   let attempts = [], sourceText = "💾 Local Storage", remoteError = "";
   if (googleScriptUrl && !googleScriptUrl.includes("PASTE")) {
-    try {
-      const res = await fetch(
-        `${googleScriptUrl}?action=dashboard&password=${encodeURIComponent(storedTrainerPwd)}&limit=500`,
-        {method:"GET", cache:"no-store", redirect:"follow"}
-      );
-      const text = await res.text();
-      let data = {};
-      try { data = JSON.parse(text); } catch(e) {
-        remoteError = "Réponse non-JSON du serveur (vérifiez le déploiement Apps Script).";
-      }
-      if (data.status === "ok") {
-        attempts = data.attempts || [];
-        sourceText = attempts.length
-          ? "☁️ Google Sheets (" + attempts.length + " tentative(s))"
-          : "☁️ Google Sheets — aucune tentative enregistrée";
-      } else {
-        remoteError = data.message || "Erreur Apps Script inconnue.";
-      }
-    } catch(e) {
-      remoteError = "Erreur réseau : " + e.message;
-    }
-    // Fallback localStorage seulement si erreur réseau/serveur (pas si Sheets répond 0)
-    if (remoteError && !attempts.length) {
+    // ── Utiliser JSONP pour le GET dashboard (contourne le CORS comme pour le POST)
+    const remoteData = await new Promise((resolve) => {
+      const cbName = "capmDashCb_" + Date.now();
+      const scriptEl = document.createElement("script");
+      const timeout = setTimeout(() => {
+        delete window[cbName];
+        if (scriptEl.parentNode) scriptEl.parentNode.removeChild(scriptEl);
+        resolve(null);
+      }, 10000);
+      window[cbName] = (data) => {
+        clearTimeout(timeout);
+        delete window[cbName];
+        if (scriptEl.parentNode) scriptEl.parentNode.removeChild(scriptEl);
+        resolve(data);
+      };
+      scriptEl.src = googleScriptUrl
+        + "?action=dashboard"
+        + "&password=" + encodeURIComponent(storedTrainerPwd)
+        + "&limit=500"
+        + "&callback=" + cbName;
+      scriptEl.onerror = () => {
+        clearTimeout(timeout);
+        delete window[cbName];
+        resolve(null);
+      };
+      document.head.appendChild(scriptEl);
+    });
+
+    if (remoteData && remoteData.status === "ok") {
+      attempts = remoteData.attempts || [];
+      sourceText = attempts.length
+        ? "☁️ Google Sheets (" + attempts.length + " tentative(s))"
+        : "☁️ Google Sheets — aucune tentative enregistrée";
+    } else {
+      remoteError = remoteData ? (remoteData.message || "Erreur Apps Script.") : "Timeout ou erreur réseau.";
+      // Fallback localStorage si Sheets inaccessible
       try { attempts = JSON.parse(localStorage.getItem(STORAGE_ATTEMPTS)||"[]"); } catch(e) {}
       if (attempts.length) sourceText = "💾 Local Storage (fallback — Sheets: " + remoteError + ")";
+      else sourceText = "💾 Local Storage (Sheets: " + remoteError + ")";
     }
   } else {
-    // Pas d'URL configurée → localStorage uniquement
     try { attempts = JSON.parse(localStorage.getItem(STORAGE_ATTEMPTS)||"[]"); } catch(e) {}
     sourceText = "💾 Local Storage (URL Google Sheets non configurée)";
   }
