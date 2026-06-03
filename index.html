@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Examen blanc PMP — v5.1.6</title>
+<title>Examen blanc PMP — v5.3</title>
 <style>
 :root{
   --bg:#f5f6fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;
@@ -111,53 +111,6 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
   .test-cards{grid-template-columns:1fr;}
   table{font-size:.82rem;}
 }
-
-/* ── v5.1.5 : Toasts ── */
-#pmpToastContainer{position:fixed;top:18px;right:18px;z-index:9000;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
-.pmp-toast{background:white;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.15);padding:12px 16px;font-size:.87rem;font-weight:600;display:flex;align-items:center;gap:8px;min-width:220px;max-width:340px;border-left:4px solid #9ca3af;animation:pmpSlideIn .25s ease;pointer-events:all;}
-.pmp-toast.ok  {border-color:#16a34a;color:#166534;}
-.pmp-toast.err {border-color:#dc2626;color:#991b1b;}
-.pmp-toast.inf {border-color:#2563eb;color:#1d4ed8;}
-@keyframes pmpSlideIn{from{transform:translateX(50px);opacity:0;}to{transform:none;opacity:1;}}
-
-/* ── v5.1.5 : Modal email + modal limite ── */
-.pmp-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .2s;}
-.pmp-modal-overlay.open{opacity:1;pointer-events:all;}
-.pmp-modal{background:white;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.25);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;}
-.pmp-modal-head{background:linear-gradient(135deg,#5b21b6,#7c3aed);padding:18px 22px;border-radius:20px 20px 0 0;color:white;display:flex;align-items:center;justify-content:space-between;}
-.pmp-modal-head h3{margin:0;font-size:1rem;}
-.pmp-modal-close{background:none;border:none;color:white;font-size:1.4rem;cursor:pointer;line-height:1;opacity:.8;}
-.pmp-modal-close:hover{opacity:1;}
-.pmp-modal-body{padding:20px 22px;}
-.pmp-modal-foot{padding:14px 22px;border-top:1px solid #e5e7eb;display:flex;gap:8px;justify-content:flex-end;}
-.pmp-field{margin-bottom:13px;}
-.pmp-field label{display:block;font-size:.82rem;font-weight:700;color:#4b5563;margin-bottom:4px;}
-.pmp-field input,.pmp-field textarea{width:100%;padding:9px 12px;border-radius:10px;border:1px solid #d1d5db;font-size:.9rem;outline:none;resize:vertical;}
-.pmp-field input:focus,.pmp-field textarea:focus{border-color:#7c3aed;}
-.pmp-info-box{background:#f5f3ff;border-left:3px solid #7c3aed;border-radius:8px;padding:10px 14px;font-size:.82rem;color:#5b21b6;margin-bottom:13px;}
-.pmp-info-box strong{display:block;margin-bottom:2px;}
-.pmp-summary{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:13px;margin-bottom:13px;}
-.pmp-summary .ps-name{font-size:1.05rem;font-weight:800;color:#1f4e78;}
-.pmp-summary .ps-meta{font-size:.8rem;color:#6b7280;margin-top:3px;}
-.pmp-summary .ps-score{font-size:1.5rem;font-weight:800;margin:6px 0 3px;}
-.ps-score.pass{color:#16a34a;} .ps-score.fail{color:#dc2626;}
-
-/* ── v5.1.5 : Badges essais ── */
-.att-badge{display:inline-flex;align-items:center;gap:3px;border-radius:999px;padding:2px 8px;font-size:.75rem;font-weight:700;}
-.att-badge.ok{background:#eff6ff;color:#1d4ed8;}
-.att-badge.warn{background:#fff7ed;color:#92400e;}
-.att-badge.blocked{background:#fee2e2;color:#991b1b;}
-.att-row-blocked td{background:#fff5f5 !important;}
-.att-row-blocked:hover td{background:#fee2e2 !important;}
-
-/* ── v5.1.5 : Section limites ── */
-.max-section{background:white;border:1px solid #e5e7eb;border-radius:20px;padding:20px;box-shadow:0 12px 32px rgba(15,23,42,.08);margin-bottom:20px;}
-.max-section h3{margin:0 0 6px;font-size:1rem;font-weight:700;color:#1f4e78;}
-.max-section .max-form{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:12px;}
-.max-section .max-form label{font-size:.8rem;font-weight:700;color:#4b5563;display:block;margin-bottom:3px;}
-.max-section .max-form input{padding:8px 12px;border-radius:10px;border:1px solid #d1d5db;font-size:.9rem;outline:none;}
-.max-section .max-form input:focus{border-color:#7c3aed;}
-
 </style>
 </head>
 <body>
@@ -184,8 +137,8 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
       </div>
     </div>
     <h1 id="homeTitle">Examen blanc PMP</h1>
-    <p id="homeSubtitle">Version 5.1.6 — Choisissez un test ci-dessous</p>
-    <p class="small">Dernière mise à jour : <strong>2026-05-19</strong> &nbsp;·&nbsp; <span style="background:#ede9fe;color:#5b21b6;border-radius:999px;padding:3px 10px;font-size:.8rem;font-weight:700;">v5.1.6</span></p>
+    <p id="homeSubtitle">Version 5.2 — Choisissez un test ci-dessous</p>
+    <p class="small">Dernière mise à jour : <strong>2026-05-20</strong></p>
   </div>
 
   <div class="test-cards">
@@ -503,77 +456,6 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
   </div>
 </div>
 
-
-<!-- ═══════════════════════════════════════════════════
-     MODALS v5.1.5
-═══════════════════════════════════════════════════ -->
-<div id="pmpToastContainer"></div>
-
-<!-- Modal : Envoi email résultats -->
-<div class="pmp-modal-overlay" id="pmpEmailModal">
-  <div class="pmp-modal">
-    <div class="pmp-modal-head">
-      <h3>📧 Envoyer les résultats par email</h3>
-      <button class="pmp-modal-close" onclick="closePmpEmailModal()">×</button>
-    </div>
-    <div class="pmp-modal-body">
-      <div class="pmp-summary" id="pmpEmailSummary"></div>
-
-      <div class="pmp-field">
-        <label for="pmpEmailTo">Adresse email du destinataire <span style="color:#dc2626;">*</span></label>
-        <input type="email" id="pmpEmailTo" placeholder="participant@exemple.com"/>
-      </div>
-
-      <!-- Option : inclure les réponses détaillées -->
-      <div style="background:#f5f3ff;border:1px solid #c4b5fd;border-radius:12px;padding:14px;margin-bottom:12px;">
-        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;">
-          <input type="checkbox" id="pmpIncludeAnswers" checked
-            style="width:17px;height:17px;margin-top:2px;accent-color:#5b21b6;flex-shrink:0;cursor:pointer;"/>
-          <div>
-            <strong style="display:block;color:#5b21b6;font-size:.9rem;">📋 Inclure le détail des réponses</strong>
-            <span style="font-size:.8rem;color:#6b7280;line-height:1.4;">
-              Lorsque coché, l'email inclura question par question la réponse du participant et la bonne réponse.<br>
-              Décocher pour envoyer uniquement le score et les performances par domaine/ECO.
-            </span>
-          </div>
-        </label>
-      </div>
-
-      <!-- Zone de statut d'envoi -->
-      <div id="pmpEmailStatus" style="display:none;border-radius:10px;padding:11px 14px;font-size:.87rem;font-weight:600;margin-bottom:4px;"></div>
-    </div>
-    <div class="pmp-modal-foot">
-      <button class="btn-light" onclick="closePmpEmailModal()">Annuler</button>
-      <button class="btn-primary" id="pmpEmailSendBtn" onclick="pmpConfirmSendEmail()">📨 Envoyer</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal : Définir limite d'essais (depuis ligne tableau) -->
-<div class="pmp-modal-overlay" id="pmpMaxModal">
-  <div class="pmp-modal" style="max-width:400px;">
-    <div class="pmp-modal-head">
-      <h3>🔒 Limite d'essais</h3>
-      <button class="pmp-modal-close" onclick="closePmpMaxModal()">×</button>
-    </div>
-    <div class="pmp-modal-body">
-      <div class="pmp-info-box">
-        <strong id="pmpMaxModalName"></strong>
-        Nombre maximum d'essais. <strong>0 = illimité.</strong>
-      </div>
-      <div class="pmp-field">
-        <label for="pmpMaxInput">Maximum d'essais</label>
-        <input type="number" id="pmpMaxInput" min="0" max="99" value="0" style="max-width:110px;"/>
-      </div>
-      <p style="font-size:.78rem;color:#9ca3af;margin-top:4px;">Une fois la limite atteinte, le participant ne peut plus soumettre. 0 = aucune restriction.</p>
-    </div>
-    <div class="pmp-modal-foot">
-      <button class="btn-light" onclick="closePmpMaxModal()">Annuler</button>
-      <button class="btn-primary" onclick="pmpConfirmSetMax()">✔ Confirmer</button>
-    </div>
-  </div>
-</div>
-
 <iframe id="submitFrame" name="submitFrame" style="display:none;"></iframe>
 </div>
 
@@ -590,7 +472,7 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
 
 // 👉 Collez ici l'URL de votre Google Apps Script Web App
 //    (Déployer > Gérer les déploiements > URL de l'application Web)
-let GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzriJo4exm-YsP5FKj8TMMgtO2kKzgoLUJ9tzjrdiLvIfEFc_R8IN9Yy0FW1zcXS_dE/exec";
+let GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZixorYdXAVRjudeClRjTeSd1ODWBnxITTsVXxEmzHNzlNQUyCWfxdQBWuuwgY86g1/exec";
 
 // Mot de passe du dashboard formateur
 const TRAINER_PASSWORD = "221008";
@@ -599,9 +481,9 @@ const TRAINER_PASSWORD = "221008";
    ⚙️  CONFIGURATION AVANCÉE (ne pas modifier sauf si nécessaire)
    ================================================================ */
 const APP_CONFIG = {
-  RESULT_ENDPOINT: GOOGLE_APPS_SCRIPT_URL,
+  get RESULT_ENDPOINT() { return GOOGLE_APPS_SCRIPT_URL; },
   ENABLE_REMOTE_SUBMIT: true,
-  APP_TITLE: "Examen blanc PMP - v5.1.6",
+  APP_TITLE: "Examen blanc PMP - v5.3",
   DASHBOARD_FETCH_LIMIT: 500,
   STORAGE_KEY_ATTEMPTS: "pmp_exam_attempts_v51",
   STORAGE_KEY_LAST: "pmp_exam_last_attempt_v51",
@@ -642,7 +524,7 @@ let storedTrainerPwd = "";
 const TR = {
   fr: {
     homeTitle: "Examen blanc PMP",
-    homeSubtitle: "Version 5.1.6 — Choisissez un test ci-dessous",
+    homeSubtitle: "Version 5.2 — Choisissez un test ci-dessous",
     tc0h: "Test Débutant",
     tc0d: "Évaluez vos connaissances fondamentales PMP.",
     tc0l: "🇫🇷 FR / 🇬🇧 EN",
@@ -690,7 +572,7 @@ const TR = {
   },
   en: {
     homeTitle: "PMP Mock Exam",
-    homeSubtitle: "Version 5.1.6 — Choose a test below",
+    homeSubtitle: "Version 5.0 — Choose a test below",
     tc0h: "Beginner Test",
     tc0d: "Assess your fundamental PMP knowledge.",
     tc0l: "🇫🇷 FR / 🇬🇧 EN",
@@ -1127,25 +1009,20 @@ async function submitRemote(results) {
   };
   try {
     const res = await fetch(APP_CONFIG.RESULT_ENDPOINT, {
-      method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow",
       body: JSON.stringify(payload)
     });
     const data = await res.json().catch(() => ({}));
-    if (res.ok && data.status === "ok") {
+    if (data.status === "ok") {
       lastRemoteSubmit = { attempted: true, success: true, message: data.message || (currentLang === "fr" ? "Résultats enregistrés." : "Results saved.") };
-    } else if (res.ok && data.status === "blocked") {
-      lastRemoteSubmit = {
-        attempted: true, success: false,
-        message: (currentLang === "fr"
-          ? "🚫 Nombre maximum d'essais atteint (" + (data.maxAttempts || "") + "). Contactez votre formateur."
-          : "🚫 Maximum attempts reached (" + (data.maxAttempts || "") + "). Contact your trainer."),
-        blocked: true
-      };
     } else {
       lastRemoteSubmit = { attempted: true, success: false, message: data.message || (currentLang === "fr" ? "Erreur serveur." : "Server error.") };
     }
   } catch (err) {
-    lastRemoteSubmit = { attempted: true, success: false, message: currentLang === "fr" ? "Erreur réseau." : "Network error." };
+    const errMsg = err && err.message ? err.message : String(err);
+    lastRemoteSubmit = { attempted: true, success: false, message: (currentLang === "fr" ? "Erreur connexion. Vérifiez l'URL du script et son déploiement ("Tout le monde" + redéployé). Détail : " : "Connection error. Check the script URL and deployment ("Anyone" + redeployed). Detail: ") + errMsg };
   }
 }
 function renderResultPage(results, manual) {
@@ -1159,8 +1036,7 @@ function renderResultPage(results, manual) {
       <h2 class="section-title">${lang === "fr" ? "Résultats" : "Results"} — ${lang === "fr" ? cfg.name : cfg.name_en}</h2>
       <div class="result-score">${results.score}/${results.total} — ${results.globalPercent}%</div>
       <p><strong>👤 ${lang === "fr" ? "Participant" : "Participant"}:</strong> ${participant.name}</p>
-      ${lastRemoteSubmit.attempted && !lastRemoteSubmit.blocked ? `<p class="small" style="color:${lastRemoteSubmit.success ? "#166534" : "#dc2626"};font-weight:700;">${lastRemoteSubmit.success ? "☁️ " : "⚠️ "}${lastRemoteSubmit.message}</p>` : ""}
-      ${lastRemoteSubmit.blocked ? `<div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:12px;padding:14px;margin:10px 0;color:#991b1b;font-weight:700;">${lastRemoteSubmit.message}</div>` : ""}
+      ${lastRemoteSubmit.attempted ? `<p class="small" style="color:${lastRemoteSubmit.success ? "#166534" : "#dc2626"};font-weight:700;">${lastRemoteSubmit.success ? "☁️ " : "⚠️ "}${lastRemoteSubmit.message}</p>` : ""}
       ${!lastRemoteSubmit.attempted && lastRemoteSubmit.message ? `<p class="small" style="color:#6b7280;">ℹ️ ${lastRemoteSubmit.message}</p>` : ""}
       <p><span class="status-chip ${results.globalStatus.cls}">${results.globalStatus.label}</span></p>
       <p class="small">${manual ? (lang === "fr" ? "Examen soumis manuellement." : "Exam submitted manually.") : (lang === "fr" ? "⏰ Temps écoulé — soumis automatiquement." : "⏰ Time up — submitted automatically.")}</p>
@@ -1223,8 +1099,6 @@ async function loginTrainer() {
     return;
   }
   storedTrainerPwd = pwd;
-  // Persister le pwd en session pour les actions asynchrones (email, etc.)
-  try { sessionStorage.setItem("pmp_trainer_pwd_session", pwd); } catch(_) {}
   // Save AppScript URL from field if provided
   const urlInput = document.getElementById("appScriptUrlInput");
   if (urlInput && urlInput.value.trim()) {
@@ -1336,15 +1210,54 @@ async function grantRetake(encodedId) {
   }
 }
 
+async function setAttemptLimit(name, encodedName) {
+  const pName = decodeURIComponent(encodedName);
+  const currentLimit = parseInt(localStorage.getItem("pmp_attempt_limit_" + pName) || "0");
+  const input = prompt(
+    (currentLang === "fr"
+      ? "Limite d'essais pour " + pName + "\n(0 = illimité, valeur actuelle : "
+      : "Attempt limit for " + pName + "\n(0 = unlimited, current value: ") + (currentLimit || "illimité/unlimited") + ")",
+    currentLimit || ""
+  );
+  if (input === null) return;
+  const val = parseInt(input) || 0;
+  try {
+    localStorage.setItem("pmp_attempt_limit_" + pName, String(val));
+    // Also store globally to be accessible on participant side
+    const limitsKey = "pmp_attempt_limits_global";
+    const limits = JSON.parse(localStorage.getItem(limitsKey) || "{}");
+    limits[pName] = val;
+    localStorage.setItem(limitsKey, JSON.stringify(limits));
+    // Persist to GAS if available
+    try {
+      await apiPost({ action: "setAttemptLimit", participantName: pName, limit: val });
+    } catch(e) {}
+    alert(val === 0
+      ? (currentLang === "fr" ? "✅ Limite supprimée (illimité)." : "✅ Limit removed (unlimited).")
+      : (currentLang === "fr" ? "✅ Limite définie à " + val + " essai(s) pour " + pName + "." : "✅ Limit set to " + val + " attempt(s) for " + pName + ".")
+    );
+    await renderTrainerDashboard();
+  } catch (err) {
+    alert((currentLang === "fr" ? "Erreur : " : "Error: ") + err.message);
+  }
+}
+
+async function sendEmailToParticipant(encodedId) {
+  const attemptId = decodeURIComponent(encodedId);
+  const btn = document.querySelector('[data-send-email="' + encodedId + '"]');
+  if (btn) { btn.disabled = true; btn.textContent = "⏳"; }
+  try {
+    await apiPost({ action: "sendEmailToParticipant", attemptId });
+    alert(currentLang === "fr" ? "✅ Email envoyé au participant." : "✅ Email sent to participant.");
+  } catch (err) {
+    alert((currentLang === "fr" ? "Erreur envoi email : " : "Email send error: ") + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = "📧"; }
+  }
+}
+
 async function renderTrainerDashboard() {
   const inner = document.getElementById("trainerInner");
-  // Remplir datalist participants
-  try {
-    const names = [...new Set(attempts.map(a => a.participantName || a.participant_name || "").filter(Boolean))].sort();
-    const dl = document.getElementById("trainerPartList");
-    if (dl) dl.innerHTML = names.map(n => `<option value="${n}">`).join("");
-  } catch(_){}
-
   inner.innerHTML = `<p class="small" style="padding:20px;">⏳ ${currentLang === "fr" ? "Chargement..." : "Loading..."}</p>`;
 
   let attempts = [], sourceText = "", serverUpdatedAt = "";
@@ -1390,11 +1303,9 @@ async function renderTrainerDashboard() {
     ecoAgg[k].interpretation = cl.label; ecoAgg[k].interpretationClass = cl.cls;
   });
   const avg = attempts.length ? Math.round(attempts.reduce((s, a) => s + Number(a.percent || 0), 0) / attempts.length) : 0;
-  const blockedCount = attempts.filter(a => a.isBlocked).length;
   const gStatus = classifyGlobal(avg);
   const retakeCounts = {};
   attempts.forEach(a => { const n = a.participantName || a.participant_name || ""; if (!retakeCounts[n]) retakeCounts[n] = 0; retakeCounts[n]++; });
-  retakeCountsCache = retakeCounts;
 
   inner.innerHTML = `
     <div class="hero">
@@ -1416,7 +1327,6 @@ async function renderTrainerDashboard() {
           <div class="meta-item"><strong>Moyenne</strong><span>${avg}%</span></div>
           <div class="meta-item"><strong>Interprétation</strong><span class="status-chip ${gStatus.cls}">${gStatus.label}</span></div>
           <div class="meta-item"><strong>Tests</strong><span>3 standards + import</span></div>
-          <div class="meta-item"><strong>🚫 Bloqués</strong><span id="trainerBlockedCount">—</span></div>
         </div>
         <div class="controls">
           <button class="btn-light" onclick="renderTrainerDashboard()">🔄 Actualiser</button>
@@ -1435,39 +1345,6 @@ async function renderTrainerDashboard() {
         </p>
       </div>
     </div>
-    <!-- ── Section Limite d'essais v5.1.5 ── -->
-    <div class="max-section" style="margin-top:20px;">
-      <h3>🔒 Limite d'essais par participant</h3>
-      <p class="small" style="color:#6b7280;">Définissez la limite d'essais autorisés pour un participant. <strong>0 = illimité.</strong> La limite est vérifiée côté serveur (Google Apps Script v5.1).</p>
-      <div class="max-form">
-        <div>
-          <label for="maxPartInput">Participant</label>
-          <input type="text" id="maxPartInput" placeholder="Nom du participant" style="min-width:200px;" list="trainerPartList"/>
-          <datalist id="trainerPartList"></datalist>
-        </div>
-        <div>
-          <label for="maxNumInput">Max essais</label>
-          <input type="number" id="maxNumInput" min="0" max="99" value="3" style="max-width:90px;"/>
-        </div>
-        <div style="display:flex;gap:8px;align-items:flex-end;">
-          <button class="btn-primary" onclick="trainerSetMaxAttempts()" style="padding:9px 16px;">✔ Appliquer</button>
-          <button class="btn-light" onclick="trainerLoadMaxList()" style="padding:9px 16px;">📋 Voir les limites</button>
-        </div>
-      </div>
-      <div id="maxListWrap" style="display:none;margin-top:14px;overflow-x:auto;">
-        <table style="width:100%;border-collapse:collapse;font-size:.85rem;">
-          <thead><tr style="background:#1f4e78;color:white;">
-            <th style="padding:8px;border:1px solid #1e3a5f;">Participant</th>
-            <th style="padding:8px;border:1px solid #1e3a5f;">Limite</th>
-            <th style="padding:8px;border:1px solid #1e3a5f;">Essais effectués</th>
-            <th style="padding:8px;border:1px solid #1e3a5f;">Statut</th>
-            <th style="padding:8px;border:1px solid #1e3a5f;">Actions</th>
-          </tr></thead>
-          <tbody id="maxListBody"><tr><td colspan="5" style="padding:12px;text-align:center;color:#6b7280;">Chargement…</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-
     <div class="dashboard-grid" style="margin-top:20px;">
       <div class="card"><h2 class="section-title">Performance cumulée — Domaines</h2><div class="bars">${renderBars(domainAgg)}</div></div>
       <div class="card"><h2 class="section-title">Performance cumulée — ECO</h2><div class="bars">${
@@ -1486,44 +1363,27 @@ async function renderTrainerDashboard() {
       ${attempts.length ? `
       <div style="overflow-x:auto;">
         <table>
-          <thead><tr><th>Date</th><th>Participant</th><th>Email</th><th>Test</th><th>Score</th><th>%</th><th>Essais</th><th>Résultat</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Date</th><th>Participant</th><th>Email</th><th>Test</th><th>Score</th><th>%</th><th>Résultat</th><th>Essais</th><th>Limite</th><th>Actions</th></tr></thead>
           <tbody>
             ${attempts.map(a => {
               const name = a.participantName || a.participant_name || "-";
               const aid = encodeURIComponent(String(a.attemptId || a.attempt_id || ""));
-              const maxAtt = Number(a.maxAttempts || 0);
-              const doneAtt = Number(a.totalAttemptsDone || retakeCounts[name] || 1);
-              const isBlocked = maxAtt > 0 && doneAtt >= maxAtt;
-              const attBadgeCls = maxAtt === 0 ? "ok" : (doneAtt >= maxAtt ? "blocked" : (doneAtt / maxAtt >= 0.75 ? "warn" : "ok"));
-              const attLabel = maxAtt === 0 ? `${doneAtt} (∞)` : `${doneAtt}/${maxAtt}`;
-              return `<tr class="${isBlocked ? "att-row-blocked" : ""}">
+              return `<tr>
                 <td style="white-space:nowrap;">${String(a.date || a.submitted_at || "-").substring(0, 19)}</td>
-                <td><strong>${name}</strong>${isBlocked ? `<br><span style="font-size:.72rem;color:#dc2626;font-weight:700;">🚫 Limite atteinte</span>` : ""}</td>
+                <td><strong>${name}</strong></td>
                 <td style="font-size:.82rem;">${a.participantEmail || a.participant_email || "-"}</td>
                 <td><span class="pill" style="font-size:.78rem;">${a.testType || a.test_type || "Débutant"}</span></td>
                 <td>${a.score}/${a.total}</td>
                 <td><strong>${a.percent}%</strong></td>
-                <td><span class="att-badge ${attBadgeCls}">${attLabel}</span></td>
                 <td><span class="status-chip ${classifyGlobal(Number(a.percent || 0)).cls}">${a.globalLabel || a.global_label || classifyGlobal(Number(a.percent || 0)).label}</span></td>
+                <td style="text-align:center;">${retakeCounts[name] || 1}</td>
+                <td style="text-align:center;">${(() => { const lim = parseInt(localStorage.getItem("pmp_attempt_limit_" + name) || "0"); return lim ? `<span style="background:#fef3c7;color:#92400e;border-radius:6px;padding:2px 7px;font-size:.78rem;font-weight:700;">${retakeCounts[name] || 1}/${lim}</span>` : `<span style="color:#6b7280;font-size:.78rem;">∞</span>`; })()}</td>
                 <td><div class="tbl-actions">
-                  <button class="btn-light" onclick="viewAttemptAnswers(this.dataset.id)" data-id="${aid}" title="Voir réponses">👁</button>
-                  <button class="btn-primary"
-                    data-attemptid="${aid}"
-                    data-name="${encodeURIComponent(name)}"
-                    data-email="${encodeURIComponent(a.participantEmail || a.participant_email || "")}"
-                    data-score="${a.score}"
-                    data-total="${a.total}"
-                    data-percent="${a.percent}"
-                    data-label="${encodeURIComponent(a.globalLabel || a.global_label || "")}"
-                    onclick="openPmpEmailModalFromBtn(this)"
-                    title="Envoyer email résultats" style="background:#5b21b6;">📧</button>
-                  <button class="btn-light"
-                    data-name="${encodeURIComponent(name)}"
-                    data-max="${maxAtt}"
-                    onclick="openPmpMaxModalFromBtn(this)"
-                    title="Définir limite d'essais" style="background:#ede9fe;color:#5b21b6;">🔒</button>
-                  <button class="btn-success" onclick="grantRetake(this.dataset.id)" data-id="${aid}" title="Autoriser reprise">🔄</button>
-                  <button class="btn-danger" onclick="removeAttempt(this.dataset.id)" data-id="${aid}" title="Supprimer">🗑</button>
+                  <button class="btn-light" onclick="viewAttemptAnswers(this.dataset.id)" data-id="${aid}" title="${currentLang==='fr'?'Voir réponses':'View answers'}">👁</button>
+                  <button class="btn-light" onclick="sendEmailToParticipant(this.dataset.id)" data-id="${aid}" data-send-email="${aid}" title="${currentLang==='fr'?'Envoyer email résultats':'Send results email'}" style="background:#dbeafe;color:#1d4ed8;border-color:#93c5fd;">📧</button>
+                  <button class="btn-success" onclick="grantRetake(this.dataset.id)" data-id="${aid}" title="${currentLang==='fr'?'Autoriser reprise':'Allow retake'}">🔄</button>
+                  <button class="btn-light" onclick="setAttemptLimit('${encodeURIComponent(name)}','${encodeURIComponent(name)}')" title="${currentLang==='fr'?'Définir limite essais':'Set attempt limit'}" style="background:#fef3c7;color:#92400e;border-color:#fcd34d;">🔒</button>
+                  <button class="btn-danger" onclick="removeAttempt(this.dataset.id)" data-id="${aid}" title="${currentLang==='fr'?'Supprimer':'Delete'}">🗑</button>
                 </div></td>
               </tr>`;
             }).join("")}
@@ -1532,10 +1392,6 @@ async function renderTrainerDashboard() {
       </div>` : `<p class="small">${currentLang === "fr" ? "Aucune tentative enregistrée." : "No attempts recorded."}</p>`}
     </div>
     <div id="answersPanel"></div>`;
-
-  // Mettre à jour le KPI bloqués
-  const blockedEl = document.getElementById("trainerBlockedCount");
-  if (blockedEl) blockedEl.textContent = blockedCount;
 }
 
 /* ── IMPORT v5.0 ── */
@@ -2148,241 +2004,6 @@ function applyStoredAnswerEdits() {
     console.log('Applied stored answer edits:', Object.keys(stored).length, 'questions');
   } catch(e) {}
 }
-
-
-/* ═══════════════════════════════════════════════════════════
-   v5.1.5 — NOUVELLES FONCTIONS : EMAIL DEPUIS DASHBOARD + LIMITE D'ESSAIS
-═══════════════════════════════════════════════════════════ */
-
-// ── TOAST ──────────────────────────────────────────────────
-function pmpToast(msg, type = "inf") {
-  const icons = { ok: "✅", err: "❌", inf: "ℹ️" };
-  const el = document.createElement("div");
-  el.className = "pmp-toast " + type;
-  el.innerHTML = `<span>${icons[type] || "ℹ️"}</span> ${msg}`;
-  const c = document.getElementById("pmpToastContainer");
-  if (c) c.appendChild(el);
-  setTimeout(() => el.remove(), 4500);
-}
-
-// ── MODAL EMAIL ─────────────────────────────────────────────
-let _pmpEmailAttemptId = "";
-function openPmpEmailModal(encodedId, name, email, score, total, percent, label) {
-  _pmpEmailAttemptId = decodeURIComponent(encodedId);
-  const pass = Number(percent) >= 65;
-  document.getElementById("pmpEmailSummary").innerHTML = `
-    <div class="ps-name">${name}</div>
-    <div class="ps-meta">🆔 ${_pmpEmailAttemptId}</div>
-    <div class="ps-score ${pass ? "pass" : "fail"}">${score}/${total} (${percent}%)</div>
-    <span class="status-chip ${pass ? "global-pass" : "global-fail"}">${label || (pass ? "✅ Réussi" : "❌ Insuffisant")}</span>
-  `;
-  document.getElementById("pmpEmailTo").value = email || "";
-  const btn = document.getElementById("pmpEmailSendBtn");
-  btn.disabled = false; btn.innerHTML = "📨 Envoyer";
-  // Réinitialiser la zone de statut
-  const statusEl = document.getElementById("pmpEmailStatus");
-  if (statusEl) { statusEl.style.display = "none"; statusEl.textContent = ""; }
-  document.getElementById("pmpEmailModal").classList.add("open");
-}
-function closePmpEmailModal() {
-  document.getElementById("pmpEmailModal").classList.remove("open");
-  _pmpEmailAttemptId = "";
-}
-async function pmpConfirmSendEmail() {
-  if (!_pmpEmailAttemptId) { pmpToast("Aucune tentative sélectionnée.", "err"); return; }
-
-  const toEmail = (document.getElementById("pmpEmailTo").value || "").trim();
-  if (!toEmail || !toEmail.includes("@")) {
-    pmpEmailStatus("❌ Adresse email invalide ou manquante.", false); return;
-  }
-
-  // Récupérer le mot de passe (session courante ou localStorage en fallback)
-  const pwd = storedTrainerPwd
-    || localStorage.getItem("pmp_trainer_pwd_session")
-    || TRAINER_PASSWORD;
-
-  // Vérifier que l'URL GAS est configurée
-  const gasUrl = APP_CONFIG.RESULT_ENDPOINT || GOOGLE_APPS_SCRIPT_URL;
-  if (!gasUrl || gasUrl === "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE") {
-    pmpEmailStatus("❌ Google Apps Script non configuré. Connectez-vous d'abord via l'accès formateur.", false);
-    return;
-  }
-
-  const includeAnswers = document.getElementById("pmpIncludeAnswers").checked;
-
-  const btn = document.getElementById("pmpEmailSendBtn");
-  btn.disabled = true;
-  btn.innerHTML = "⏳ Envoi en cours…";
-  pmpEmailStatus("⏳ Envoi en cours, veuillez patienter…", null);
-
-  const payload = {
-    action:          "sendResultEmail",
-    password:        pwd,
-    attemptId:       _pmpEmailAttemptId,
-    overrideEmail:   toEmail,
-    includeAnswers:  includeAnswers
-  };
-
-  try {
-    const res  = await fetch(gasUrl, {
-      method:  "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body:    JSON.stringify(payload)
-    });
-
-    let data = {};
-    try { data = await res.json(); } catch(_) { data = { status: "error", message: "Réponse invalide du serveur." }; }
-
-    if (data.status === "ok") {
-      pmpEmailStatus("✅ Email envoyé avec succès à " + toEmail + (includeAnswers ? " (avec détail des réponses)" : " (score uniquement)") + ".", true);
-      pmpToast("✅ Email envoyé à " + toEmail, "ok");
-      btn.innerHTML = "✅ Envoyé";
-      setTimeout(() => closePmpEmailModal(), 2200);
-    } else {
-      const msg = data.message || "Erreur inconnue du serveur.";
-      pmpEmailStatus("❌ Échec : " + msg, false);
-      btn.disabled = false;
-      btn.innerHTML = "📨 Réessayer";
-      pmpToast("❌ " + msg, "err");
-    }
-  } catch (err) {
-    const msg = err.message || "Erreur réseau.";
-    pmpEmailStatus("❌ Erreur réseau : " + msg + " — Vérifiez que le GAS est bien déployé en accès public.", false);
-    btn.disabled = false;
-    btn.innerHTML = "📨 Réessayer";
-    pmpToast("❌ " + msg, "err");
-  }
-}
-
-// Affiche un message dans la zone de statut du modal email
-function pmpEmailStatus(msg, success) {
-  const el = document.getElementById("pmpEmailStatus");
-  if (!el) return;
-  el.style.display = "block";
-  if (success === true)  { el.style.background = "#dcfce7"; el.style.color = "#166534"; el.style.border = "1px solid #22c55e"; }
-  if (success === false) { el.style.background = "#fee2e2"; el.style.color = "#991b1b"; el.style.border = "1px solid #fca5a5"; }
-  if (success === null)  { el.style.background = "#eff6ff"; el.style.color = "#1d4ed8"; el.style.border = "1px solid #93c5fd"; }
-  el.textContent = msg;
-}
-
-// ── MODAL LIMITE ─────────────────────────────────────────────
-let _pmpMaxParticipant = "";
-function openPmpMaxModal(name, currentMax) {
-  _pmpMaxParticipant = name;
-  document.getElementById("pmpMaxModalName").textContent = "👤 " + name;
-  document.getElementById("pmpMaxInput").value = currentMax || 0;
-  document.getElementById("pmpMaxModal").classList.add("open");
-}
-function closePmpMaxModal() {
-  document.getElementById("pmpMaxModal").classList.remove("open");
-  _pmpMaxParticipant = "";
-}
-// ── WRAPPERS data-* (fix v5.1.5 — évite les problèmes de quotes dans onclick) ──
-function openPmpEmailModalFromBtn(btn) {
-  const encodedId = btn.dataset.attemptid || "";
-  const name      = decodeURIComponent(btn.dataset.name   || "");
-  const email     = decodeURIComponent(btn.dataset.email  || "");
-  const score     = btn.dataset.score   || 0;
-  const total     = btn.dataset.total   || 0;
-  const percent   = btn.dataset.percent || 0;
-  const label     = decodeURIComponent(btn.dataset.label  || "");
-  openPmpEmailModal(encodedId, name, email, score, total, percent, label);
-}
-function openPmpMaxModalFromBtn(btn) {
-  const name = decodeURIComponent(btn.dataset.name || "");
-  const max  = parseInt(btn.dataset.max || "0", 10);
-  openPmpMaxModal(name, max);
-}
-function doSetMaxAttemptsFromBtn(btn, forceMax) {
-  const name = decodeURIComponent(btn.dataset.name || "");
-  const max  = (forceMax !== undefined) ? forceMax : parseInt(btn.dataset.max || "0", 10);
-  doSetMaxAttempts(name, max);
-}
-
-async function pmpConfirmSetMax() {
-  if (!_pmpMaxParticipant) return;
-  const max = parseInt(document.getElementById("pmpMaxInput").value, 10);
-  if (isNaN(max) || max < 0) { pmpToast("Valeur invalide.", "err"); return; }
-  await doSetMaxAttempts(_pmpMaxParticipant, max);
-  closePmpMaxModal();
-}
-
-// ── DÉFINIR LIMITE (depuis section formateur) ───────────────
-async function trainerSetMaxAttempts() {
-  const name = (document.getElementById("maxPartInput").value || "").trim();
-  const max = parseInt(document.getElementById("maxNumInput").value, 10);
-  if (!name) { pmpToast("Saisissez un nom de participant.", "err"); return; }
-  if (isNaN(max) || max < 0) { pmpToast("Nombre invalide.", "err"); return; }
-  await doSetMaxAttempts(name, max);
-}
-
-async function doSetMaxAttempts(name, max) {
-  try {
-    const data = await apiPost({ action: "setMaxAttempts", participantName: name, maxAttempts: max });
-    pmpToast(data.message || "Limite appliquée.", "ok");
-    await renderTrainerDashboard();
-  } catch (err) {
-    pmpToast("❌ " + err.message, "err");
-  }
-}
-
-// ── CHARGER LA LISTE DES LIMITES ────────────────────────────
-async function trainerLoadMaxList() {
-  const wrap = document.getElementById("maxListWrap");
-  const tbody = document.getElementById("maxListBody");
-  if (!wrap || !tbody) return;
-  wrap.style.display = "block";
-  tbody.innerHTML = `<tr><td colspan="5" style="padding:12px;text-align:center;color:#6b7280;">⏳ Chargement…</td></tr>`;
-  try {
-    const url = APP_CONFIG.RESULT_ENDPOINT + "?action=getMaxAttempts&password=" + encodeURIComponent(storedTrainerPwd);
-    const res  = await fetch(url, { cache: "no-store" });
-    const data = await res.json();
-    const settings = data.settings || [];
-    if (!settings.length) {
-      tbody.innerHTML = `<tr><td colspan="5" style="padding:12px;text-align:center;color:#6b7280;">Aucune limite définie.</td></tr>`;
-      return;
-    }
-    tbody.innerHTML = settings.map(s => {
-      const lim  = s.maxAttempts === 0 ? "<em>Illimité</em>" : s.maxAttempts;
-      const done = (retakeCountsCache && retakeCountsCache[s.participantName]) || "—";
-      const blocked = s.maxAttempts > 0 && Number(done) >= s.maxAttempts;
-      const status = blocked
-        ? `<span class="status-chip status-red">🚫 Bloqué</span>`
-        : `<span class="status-chip status-lightgreen">✅ Actif</span>`;
-      return `<tr>
-        <td style="padding:8px;border:1px solid #e5e7eb;">${s.participantName}</td>
-        <td style="padding:8px;border:1px solid #e5e7eb;text-align:center;">${lim}</td>
-        <td style="padding:8px;border:1px solid #e5e7eb;text-align:center;">${done}</td>
-        <td style="padding:8px;border:1px solid #e5e7eb;">${status}</td>
-        <td style="padding:8px;border:1px solid #e5e7eb;">
-          <button class="btn-light"
-            data-name="${encodeURIComponent(s.participantName)}"
-            data-max="${s.maxAttempts}"
-            onclick="openPmpMaxModalFromBtn(this)"
-            style="padding:4px 10px;font-size:.78rem;">✏ Modifier</button>
-          <button class="btn-success"
-            data-name="${encodeURIComponent(s.participantName)}"
-            onclick="doSetMaxAttemptsFromBtn(this, 0)"
-            style="padding:4px 10px;font-size:.78rem;">🔓 Lever</button>
-        </td>
-      </tr>`;
-    }).join("");
-  } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="5" style="padding:12px;text-align:center;color:#dc2626;">⚠️ ${err.message}</td></tr>`;
-  }
-}
-
-// Cache pour les comptages par participant (rempli dans renderTrainerDashboard)
-let retakeCountsCache = {};
-
-// ── FERMER MODALS EN CLIQUANT LE FOND ───────────────────────
-document.addEventListener("DOMContentLoaded", () => {
-  const emailModal = document.getElementById("pmpEmailModal");
-  const maxModal   = document.getElementById("pmpMaxModal");
-  if (emailModal) emailModal.addEventListener("click", e => { if (e.target === emailModal) closePmpEmailModal(); });
-  if (maxModal)   maxModal.addEventListener("click",   e => { if (e.target === maxModal)   closePmpMaxModal(); });
-});
-
 
 /* ── INIT ── */
 document.addEventListener("DOMContentLoaded", () => {
