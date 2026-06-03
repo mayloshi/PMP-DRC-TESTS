@@ -1022,7 +1022,7 @@ async function submitRemote(results) {
     }
   } catch (err) {
     const errMsg = err && err.message ? err.message : String(err);
-    lastRemoteSubmit = { attempted: true, success: false, message: (currentLang === "fr" ? "Erreur connexion. Vérifiez l'URL du script et son déploiement ("Tout le monde" + redéployé). Détail : " : "Connection error. Check the script URL and deployment ("Anyone" + redeployed). Detail: ") + errMsg };
+    lastRemoteSubmit = { attempted: true, success: false, message: (currentLang === "fr" ? "Erreur connexion. Vérifiez l'URL du script et son déploiement (Tout le monde + redéployé). Détail : " : "Connection error. Check script URL and deployment settings. Detail: ") + errMsg };
   }
 }
 function renderResultPage(results, manual) {
