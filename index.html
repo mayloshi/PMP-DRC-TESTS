@@ -482,7 +482,7 @@ pre.json-schema{background:#f8fafc;border:1px solid var(--line);border-radius:10
 
 // 👉 Collez ici l'URL de votre Google Apps Script Web App
 //    (Déployer > Gérer les déploiements > URL de l'application Web)
-let GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZixorYdXAVRjudeClRjTeSd1ODWBnxITTsVXxEmzHNzlNQUyCWfxdQBWuuwgY86g1/exec";
+let GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbykIdaucqfX03CCZOW0DJ8DrErvHm8AvsENtANjy-CUA_xM0xcIluRQvwtnUcfKAbz5/exec";
 
 // Mot de passe du dashboard formateur
 const TRAINER_PASSWORD = "221008";
@@ -1029,22 +1029,60 @@ async function submitRemote(results) {
         correctLabel: Array.isArray(a.correct) ? a.correct.map(i => String.fromCharCode(65+i)).join(",") : String.fromCharCode(65 + a.correct) };
     })
   };
+
+  // ── STRATÉGIE ANTI-CORS ──────────────────────────────────────────────────
+  // Google Apps Script bloque les requêtes POST cross-origin depuis les
+  // navigateurs (preflight OPTIONS non supporté). Solution : soumettre via
+  // GET avec le payload encodé en paramètre — le script v5.2 supporte
+  // ?action=submit&payload=<JSON>. La réponse est lue normalement car GET
+  // ne déclenche pas de preflight CORS.
+  // Si l'URL est trop longue (> ~7500 chars), on tente no-cors POST en
+  // fallback (enregistre quand même côté script, mais on ne peut pas lire
+  // la réponse — on considère alors le succès comme probable).
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const payloadJson = JSON.stringify(payload);
+  const getUrl = APP_CONFIG.RESULT_ENDPOINT + "?action=submit&payload=" + encodeURIComponent(payloadJson);
+
   try {
-    const res = await fetch(APP_CONFIG.RESULT_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      redirect: "follow",
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json().catch(() => ({}));
-    if (data.status === "ok") {
-      lastRemoteSubmit = { attempted: true, success: true, message: data.message || (currentLang === "fr" ? "Résultats enregistrés." : "Results saved.") };
+    if (getUrl.length <= 7500) {
+      // ── Méthode 1 : GET (aucun problème CORS) ──
+      const res = await fetch(getUrl, { method: "GET", redirect: "follow" });
+      const data = await res.json().catch(() => ({}));
+      if (data.status === "ok") {
+        lastRemoteSubmit = { attempted: true, success: true, message: data.message || (currentLang === "fr" ? "Résultats enregistrés ✓" : "Results saved ✓") };
+      } else {
+        lastRemoteSubmit = { attempted: true, success: false, message: data.message || (currentLang === "fr" ? "Erreur serveur." : "Server error.") };
+      }
     } else {
-      lastRemoteSubmit = { attempted: true, success: false, message: data.message || (currentLang === "fr" ? "Erreur serveur." : "Server error.") };
+      // ── Méthode 2 : POST no-cors (payload trop lourd pour GET) ──
+      // no-cors = pas de preflight, la réponse est opaque (non lisible),
+      // mais Google Apps Script reçoit et traite la requête normalement.
+      await fetch(APP_CONFIG.RESULT_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        redirect: "follow",
+        body: payloadJson
+      });
+      // Réponse opaque → on présume le succès
+      lastRemoteSubmit = { attempted: true, success: true, message: currentLang === "fr" ? "Résultats envoyés ✓ (confirmation différée)" : "Results sent ✓ (deferred confirmation)" };
     }
   } catch (err) {
-    const errMsg = err && err.message ? err.message : String(err);
-    lastRemoteSubmit = { attempted: true, success: false, message: (currentLang === "fr" ? "Erreur connexion. Vérifiez l'URL du script et son déploiement (Tout le monde + redéployé). Détail : " : "Connection error. Check script URL and deployment settings. Detail: ") + errMsg };
+    // Dernier recours : POST no-cors
+    try {
+      await fetch(APP_CONFIG.RESULT_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        redirect: "follow",
+        body: payloadJson
+      });
+      lastRemoteSubmit = { attempted: true, success: true, message: currentLang === "fr" ? "Résultats envoyés ✓ (mode alternatif)" : "Results sent ✓ (fallback mode)" };
+    } catch (err2) {
+      const errMsg = err2 && err2.message ? err2.message : String(err2);
+      lastRemoteSubmit = { attempted: true, success: false, message: (currentLang === "fr" ? "Erreur d'envoi. Détail : " : "Send error. Detail: ") + errMsg };
+    }
   }
 }
 function renderResultPage(results, manual) {
@@ -1166,13 +1204,35 @@ async function apiPost(payload) {
     throw new Error(currentLang === "fr"
       ? "Google Apps Script non configuré. Remplacez PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE dans le code HTML."
       : "Google Apps Script not configured.");
-  const res = await fetch(APP_CONFIG.RESULT_ENDPOINT, {
-    method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify({ ...payload, password: storedTrainerPwd })
-  });
-  const data = await res.json();
-  if (!res.ok || data.status !== "ok") throw new Error(data.message || "Erreur");
-  return data;
+  // Anti-CORS : les actions formateur sont envoyées via POST no-cors + lecture
+  // différée impossible → on utilise un GET avec payload encodé (comme pour submit)
+  // Le script v5.2 route toutes les actions via doGet ?action=submit&payload=...
+  // Pour les actions formateur (delete, allowRetake, etc.), on utilise POST standard
+  // car le formateur accède généralement depuis une connexion sans restriction.
+  // Si CORS échoue, on retente en no-cors (perte de la réponse, mais action exécutée).
+  const fullPayload = { ...payload, password: storedTrainerPwd };
+  const payloadJson = JSON.stringify(fullPayload);
+  try {
+    const res = await fetch(APP_CONFIG.RESULT_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow",
+      body: payloadJson
+    });
+    const data = await res.json();
+    if (!res.ok || data.status !== "ok") throw new Error(data.message || "Erreur");
+    return data;
+  } catch (corsErr) {
+    // Retry via GET with encoded payload (fully CORS-safe)
+    const getUrl = APP_CONFIG.RESULT_ENDPOINT + "?payload=" + encodeURIComponent(payloadJson);
+    if (getUrl.length <= 7500) {
+      const res2 = await fetch(getUrl, { method: "GET", redirect: "follow" });
+      const data2 = await res2.json();
+      if (!res2.ok || data2.status !== "ok") throw new Error(data2.message || "Erreur");
+      return data2;
+    }
+    throw corsErr;
+  }
 }
 async function viewAttemptAnswers(encodedId) {
   const attemptId = decodeURIComponent(encodedId);
